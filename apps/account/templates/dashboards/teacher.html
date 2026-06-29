@@ -1,0 +1,26 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+{% block title %}Teacher Console{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Teacher Dashboard</h1>
+</div>
+
+<div class="card p-4 mb-4">
+    <h4>Today's Schedule</h4>
+    <table class="table mt-3">
+        <thead>
+            <tr><th>Class</th><th>Subject</th><th>Time</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Class 9 (A)</td><td>Mathematics</td><td>10:00 AM</td></tr>
+            <tr><td>Class 10 (B)</td><td>Physics</td><td>11:30 AM</td></tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

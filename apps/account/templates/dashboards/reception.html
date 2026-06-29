@@ -1,0 +1,27 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+{% block title %}Reception Desk{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Reception Dashboard</h1>
+</div>
+
+<div class="card p-4">
+    <h4>Front Desk Entry Log</h4>
+    <button class="btn btn-primary btn-sm w-25 mt-2">+ New Visitor Entry</button>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr><th>Visitor Name</th><th>Purpose</th><th>In-Time</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Mr. Karim Ahmed</td><td>Admission Query</td><td>09:15 AM</td></tr>
+            <tr><td>Mrs. Sultana Razia</td><td>Parent-Teacher Meet</td><td>10:40 AM</td></tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

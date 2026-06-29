@@ -1,0 +1,26 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Student Dashboard</h1>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card p-3">
+            <h4>🔔 Announcements</h4>
+            <p class="text-muted mt-2">Next mid-term examinations schedule has been published checking terminal file panel.</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card p-3">
+            <h4>📊 Quick Summary</h4>
+            <p>Attendance rate: <strong>92%</strong></p>
+            <p>Pending Invoices: <span class="badge bg-danger">None</span></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

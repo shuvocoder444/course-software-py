@@ -1,0 +1,57 @@
+from django.conf import settings
+import json
+from web_project.template_helpers.theme import TemplateHelper
+from pathlib import Path
+from django.contrib.auth.models import AnonymousUser
+
+# Load menu JSON path dynamically by role
+def get_menu_file_path(role):
+    role = (role or "student").lower()  # Normalize role to lowercase
+    filename_map = {
+        "master_admin": "vertical_master_menu.json",
+        "admin": "vertical_menu.json",
+        "sub_admin": "vertical_sub_admin_menu.json",
+        "teacher": "vertical_teacher_menu.json",
+        "student": "vertical_student_menu.json",
+    }
+    filename = filename_map.get(role, "vertical_menu.json")  # Default menu
+    return Path(settings.BASE_DIR) / "templates" / "layout" / "partials" / "menu" / "vertical" / "json" / filename
+
+class TemplateBootstrapLayoutVertical:
+    @staticmethod
+    def init(context):
+        context.update({
+            "layout": "vertical",
+            "content_navbar": True,
+            "is_navbar": True,
+            "is_menu": True,
+            "is_footer": True,
+            "navbar_detached": True,
+        })
+
+        # Map context
+        TemplateHelper.map_context(context)
+
+        user = context.get("user")
+        if user and not isinstance(user, AnonymousUser) and hasattr(user, "role"):
+            role = user.role.lower()
+        elif isinstance(user, dict) and "role" in user:
+            role = user["role"].lower()
+        else:
+            role = "student"
+            print(f"DEBUG: User is {user}, defaulting role to 'student'")
+
+        print(f"DEBUG: User: {user}, Role: {role}")
+
+        TemplateBootstrapLayoutVertical.init_menu_data(context, role)
+        return context
+
+    @staticmethod
+    def init_menu_data(context, role):
+        menu_file_path = get_menu_file_path(role)
+        try:
+            with open(menu_file_path, 'r', encoding='utf-8') as file:
+                context["menu_data"] = json.load(file)
+        except FileNotFoundError:
+            print(f"DEBUG: Menu file not found: {menu_file_path}")
+            context["menu_data"] = []
