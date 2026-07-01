@@ -6,8 +6,6 @@ from django.contrib.auth.models import AnonymousUser
 
 # রোলের ভিত্তিতে মেনু ফাইলের পাথ নির্ধারণ
 def get_menu_file_path(role):
-    # আপনার মডেলে থাকা রোলের সাথে মিল রেখে ম্যাপিং
-    # মনে রাখবেন: মডেলে রোলগুলো বড় হাতের অক্ষরে আছে, তাই এখানেও সেভাবে হ্যান্ডেল করা ভালো
     filename_map = {
         "admin": "vertical_admin_menu.json",
         "teacher": "vertical_teacher_menu.json",
@@ -16,11 +14,12 @@ def get_menu_file_path(role):
         "student": "vertical_student_menu.json",
     }
 
-    # রোলটিকে ছোট হাতের অক্ষরে রূপান্তর (যেমন: 'ADMIN' -> 'admin')
-    role_key = str(role).lower()
+    # রোলটিকে ছোট হাতের অক্ষরে রূপান্তর ও এক্সট্রা স্পেস বাদ দেওয়া
+    role_key = str(role).lower().strip()
     filename = filename_map.get(role_key, "vertical_menu.json")
 
     return Path(settings.BASE_DIR) / "templates" / "layout" / "partials" / "menu" / "vertical" / "json" / filename
+
 
 class TemplateBootstrapLayoutVertical:
     @staticmethod
@@ -38,14 +37,10 @@ class TemplateBootstrapLayoutVertical:
 
         # ইউজার এবং রোল ডিটেকশন
         user = context.get("user")
+        role = "student"  # ডিফল্ট রোল
 
-        # যদি ইউজার লগইন করা থাকে এবং আমাদের কাস্টম Account মডেলের সাথে যুক্ত থাকে
         if user and not isinstance(user, AnonymousUser) and hasattr(user, "role"):
-            role = user.role # আপনার মডেলের role ফিল্ড সরাসরি ব্যবহার করুন
-        else:
-            role = "student" # গেস্ট বা লগইন না করা ইউজারদের জন্য
-
-        print(f"DEBUG: User: {user}, Role: {role}")
+            role = user.role
 
         # মেনু ডেটা ইনিশিয়ালাইজ করা
         TemplateBootstrapLayoutVertical.init_menu_data(context, role)
@@ -58,5 +53,5 @@ class TemplateBootstrapLayoutVertical:
             with open(menu_file_path, 'r', encoding='utf-8') as file:
                 context["menu_data"] = json.load(file)
         except FileNotFoundError:
-            print(f"DEBUG: Menu file not found: {menu_file_path}")
-            context["menu_data"] = [] # ফাইল না পেলে খালি লিস্ট
+            # প্রোডাকশনে ক্র্যাশ এড়াতে ফাইল না পাওয়া গেলে খালি লিস্ট সেট হবে
+            context["menu_data"] = []

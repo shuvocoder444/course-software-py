@@ -1,0 +1,143 @@
+{% extends layout_path %}
+
+{% block content %}
+<div class="container-fluid my-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4 gap-3">
+        <div>
+            <h4 class="mb-0 text-dark fw-bold">Accounts / General Ledger</h4>
+            <small class="text-muted">Inflow and Outflow statement (From {{ start_date|date:"d M, Y" }} to {{ end_date|date:"d M, Y" }})</small>
+        </div>
+
+        <form method="GET" action="" class="d-flex gap-2 align-items-center flex-wrap">
+            <input type="date" name="start_date" value="{{ start_date|date:'Y-m-d' }}" class="form-control form-control-sm">
+            <span class="text-muted small">to</span>
+            <input type="date" name="end_date" value="{{ end_date|date:'Y-m-d' }}" class="form-control form-control-sm">
+            <button type="submit" class="btn btn-sm btn-primary px-3"><i class="fas fa-filter me-1"></i> Filter</button>
+            <a href="{% url 'general_ledger' %}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-sync"></i></a>
+        </form>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-white p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="fw-bold text-success mb-1">৳ {{ total_income|stringformat:".2f" }}</h4>
+                        <small class="text-muted uppercase fw-bold small">Total Income (Inflow)</small>
+                    </div>
+                    <div class="p-2 rounded-3 text-success" style="background-color: #e8fadf;">
+                        <i class="fas fa-arrow-trend-up fa-lg"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-white p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="fw-bold text-danger mb-1">৳ {{ total_expense|stringformat:".2f" }}</h4>
+                        <small class="text-muted uppercase fw-bold small">Total Expense (Outflow)</small>
+                    </div>
+                    <div class="p-2 rounded-3 text-danger" style="background-color: #fce8e6;">
+                        <i class="fas fa-arrow-trend-down fa-lg"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-white p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="fw-bold text-primary mb-1">৳ {{ net_balance|stringformat:".2f" }}</h4>
+                        <small class="text-muted uppercase fw-bold small">Net Balance</small>
+                    </div>
+                    <div class="p-2 rounded-3 text-primary" style="background-color: #e8f2fc;">
+                        <i class="fas fa-wallet fa-lg"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3 border-bottom-0">
+                    <h5 class="mb-0 text-success fw-bold"><i class="fas fa-circle-plus me-2"></i> Incomes</h5>
+                    <span class="badge px-3 py-2 fw-bold" style="background-color: #e8fadf; color: #71dd37;">৳ {{ total_income|stringformat:".2f" }}</span>
+                </div>
+                <div class="card-body p-0 bg-white">
+                    <div class="table-responsive" style="max-height: 450px; overflow-y: auto;">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-3" style="width: 60px;">SL</th>
+                                    <th>DATE</th>
+                                    <th>PARTICULARS</th>
+                                    <th class="text-end pe-3">AMOUNT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for income in incomes %}
+                                <tr>
+                                    <td class="ps-3 text-muted">{{ forloop.counter }}</td>
+                                    <td class="text-muted small">{{ income.date|date:"d M, Y" }}</td>
+                                    <td><span class="text-dark fw-semibold">{{ income.particulars }}</span></td>
+                                    <td class="text-end pe-3 fw-bold text-success">+ ৳{{ income.amount|stringformat:".2f" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center py-4 text-muted">No incomes recorded in this period.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3 border-bottom-0">
+                    <h5 class="mb-0 text-danger fw-bold"><i class="fas fa-circle-minus me-2"></i> Expenses</h5>
+                    <span class="badge px-3 py-2 fw-bold" style="background-color: #fce8e6; color: #ff3e1d;">৳ {{ total_expense|stringformat:".2f" }}</span>
+                </div>
+                <div class="card-body p-0 bg-white">
+                    <div class="table-responsive" style="max-height: 450px; overflow-y: auto;">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-3" style="width: 60px;">SL</th>
+                                    <th>DATE</th>
+                                    <th>PARTICULARS</th>
+                                    <th class="text-end pe-3">AMOUNT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for exp in expenses %}
+                                <tr>
+                                    <td class="ps-3 text-muted">{{ forloop.counter }}</td>
+                                    <td class="text-muted small">{{ exp.date|date:"d M, Y" }}</td>
+                                    <td>
+                                        <span class="text-dark fw-semibold">{{ exp.name }}</span>
+                                        {% if exp.category %}<br><small class="text-muted">{{ exp.category }}</small>{% endif %}
+                                    </td>
+                                    <td class="text-end pe-3 fw-bold text-danger">- ৳{{ exp.amount|stringformat:".2f" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center py-4 text-muted">No expenses recorded in this period.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends layout_path %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex align-items-center mb-3">
+                <a href="{% url 'batch_list' %}" class="btn btn-outline-secondary btn-sm me-3">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+                <h4 class="fw-bold mb-0">{% if form.instance.pk %}Edit Batch{% else %}Create New Batch{% endif %}</h4>
+            </div>
+
+            <div class="card shadow border-0">
+                <div class="card-body p-4">
+                    <form method="POST" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                Please correct the errors below.
+                            </div>
+                        {% endif %}
+
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold">Select Course <span class="text-danger">*</span></label>
+                                {{ form.course }}
+                                {% if form.course.errors %}<div class="text-danger small mt-1">{{ form.course.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Batch Number/Name <span class="text-danger">*</span></label>
+                                {{ form.batch_number }}
+                                {% if form.batch_number.errors %}<div class="text-danger small mt-1">{{ form.batch_number.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Start Date</label>
+                                {{ form.start_date }}
+                                {% if form.start_date.errors %}<div class="text-danger small mt-1">{{ form.start_date.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <div class="col-md-12 mt-4">
+                                <div class="form-check form-switch card p-3 bg-light border-0">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <label class="form-check-label fw-semibold d-block" for="{{ form.is_active.id_for_label }}">Is This Batch Active?</label>
+                                            <small class="text-muted">Inactive batches won't be shown in public admission fields.</small>
+                                        </div>
+                                        <div style="transform: scale(1.3); margin-right: 15px;">
+                                            {{ form.is_active }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-2 border-top text-end">
+                            <a href="{% url 'batch_list' %}" class="btn btn-secondary me-2">Cancel</a>
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="fas fa-save me-2"></i>Save Batch
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

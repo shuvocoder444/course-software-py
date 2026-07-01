@@ -3,8 +3,11 @@ from . import views  # সব ভিউ ইমপোর্ট হলো
 
 urlpatterns = [
     # Auth Routes
-    path('login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='logout'),
+# ২. ফ্রন্টএন্ড লগইন পেজ (URL: jbdit.bd/login/) -> এটি এখন আর হোমে আসবে না
+    path('login/', views.UserLoginView.as_view(), name='login'),
+
+    # ৩. লগআউট পাথ (URL: jbdit.bd/logout/)
+    path('logout/', views.UserLogoutView.as_view(), name='logout'),
 
     # Core Main Redirector Route
     path('dashboard/', views.dashboard_redirect_view, name='dashboard_redirect'),

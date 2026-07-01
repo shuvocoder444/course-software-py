@@ -20,6 +20,8 @@ urlpatterns = [
     # ড্যাশবোর্ড ইউআরএল (আলাদা এবং স্ল্যাশসহ সুরক্ষিত করা হলো)
     path("dashboard/courses/", include("apps.courses.urls")),
     path('dashboard/students/', include('apps.students.urls')),
+    path('dashboard/finance/', include('apps.finance.urls')),
+
 ]
 
 # Custom Error Handlers

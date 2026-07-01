@@ -5,68 +5,74 @@
 
 {% block content %}
 
-<!-- পেজ হেডার -->
 <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom">
     <h3 class="fw-bold m-0 text-dark">{{ title }}</h3>
 </div>
 
-<!-- ফুল উইডথ ফর্ম কার্ড (w-100 ব্যবহার করা হয়েছে) -->
-<div class="card shadow-sm border-0 w-100" style="border-radius: 0.5rem;">
-    <div class="card-body p-4">
-        <form method="POST" novalidate>
+<div class="card shadow-sm border-0 w-100 mb-4" style="border-radius: 0.75rem;">
+    <div class="card-body p-4 p-md-5">
+        <form method="POST" novalidate id="user-creation-form">
             {% csrf_token %}
 
-            <div class="row">
+            <div class="row g-4">
                 {% for field in form %}
-                    <!-- চেকবক্স বা ফুল পাসওয়ার্ড ফিল্ড বাদে অন্য ইনপুটগুলো চাইলে পাশাপাশি ২ কলামেও দেখাতে পারেন, তবে নিচে সিঙ্গেল লাইনেই সুন্দর স্পেসিং দেওয়া হলো -->
-                    <div class="col-12 mb-3">
+                    {% if field.name != 'last_name' %}
+                        <div class="col-12 col-md-6">
 
-                        {% if field.field.widget.input_type != 'checkbox' %}
-                            <label for="{{ field.id_for_label }}" class="form-label fw-semibold text-secondary mb-1">
-                                {{ field.label }}
-                            </label>
-                        {% endif %}
+                            {% if field.field.widget.input_type != 'checkbox' %}
+                                <label for="{{ field.id_for_label }}" class="form-label fw-semibold text-heading small text-uppercase tracking-wider mb-2">
+                                    {{ field.label }}
+                                </label>
+                            {% endif %}
 
-                        <div>
-                            {% if field.field.widget.input_type == 'checkbox' %}
-                                <!-- আধুনিক বুটস্ট্র্যাপ সুইচ/চেকবক্স স্টাইল -->
-                                <div class="form-check form-switch d-flex align-items-center gap-2 ps-0">
-                                    <label class="form-label fw-semibold text-secondary mb-0 me-2" for="{{ field.id_for_label }}">
-                                        {{ field.label }}
-                                    </label>
-                                    <div class="position-relative" style="padding-left: 2.5rem;">
-                                        {{ field }}
-                                        <span class="text-muted small ms-1">(টিক দিন)</span>
+                            <div>
+                                {% if field.field.widget.input_type == 'checkbox' %}
+                                    <div class="form-check form-switch card-checkbox-wrapper p-3 border rounded-3 d-flex align-items-center justify-content-between">
+                                        <label class="form-check-label fw-semibold text-secondary mb-0 cursor-pointer" for="{{ field.id_for_label }}">
+                                            {{ field.label }}
+                                        </label>
+                                        <div class="form-check-input-container">
+                                            {{ field }}
+                                        </div>
                                     </div>
+                                {% elif field.field.widget.input_type == 'password' or 'password' in field.name %}
+                                    <div class="position-relative password-wrapper">
+                                        {{ field }}
+                                        <span class="password-toggle-icon position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer" onclick="togglePassword('{{ field.id_for_label }}', this)">
+                                            👁️
+                                        </span>
+                                    </div>
+                                    <div class="mt-2">
+                                        <button type="button" class="btn btn-sm btn-link text-primary p-0 fw-medium btn-generate-password" data-field-id="{{ field.id_for_label }}">
+                                            ⚡ Auto Generate Password
+                                        </button>
+                                    </div>
+                                {% else %}
+                                    {{ field }}
+                                {% endif %}
+                            </div>
+
+                            {% if field.help_text %}
+                                <div class="form-text text-muted small mt-2 lh-base opacity-75">
+                                    {{ field.help_text|safe }}
                                 </div>
-                            {% else %}
-                                {{ field }}
+                            {% endif %}
+
+                            {% if field.errors %}
+                                <div class="invalid-feedback d-block small mt-2 fw-medium animate-fade-in">
+                                    <i class="ti ti-info-circle me-1"></i> {{ field.errors|striptags }}
+                                </div>
                             {% endif %}
                         </div>
-
-                        <!-- হেল্প টেক্সট -->
-                        {% if field.help_text %}
-                            <div class="form-text text-muted small mt-1 lh-base" style="font-size: 0.82rem;">
-                                {{ field.help_text|safe }}
-                            </div>
-                        {% endif %}
-
-                        <!-- এরর মেসেজ -->
-                        {% if field.errors %}
-                            <div class="invalid-feedback d-block small mt-1 fw-medium">
-                                {{ field.errors|striptags }}
-                            </div>
-                        {% endif %}
-                    </div>
+                    {% endif %}
                 {% endfor %}
             </div>
 
-            <!-- অ্যাকশন বাটনসমূহ -->
-            <div class="mt-4 pt-3 border-top d-flex gap-2 justify-content-start">
-                <button type="submit" class="btn btn-primary px-4 fw-semibold shadow-sm">
+            <div class="mt-5 pt-4 border-top d-flex gap-3 justify-content-start">
+                <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm rounded-3 hover-lift">
                     Save Context
                 </button>
-                <a href="{% url 'user_list' %}" class="btn btn-label-secondary px-4 fw-semibold">
+                <a href="{% url 'user_list' %}" class="btn btn-label-secondary px-4 py-2 fw-semibold rounded-3">
                     Cancel
                 </a>
             </div>
@@ -74,41 +80,110 @@
     </div>
 </div>
 
-<!-- Vuexy থিমের সাথে ম্যাচিং গলোবাল ফর্ম স্টাইল -->
+<script>
+    // পাসওয়ার্ড দেখানো বা লুকানোর ফাংশন
+    function togglePassword(fieldId, iconElement) {
+        const passwordInput = document.getElementById(fieldId);
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            iconElement.textContent = "🙈";
+        } else {
+            passwordInput.type = "password";
+            iconElement.textContent = "👁️";
+        }
+    }
+
+    // স্মার্ট পাসওয়ার্ড অটো-জেনারেট লজিক (যা উভয় ফিল্ডে একসাথে বসবে)
+    document.addEventListener("DOMContentLoaded", function() {
+        const generateButtons = document.querySelectorAll('.btn-generate-password');
+
+        generateButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // সব পাসওয়ার্ড ইনপুট ফিল্ড খুঁজে বের করা (Password এবং Confirmation)
+                const passwordInputs = document.querySelectorAll('input[type="password"], input[type="text"]');
+                const actualPasswordFields = Array.from(passwordInputs).filter(input =>
+                    input.id.toLowerCase().includes('password') || input.name.toLowerCase().includes('password')
+                );
+
+                // ১. একটি স্ট্রং পাসওয়ার্ড তৈরি করা
+                const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+                const passwordLength = 12;
+                let generatedPassword = "";
+                for (let i = 0; i < passwordLength; i++) {
+                    const randomNumber = Math.floor(Math.random() * chars.length);
+                    generatedPassword += chars.substring(randomNumber, randomNumber + 1);
+                }
+
+                // ২. লুপ চালিয়ে ফর্মের সব পাসওয়ার্ড ফিল্ডে একই পাসওয়ার্ড বসিয়ে দেওয়া
+                actualPasswordFields.forEach(input => {
+                    input.value = generatedPassword;
+                    input.type = "text"; // ইউজারকে দেখানোর জন্য টেক্সট মোড করা হলো
+
+                    // আইকনগুলোকেও বন্ধ চোখ (🙈) হিসেবে আপডেট করা
+                    const wrapper = input.closest('.password-wrapper');
+                    if (wrapper) {
+                        const icon = wrapper.querySelector('.password-toggle-icon');
+                        if (icon) icon.textContent = "🙈";
+                    }
+                });
+            });
+        });
+    });
+</script>
+
 <style>
-    /* টেক্সট ও সিলেক্ট ইনপুট সুদৃশ্য করা */
+    .tracking-wider {
+        letter-spacing: 0.05em;
+        font-size: 0.8rem !important;
+        color: #4b4b5a;
+    }
+
     .card form input[type="text"],
     .card form input[type="email"],
     .card form input[type="password"],
     .card form select {
         display: block;
         width: 100%;
-        padding: 0.55rem 0.875rem;
+        padding: 0.65rem 1rem;
         font-size: 0.9375rem;
         font-weight: 400;
         line-height: 1.5;
-        color: #5d596c;
+        color: #4b4b5a;
         background-color: #fff;
-        border: 1px solid #dbdade;
-        border-radius: 0.375rem;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        border: 1px solid #e6e5ea;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease-in-out;
     }
 
-    /* ফোকাস স্টেট (Vuexy পার্পল গলো) */
+    .password-wrapper input {
+        padding-right: 2.5rem !important;
+    }
+
     .card form input:focus, .card form select:focus {
         border-color: #7367f0;
         outline: 0;
-        box-shadow: 0 0.125rem 0.25rem rgba(115, 103, 240, 0.15);
+        box-shadow: 0 0 0 0.25rem rgba(115, 103, 240, 0.12);
+        background-color: #fff;
     }
 
-    /* চেকবক্স স্টাইল */
-    .card form input[type="checkbox"] {
-        position: absolute;
-        left: 0;
-        width: 1.8rem;
-        height: 1rem;
-        margin-top: 0;
+    .card-checkbox-wrapper {
+        background-color: #fcfcff;
+        transition: all 0.2s ease;
+    }
+    .card-checkbox-wrapper:hover {
+        border-color: #dbdade;
+        background-color: #f8f7fa;
+    }
+    .cursor-pointer {
         cursor: pointer;
+    }
+
+    .card form input[type="checkbox"] {
+        width: 2.5rem;
+        height: 1.35rem;
+        margin-top: 0;
+        vertical-align: top;
+        background-color: #fff;
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='rgba%280, 0, 0, 0.25%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 9h12'/%3e%3c/svg%3e");
         background-position: left center;
         background-repeat: no-repeat;
@@ -116,7 +191,8 @@
         border: 1px solid #dbdade;
         border-radius: 2rem;
         appearance: none;
-        transition: background-position .15s ease-in-out;
+        cursor: pointer;
+        transition: all 0.15s ease-in-out;
     }
     .card form input[type="checkbox"]:checked {
         background-position: right center;
@@ -125,27 +201,11 @@
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='%23fff' stroke='%237367f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 9h12'/%3e%3c/svg%3e");
     }
 
-    /* পাসওয়ার্ড রুলস লিস্ট (Help Text) */
-    .card form ul {
-        list-style-type: none;
-        padding-left: 0;
-        margin-top: 8px;
-        color: #a1a0a8;
-    }
-    .card form ul li {
-        position: relative;
-        padding-left: 15px;
-        margin-bottom: 4px;
-    }
-    .card form ul li::before {
-        content: "•";
-        color: #7367f0;
-        font-weight: bold;
-        position: absolute;
-        left: 0;
+    .invalid-feedback {
+        color: #ea5455;
+        font-size: 0.82rem;
     }
 
-    /* বাটন ওভাররাইড (Vuexy Primary Color: #7367f0) */
     .btn-primary {
         background-color: #7367f0 !important;
         border-color: #7367f0 !important;
@@ -156,13 +216,24 @@
         border-color: #655bd3 !important;
     }
     .btn-label-secondary {
-        color: #a1a0a8 !important;
+        color: #6f6b7d !important;
         background-color: #f1f0f2 !important;
         border-color: transparent !important;
     }
     .btn-label-secondary:hover {
-        color: #8f8e94 !important;
+        color: #5d596c !important;
         background-color: #e3e2e5 !important;
+    }
+    .hover-lift {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(115, 103, 240, 0.25) !important;
+    }
+    .password-toggle-icon {
+        font-size: 1.15rem;
+        user-select: none;
     }
 </style>
 

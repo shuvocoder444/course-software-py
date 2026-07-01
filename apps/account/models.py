@@ -1,3 +1,4 @@
+# apps/account/models.py (👑 সম্পূর্ণ ক্লিন এবং ফিক্সড কোড)
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -16,4 +17,5 @@ class Account(AbstractUser):
     )
 
     def __str__(self):
+        # 👑 ফিক্স: self.username যদি অবজেক্ট হিসেবে না আসে, তাই স্ট্রিং সেফ রাখা হলো
         return f"{self.username} ({self.role})"

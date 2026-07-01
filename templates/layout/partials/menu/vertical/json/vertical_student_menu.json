@@ -6,25 +6,6 @@
       "name": "Dashboard",
       "slug": "index"
     },
-    {
-      "name": "User Management",
-      "icon": "menu-icon tf-icons ti ti-settings",
-      "slug": "user-management",
-      "submenu": [
-        {
-          "url": "user_create",
-          "name": "Create User",
-          "slug": "user_create",
-          "icon": "menu-icon tf-icons ti ti-user-plus"
-        },
-        {
-          "url": "user_list",
-          "name": "User List",
-          "slug": "user_list",
-          "icon": "menu-icon tf-icons ti ti-list"
-        }
-      ]
-    },
 
     {
       "url": "logout",

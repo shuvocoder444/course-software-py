@@ -1,9 +1,193 @@
 {% extends layout_path %}
 
-{% load static %}
-{% load i18n %}
+{% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
-    <h2>Welcome to Admin Panel Content</h2>
-    <p>Apnar main visual data analytics structure ekhane hobe.</p>
+
+<div class="">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card bg-primary text-white border-0 shadow-sm">
+        <div class="card-body p-4 d-flex align-items-center justify-content-between">
+          <div>
+            <h3 class="fw-bold text-white mb-1">Welcome Back, {{ request.user.name|default:request.user.username }}! 👋</h3>
+            <p class="mb-0 text-white-50">Here is what's happening with your institute management system today.</p>
+          </div>
+          <div class="d-none d-md-block">
+            <span class="badge bg-white text-primary p-2 px-3 fw-semibold">Role: {{ request.user.role }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-4">
+    <div class="col-sm-6 col-xl-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-start justify-content-between">
+            <div class="content-left">
+              <span class="text-muted small text-uppercase fw-semibold">Total Students</span>
+              <div class="d-flex align-items-end mt-2">
+                <h4 class="mb-0 me-2 fw-bold">{{ total_students }}</h4>
+              </div>
+              <small class="text-muted small">Registered in system</small>
+            </div>
+            <span class="badge bg-label-primary p-2 rounded bg-light text-primary">
+              <i class="bx bx-user-voice fs-3"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-start justify-content-between">
+            <div class="content-left">
+              <span class="text-muted small text-uppercase fw-semibold">Total Teachers</span>
+              <div class="d-flex align-items-end mt-2">
+                <h4 class="mb-0 me-2 fw-bold">{{ total_teachers }}</h4>
+              </div>
+              <small class="text-muted small">Assigned faculties</small>
+            </div>
+            <span class="badge bg-label-danger p-2 rounded bg-light text-danger">
+              <i class="bx bx-id-card fs-3"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-start justify-content-between">
+            <div class="content-left">
+              <span class="text-muted small text-uppercase fw-semibold">Active Courses</span>
+              <div class="d-flex align-items-end mt-2">
+                <h4 class="mb-0 me-2 fw-bold">{{ total_courses|default:"0" }}</h4>
+              </div>
+              <small class="text-muted small">Live institutional courses</small>
+            </div>
+            <span class="badge bg-label-warning p-2 rounded bg-light text-warning">
+              <i class="bx bx-book-open fs-3"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-start justify-content-between">
+            <div class="content-left">
+              <span class="text-muted small text-uppercase fw-semibold">Active Batches</span>
+              <div class="d-flex align-items-end mt-2">
+                <h4 class="mb-0 me-2 fw-bold">{{ total_batches|default:"0" }}</h4>
+              </div>
+              <small class="text-muted small">Running batches</small>
+            </div>
+            <span class="badge bg-label-success p-2 rounded bg-light text-success">
+              <i class="bx bx-group fs-3"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-8">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header d-flex align-items-center justify-content-between bg-transparent border-bottom-0">
+          <h5 class="card-title m-0 fw-bold">Recently Registered Students</h5>
+          <a href="{% url 'student_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+        </div>
+        <div class="table-responsive text-nowrap">
+          <table class="table table-hover table-borderless border-top">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Student Name</th>
+                <th>Phone</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for student in recent_students %}
+              <tr>
+                <td><strong>#{{ student.student_id }}</strong></td>
+                <td>{{ student.name }}</td>
+                <td>{{ student.phone }}</td>
+                <td>
+                  {% if student.status == 'active' %}
+                    <span class="badge bg-label-success bg-light text-success px-2 py-1">Active</span>
+                  {% else %}
+                    <span class="badge bg-label-warning bg-light text-warning px-2 py-1">Pending</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4" class="text-center py-4 text-muted">No recent student profiles found.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header bg-transparent border-bottom-0">
+          <h5 class="card-title m-0 fw-bold">Academic Shortcuts</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2 mb-4">
+            <a href="{% url 'course_list' %}" class="btn btn-outline-primary text-start d-flex align-items-center justify-content-between">
+              <span><i class="bx bx-book me-2"></i> Manage Courses</span>
+              <i class="bx bx-chevron-right"></i>
+            </a>
+            <a href="{% url 'batch_list' %}" class="btn btn-outline-success text-start d-flex align-items-center justify-content-between">
+              <span><i class="bx bx-layer me-2"></i> Manage Batches</span>
+              <i class="bx bx-chevron-right"></i>
+            </a>
+            <a href="{% url 'student_create' %}" class="btn btn-dark text-start d-flex align-items-center justify-content-between">
+              <span><i class="bx bx-user-plus me-2"></i> New Student Admission</span>
+              <i class="bx bx-plus"></i>
+            </a>
+          </div>
+
+          <ul class="list-unstyled mb-0 border-top pt-3">
+            <li class="d-flex mb-3 pb-1">
+              <div class="avatar flex-shrink-0 me-3">
+                <span class="avatar-initial rounded bg-label-primary bg-light text-primary p-2"><i class="bx bx-shield-quarter"></i></span>
+              </div>
+              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                <div class="me-2">
+                  <h6 class="mb-0 fw-semibold">User Role Settings</h6>
+                  <small class="text-muted">Manage system privileges</small>
+                </div>
+                <a href="#" class="btn btn-sm btn-icon btn-label-secondary"><i class="bx bx-chevron-right"></i></a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
 {% endblock %}

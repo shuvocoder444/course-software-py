@@ -1,0 +1,446 @@
+{% extends layout_path %}
+{% load static %}
+{% block title %}Expense Lists{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/quill/editor.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/quill/quill.js' %}"></script>
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+{% endblock %}
+
+{% block page_js %}
+<script>
+  let quill;
+
+  // 🟢 ইউজারের ফোন নম্বর চেক করা হচ্ছে
+  const isRestrictedUser = {% if request.user.phone_number == "8801819730730" %}true{% else %}false{% endif %};
+  const serverToday = "{% now 'Y-m-d' %}"; // সার্ভারের আজকের ডেট
+
+  $(document).ready(function () {
+
+    // কলামগুলো সেটআপ করা হচ্ছে
+    let dtColumns = [
+        {
+            data: null,
+            title: '#',
+            render: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+            }
+        },
+        {
+            data: null,
+            title: 'Actions',
+            orderable: false,
+            searchable: false,
+            render: function (data, type, row) {
+                let editBtn = `<button class="btn btn-sm btn-icon btn-primary edit-expense" data-id="${row.id}" title="Edit"><i class="ti ti-edit"></i></button>`;
+                let deleteBtn = `<button class="btn btn-sm btn-icon btn-danger delete-expense" data-id="${row.id}" title="Delete"><i class="ti ti-trash"></i></button>`;
+
+                // 🟢 লজিক: রেস্ট্রিক্টেড ইউজার হলে চেক করবে
+                if (isRestrictedUser) {
+                    deleteBtn = ''; // ডিলিট বাটন হাইড
+
+                    // চেক করবে ডেটটি আজকের কি না
+                    let isToday = (String(row.date).trim() === serverToday);
+
+                    if (!isToday) {
+                        editBtn = ''; // আজকের ডেট না হলে এডিট বাটন হাইড
+                    }
+                }
+
+                return `<div class="d-flex gap-2">${editBtn}${deleteBtn}</div>`;
+            }
+        },
+        { data: 'date', title: 'Date' },
+        { data: 'category', title: 'Category' },
+        { data: 'exp_name', title: 'Name' }, // 🟢 ব্যাকএন্ডের 'exp_name' এর সাথে মিল করা হলো
+        {
+            data: 'amount',
+            title: 'Amount',
+            render: function(data) {
+                return `৳ ${parseFloat(data).toFixed(2)}`;
+            }
+        },
+        {
+            data: 'note',
+            title: 'Note',
+            render: function(data) {
+                return data ? data : '';
+            }
+        }
+    ];
+
+    // Initialize DataTable
+    let table = $('#expense-table').DataTable({
+      processing: true,
+      serverSide: true,
+      searching: false,
+      pageLength: 50, // 🟢 ডিফল্ট শো এন্ট্রি ৫০ দেখাবে
+      lengthMenu: [10, 25, 50, 100], // ড্রপডাউন অপশনসমূহ
+      ajax: {
+        url: '{% url "expense_data" %}',
+        data: function (d) {
+          d.category = $('[name="category"]').val();
+          d.start_date = $('[name="start_date"]').val();
+          d.end_date = $('[name="end_date"]').val();
+          d.search = $('[name="search"]').val();
+        },
+        dataSrc: function (json) {
+          if(json.total_amount !== undefined) {
+             $('#total-amount').text(`৳ ${parseFloat(json.total_amount).toFixed(2)}`);
+          }
+          return json.data;
+        }
+      },
+      columns: dtColumns,
+      order: [[2, 'desc']]
+    });
+
+    $('form').not('#addExpenseModal form').on('submit', function (e) {
+      e.preventDefault();
+      $('#expense-table').DataTable().ajax.reload();
+    });
+
+    quill = new Quill('#note-editor', {
+      theme: 'snow',
+      modules: {
+        toolbar: '#note-toolbar'
+      }
+    });
+
+    $('#addExpenseModal form').on('submit', function (e) {
+      e.preventDefault();
+
+      if (typeof quill !== 'undefined') {
+        $('#note-input').val(quill.root.innerHTML);
+      }
+
+      const form = $(this);
+      const url = form.attr('action');
+      const data = form.serialize();
+
+      $.ajax({
+        type: 'POST',
+        url: url,
+        data: data,
+        headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+        success: function (response) {
+          $('#expense-table').DataTable().ajax.reload(null, false);
+          $('#addExpenseModal').modal('hide');
+          resetExpenseModal();
+          toastr.success(response.message);
+          // 🟢 টোটাল অ্যামাউন্ট আপডেট করার জন্য পেজ রিলোড বা রিকোয়েস্ট রিফ্রেশ
+          setTimeout(() => { $('#expense-table').DataTable().ajax.reload(); }, 500);
+        },
+        error: function (xhr) {
+          const msg = xhr.responseJSON?.message || 'Failed to submit expense.';
+          toastr.error(msg);
+        }
+      });
+    });
+
+    $('#addExpenseModal').on('hidden.bs.modal', function () {
+      resetExpenseModal();
+    });
+
+    $('#exportPdfBtn').on('click', function(e) {
+        e.preventDefault();
+        const search = $('[name="search"]').val() || '';
+        const category = $('[name="category"]').val() || '';
+        const startDate = $('[name="start_date"]').val() || '';
+        const endDate = $('[name="end_date"]').val() || '';
+
+        // const url = `{% url 'expense_export_pdf' %}?search=${encodeURIComponent(search)}&category=${encodeURIComponent(category)}?start_date=${encodeURIComponent(startDate)}&end_date=${encodeURIComponent(endDate)}`;
+        // window.open(url, '_blank');
+
+        const url = `{% url 'expense_export_pdf' %}?search=${encodeURIComponent(search)}&category=${encodeURIComponent(category)}&start_date=${encodeURIComponent(startDate)}&end_date=${encodeURIComponent(endDate)}`;
+        window.open(url, '_blank');
+    });
+
+  });
+
+  // 🟢 Delete Expense Logic
+  $(document).on('click', '.delete-expense', function () {
+    const id = $(this).data('id');
+    if (confirm('Are you sure you want to delete this expense?')) {
+      // 🟢 জ্যাঙ্গো নেমিং কনভেনশন অনুযায়ী সঠিক ইউআরএল ব্যবহার
+      let deleteUrl = "{% url 'delete_expense' pk=0 %}".replace('0', id);
+      $.ajax({
+        url: deleteUrl,
+        type: 'POST',
+        headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+        success: function (res) {
+          $('#expense-table').DataTable().ajax.reload(null, false);
+          toastr.success(res.message);
+          setTimeout(() => { $('#expense-table').DataTable().ajax.reload(); }, 500);
+        },
+        error: function () {
+          toastr.error('Delete failed!');
+        }
+      });
+    }
+  });
+
+  // 🟢 Edit Expense Details Logic
+  $(document).on('click', '.edit-expense', function () {
+    const id = $(this).data('id');
+    let detailUrl = "{% url 'expense_detail_ajax' pk=0 %}".replace('0', id);
+
+    $.get(detailUrl, function (data) {
+      if (data.success) {
+        const expense = data.expense;
+
+        // 🟢 ডাটা ম্যাপিং ফিক্স: ব্যাকএন্ডের কী গুলোর সাথে ইনপুট ফিল্ডের নেম সিঙ্ক করা হলো
+        $('[name="expense_id"]').val(expense.id);
+        $('[name="exp_name"]').val(expense.exp_name);
+        $('[name="amount"]').val(expense.amount);
+        $('[name="date"]').val(expense.date);
+        $('[name="exp_category"]').val(expense.exp_category_id);
+
+        if (typeof quill !== 'undefined') {
+          quill.root.innerHTML = expense.note || '';
+        }
+
+        if (isRestrictedUser) {
+            $('#expenseDateInput').attr('min', serverToday);
+        }
+
+        $('#addExpenseModal .modal-title').text('Edit Expense');
+        $('#addExpenseModal button[type="submit"]').text('Update Expense');
+
+        // এডিট পোস্ট করার জ্যাঙ্গো ডাইনামিক ইউআরএল রাউট
+        let editUrl = "{% url 'edit_expense' pk=0 %}".replace('0', id);
+        $('#addExpenseModal form').attr('action', editUrl);
+        $('#addExpenseModal').modal('show');
+      } else {
+        toastr.error('Failed to load expense details.');
+      }
+    }).fail(function() {
+        toastr.error('Server error or endpoint not found!');
+    });
+  });
+
+  function resetExpenseModal() {
+    $('#addExpenseModal form').trigger('reset');
+    $('#addExpenseModal form').attr('action', '{% url "expense_list" %}');
+
+    // মোডাল রিসেট হওয়ার সময় ওল্ড আইডি ক্লিয়ার করা
+    $('#expenseId').val('');
+
+    $('#addExpenseModal .modal-title').text('Add Expense');
+    $('#addExpenseModal button[type="submit"]').text('Save Expense');
+
+    if (typeof quill !== 'undefined') {
+      quill.root.innerHTML = '';
+    }
+
+    if (isRestrictedUser) {
+        $('#expenseDateInput').attr('min', serverToday);
+        $('#expenseDateInput').val(serverToday);
+    } else {
+        $('#expenseDateInput').removeAttr('min');
+    }
+  }
+</script>
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+  #expense-table th,
+  #expense-table td {
+    border-left: 1px solid #dee2e6 !important;
+    border-right: 1px solid #dee2e6 !important;
+  }
+
+  #expense-table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  #toast-container > .toast {
+    background-color: #323232 !important;
+    color: #fff !important;
+    font-weight: 500;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  #toast-container > .toast-success { background-color: #28c76f !important; }
+  #toast-container > .toast-error { background-color: #ea5455 !important; }
+  #toast-container > .toast-info { background-color: #00cfe8 !important; }
+  #toast-container > .toast-warning { background-color: #ff9f43 !important; }
+  #toast-container > .toast i { color: #fff !important; }
+
+  .modal-content { height: 650px; }
+</style>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="content-header">
+  <h4 class="mb-2">Expense List</h4>
+</div>
+
+<div class="card p-2 mb-2">
+  <form method="get" class="row g-2">
+    <div class="col-md-3">
+      <input type="text" name="search" value="{{ search_query }}" class="form-control" placeholder="Search expense name or note">
+    </div>
+    <div class="col-md-3">
+      <select name="category" class="form-select">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat.id }}" {% if category_filter == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <input type="date" name="start_date" value="{{ start_date }}" class="form-control">
+    </div>
+    <div class="col-md-2">
+      <input type="date" name="end_date" value="{{ end_date }}" class="form-control">
+    </div>
+
+    <div class="col-md-1">
+      <button class="btn btn-primary w-100" type="submit">Filter</button>
+    </div>
+
+    <div class="col-md-1">
+      <a href="{% url 'expense_list' %}" class="btn btn-secondary w-100">Reset</a>
+    </div>
+  </form>
+
+  <div class="col-md-2 mt-3">
+    <button type="button" id="exportPdfBtn" class="btn btn-sm btn-outline-primary">
+      <i class="ti ti-download"></i> Export PDF
+    </button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="card-title">Expenses</h5>
+    <div class="text-end">
+      <button type="button" class="btn btn-success w-100" onclick="resetExpenseModal()" data-bs-toggle="modal" data-bs-target="#addExpenseModal">
+        + Add Expense
+      </button>
+    </div>
+  </div>
+
+  <div class="text-end mt-3 pe-5">
+      <h6><strong>Total Amount:</strong> <span id="total-amount" class="">৳ {{ total_amount|floatformat:2 }}</span></h6>
+  </div>
+
+  <div class="card-datatable text-nowrap table-responsive p-2">
+    <table class="table table-bordered" id="expense-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Actions</th>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Name</th>
+          <th>Amount</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade" id="addExpenseModal" tabindex="-1" aria-labelledby="addExpenseModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form method="post" action="{% url 'expense_list' %}">
+        {% csrf_token %}
+        <input type="hidden" name="expense_id" id="expenseId">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Expense</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row g-4 px-4">
+
+          <div class="col-md-6">
+            <label class="form-label" for="exp_name">Expense Name</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-file-text"></i></span>
+              <input type="text" name="exp_name" class="form-control" placeholder="Internet Bill" required>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="amount">Amount</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-currency-taka"></i></span>
+              <input type="number" step="0.01" name="amount" class="form-control" placeholder="500.00" required>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="date">Date</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-calendar"></i></span>
+              <input type="date" name="date" id="expenseDateInput" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="exp_category">Category</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-list"></i></span>
+              <select name="exp_category" class="form-select" required>
+                <option value="">Select Category</option>
+                {% for cat in categories %}
+                  <option value="{{ cat.id }}">{{ cat.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label" for="note-editor">Note</label>
+            <div id="note-toolbar" class="">
+              <span class="ql-formats">
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+              </span>
+              <span class="ql-formats">
+                <select class="ql-color"></select>
+                <select class="ql-background"></select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+              </span>
+            </div>
+            <div id="note-editor" style="height: 250px;"></div>
+            <input type="hidden" name="note" id="note-input">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save Expense</button>
+          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

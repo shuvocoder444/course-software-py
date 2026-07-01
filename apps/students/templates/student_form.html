@@ -1,35 +1,132 @@
 {% extends layout_path %}
 
+{% block title %}{{ title }}{% endblock %}
+
 {% block content %}
-<div class="card">
-    <div class="card-header">
-        <h4 class="card-title">{{ title }}</h4>
-    </div>
-    <div class="card-body">
-        <form method="post">
-            {% csrf_token %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Students /</span> {{ title }}</h4>
 
-            <!-- ফর্ম ফিল্ডগুলো রেন্ডার করা -->
-            <div class="row">
-                {% for field in form %}
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.help_text %}
-                        <small class="text-muted">{{ field.help_text }}</small>
-                    {% endif %}
-                    {% for error in field.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
-                </div>
-                {% endfor %}
-            </div>
+  <form method="POST" enctype="multipart/form-data" novalidate id="studentForm">
+    {% csrf_token %}
 
-            <div class="mt-3">
-                <button type="submit" class="btn btn-success">Save Student</button>
-                <a href="{% url 'student_list' %}" class="btn btn-secondary">Cancel</a>
+    <div class="card mb-4">
+      <h5 class="card-header bg-light text-primary"><i class="bx bx-user me-2"></i>Student & Course Information</h5>
+      <div class="card-body mt-3">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold text-danger">Select Course *</label>
+            {{ form.course }}
+            {{ form.course.errors }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold text-danger">Select Batch *</label>
+            {{ form.batch }}
+            {{ form.batch.errors }}
+          </div>
+
+          <hr class="my-3">
+
+          <div class="col-md-4"><label class="form-label">Student / Applicant's Name *</label>{{ form.name }}{{ form.name.errors }}</div>
+          <div class="col-md-4"><label class="form-label">Mobile Number *</label>{{ form.phone }}{{ form.phone.errors }}</div>
+          <div class="col-md-4"><label class="form-label">Email Address</label>{{ form.email }}{{ form.email.errors }}</div>
+
+          <div class="col-md-3"><label class="form-label">Vill / House / Area</label>{{ form.village_house_area }}</div>
+          <div class="col-md-3"><label class="form-label">Thana / Upazila</label>{{ form.thana_upazila }}</div>
+          <div class="col-md-3"><label class="form-label">District / City</label>{{ form.district_city }}</div>
+          <div class="col-md-3"><label class="form-label">Post Code</label>{{ form.post_code }}</div>
+
+          <div class="col-md-2"><label class="form-label">Date of Birth *</label>{{ form.date_of_birth }}</div>
+          <div class="col-md-2"><label class="form-label">Marital Status</label>{{ form.marital_status }}</div>
+          <div class="col-md-2"><label class="form-label">Birth Certificate No.</label>{{ form.birth_certificate_no }}</div>
+          <div class="col-md-2"><label class="form-label">National ID No.</label>{{ form.national_id_no }}</div>
+          <div class="col-md-2"><label class="form-label">Religion</label>{{ form.religion }}</div>
+          <div class="col-md-2"><label class="form-label">Blood Group</label>{{ form.blood_group }}</div>
+
+          <div class="col-md-12">
+            <label class="form-label">Student Passport Size Photo</label>
+            <div class="border rounded p-3 text-center bg-light">
+              {{ form.photo }}
+              <p class="text-muted small mt-1 mb-0">JPEG, PNG — Max 10MB — Passport size preferred</p>
             </div>
-        </form>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <div class="card mb-4">
+      <h5 class="card-header bg-light text-success"><i class="bx bx-group me-2"></i>Guardian Information</h5>
+      <div class="card-body mt-3">
+        <div class="row g-3">
+          <div class="col-md-4"><label class="form-label">Father's Name</label>{{ form.father_name }}</div>
+          <div class="col-md-4"><label class="form-label">Father's Phone</label>{{ form.father_phone }}</div>
+          <div class="col-md-4"><label class="form-label">Father's Occupation</label>{{ form.father_occupation }}</div>
+
+          <div class="col-md-4"><label class="form-label">Mother's Name</label>{{ form.mother_name }}</div>
+          <div class="col-md-4"><label class="form-label">Guardian's Name</label>{{ form.guardian_name }}</div>
+          <div class="col-md-4"><label class="form-label">Guardian's Phone</label>{{ form.guardian_phone }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <h5 class="card-header bg-light text-info"><i class="bx bx-book-open me-2"></i>Academic Information</h5>
+      <div class="card-body mt-3">
+        <div class="row g-3">
+          <div class="col-md-6"><label class="form-label">Education Institute's Name</label>{{ form.education_institute_name }}</div>
+          <div class="col-md-6"><label class="form-label">Last Educational Qualification</label>{{ form.last_educational_qualification }}</div>
+
+          <div class="col-md-2"><label class="form-label">Examination</label>{{ form.examination }}</div>
+          <div class="col-md-2"><label class="form-label">Passing Year</label>{{ form.passing_year }}</div>
+          <div class="col-md-3"><label class="form-label">Board Name</label>{{ form.board_name }}</div>
+          <div class="col-md-2"><label class="form-label">Roll Number</label>{{ form.roll }}</div>
+          <div class="col-md-3"><label class="form-label">Registration Number</label>{{ form.registration_number }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <button type="submit" class="btn btn-primary btn-lg px-5">Save Student Details</button>
+      <a href="{% url 'student_list' %}" class="btn btn-outline-secondary btn-lg ms-2">Cancel</a>
+    </div>
+  </form>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const courseSelect = document.querySelector("select[name='course']");
+    const batchSelect = document.querySelector("select[name='batch']");
+
+    if (courseSelect && batchSelect) {
+      courseSelect.addEventListener("change", function () {
+        const courseId = this.value;
+
+        // ড্রপডাউন রিসেট করা
+        batchSelect.innerHTML = '<option value="">--- Select Batch ---</option>';
+
+        if (!courseId) return;
+
+        // 👑 ডাইনামিক ও নিরাপদ রিলেটিভ ইউআরএল পাথ
+        const ajaxUrl = "{% url 'ajax_load_batches' %}";
+
+        fetch(`${ajaxUrl}?course_id=${courseId}`)
+          .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+          })
+          .then(data => {
+            data.forEach(batch => {
+              const option = document.createElement("option");
+              option.value = batch.id;
+              // models.py অনুযায়ী field এর নাম batch_number
+              option.textContent = `Batch ${batch.batch_number}`;
+              batchSelect.appendChild(option);
+            });
+          })
+          .catch(error => {
+            console.error("Error loading batches:", error);
+            alert("Batch load করতে সমস্যা হয়েছে! দয়া করে ব্রাউজারের F12 Console চেক করুন।");
+          });
+      });
+    }
+  });
+</script>
 {% endblock %}

@@ -752,10 +752,11 @@ textarea.form-ctrl { resize:none; }
 <!-- ==================== NAVBAR ==================== -->
 <nav class="site-nav navbar navbar-expand-lg py-3" id="siteNav">
   <div class="container d-flex align-items-center justify-content-between">
-    <a href="#" class="nav-brand d-flex align-items-center gap-2">
-      <i class="ti ti-device-laptop fs-3" style="color:var(--green);"></i>
-      <span><span class="r">JBD</span><span class="g"> IT</span></span>
-    </a>
+{% load static %}
+
+<a href="/" class="nav-brand d-flex align-items-center gap-2">
+    <img src="{% static 'cus/JBD-IT-Logo.png' %}" alt="JBD IT Logo" height="35" class="d-inline-block align-top">
+</a>
 
     <button class="navbar-toggler border-0 bg-transparent d-lg-none" type="button"
       data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
@@ -765,10 +766,11 @@ textarea.form-ctrl { resize:none; }
     <div class="collapse navbar-collapse" id="navMain">
       <ul class="navbar-nav mx-auto gap-1 mb-3 mb-lg-0">
         <li class="nav-item"><a class="nav-link active" href="#">হোম</a></li>
-        <li class="nav-item"><a class="nav-link" href="#process">ভর্তি প্রক্রিয়া</a></li>
-        <li class="nav-item"><a class="nav-link" href="#courses">কোর্সসমূহ</a></li>
-        <li class="nav-item"><a class="nav-link" href="#instructors">মেন্টর</a></li>
-        <li class="nav-item"><a class="nav-link" href="#admission-form">ভর্তি ফরম</a></li>
+        <li class="nav-item"><a class="nav-link" href="">অফিস অ্যাপ্লিকেশন</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">গ্রাফিক্স ডিজাইন</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">ডিজিটাল মার্কেটিং</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">ওয়েব ডেভেলপমেন্ট</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">ফ্রিল্যান্সিং </a></li>
       </ul>
 <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 ms-lg-3 mt-3 mt-lg-0">
   <a href="tel:+8801716905615" class="btn-call">

@@ -1,0 +1,210 @@
+{% extends layout_path %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid my-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 text-white"><i class="fas fa-receipt me-2"></i> Create/Update Invoice & Add Payment</h5>
+            <a href="{% url 'invoice_list' %}" class="btn btn-sm btn-light text-primary fw-bold">
+                <i class="fas fa-list me-1"></i> Invoice List
+            </a>
+        </div>
+        <div class="card-body bg-light">
+            <form method="POST" action="{% url 'add_payment' %}" id="paymentForm">
+                {% csrf_token %}
+
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body bg-white rounded">
+                        <h6 class="text-secondary mb-3"><i class="fas fa-user-graduate me-2"></i> Student Information</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Select Student <span class="text-danger">*</span></label>
+                                {{ form.student }}
+                                {% if form.student.errors %}
+                                    <div class="text-danger small">{{ form.student.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Invoice Date <span class="text-danger">*</span></label>
+                                {{ form.date }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body bg-white rounded">
+                        <h6 class="text-secondary mb-3"><i class="fas fa-file-invoice-dollar me-2"></i> Fees Distribution Details</h6>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Course Fee (৳)</label>
+                                {{ form.course_fee }}
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Certificate Fee (৳)</label>
+                                {{ form.certificate_fee }}
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">ID Card Fee (৳)</label>
+                                {{ form.id_card_fee }}
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Admit Card Fee (৳)</label>
+                                {{ form.admit_card_fee }}
+                            </div>
+                            <div class="col-md-3 mt-3">
+                                <label class="form-label">Other Fee (৳)</label>
+                                {{ form.other_fee }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body bg-white rounded">
+                        <h6 class="text-secondary mb-3"><i class="fas fa-calculator me-2"></i> Payment Summary</h6>
+                        <div class="row g-3">
+                            <div class="col-md-2">
+                                <label class="form-label text-warning fw-bold">Discount (৳)</label>
+                                {{ form.discount }}
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label text-info fw-bold">Total Gross (৳)</label>
+                                <input type="number" id="total_gross_display" class="form-control fw-bold" readonly style="background-color: #e9ecef;">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label text-secondary fw-bold">Previously Paid (৳)</label>
+                                <input type="number" id="prev_paid_display" class="form-control fw-bold" value="0.00" readonly style="background-color: #e9ecef;">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label text-success fw-bold">New Payment / Cash (৳)</label>
+                                {{ form.paid_amount }}
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label text-primary fw-bold">Total Paid (৳)</label>
+                                <input type="number" id="total_paid_display" class="form-control fw-bold" readonly style="background-color: #e9ecef;">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label text-danger fw-bold">Amount Due (৳)</label>
+                                <input type="number" id="amount_due_display" class="form-control fw-bold text-danger" readonly style="background-color: #f8d7da;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body bg-white rounded">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Payment Method <span class="text-danger">*</span></label>
+                                <select name="payment_method" id="payment_method" class="form-select" required>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Bkash">Bkash</option>
+                                    <option value="Nagad">Nagad</option>
+                                    <option value="Rocket">Rocket</option>
+                                    <option value="Bank">Bank Transfer</option>
+                                </select>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label fw-bold">Additional Notes</label>
+                                {{ form.additional_notes }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="reset" class="btn btn-warning px-4 text-white"><i class="fas fa-undo me-1"></i> Reset</button>
+                    <button type="submit" class="btn btn-primary px-5"><i class="fas fa-check-circle me-1"></i> Save Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const studentSelect = document.getElementById('id_student') || document.querySelector('select[name="student"]');
+
+    const courseFee = document.getElementById('id_course_fee');
+    const certFee = document.getElementById('id_certificate_fee');
+    const idCardFee = document.getElementById('id_id_card_fee');
+    const admitFee = document.getElementById('id_admit_card_fee');
+    const otherFee = document.getElementById('id_other_fee');
+    const discount = document.getElementById('id_discount');
+    const newPaidAmount = document.getElementById('id_paid_amount');
+
+    const totalGrossBox = document.getElementById('total_gross_display');
+    const prevPaidBox = document.getElementById('prev_paid_display');
+    const totalPaidBox = document.getElementById('total_paid_display');
+    const dueBox = document.getElementById('amount_due_display');
+
+    let previousPaidAmount = 0;
+
+    if (studentSelect) {
+        studentSelect.addEventListener('change', fetchStudentData);
+        studentSelect.addEventListener('input', fetchStudentData);
+    }
+
+    function fetchStudentData() {
+        const studentId = studentSelect.value;
+        if (studentId) {
+            fetch(`/dashboard/finance/ajax/get-student-details/?student_id=${studentId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    if(courseFee) courseFee.value = data.course_fee;
+                    if(certFee) certFee.value = data.certificate_fee;
+                    if(idCardFee) idCardFee.value = data.id_card_fee;
+                    if(admitFee) admitFee.value = data.admit_card_fee;
+                    if(otherFee) otherFee.value = data.other_fee;
+                    if(discount) discount.value = data.discount;
+
+                    previousPaidAmount = data.total_paid;
+                    if(prevPaidBox) prevPaidBox.value = previousPaidAmount.toFixed(2);
+                } else {
+                    if(courseFee) courseFee.value = 0;
+                    if(certFee) certFee.value = 0;
+                    if(idCardFee) idCardFee.value = 0;
+                    if(admitFee) admitFee.value = 0;
+                    if(otherFee) otherFee.value = 0;
+                    if(discount) discount.value = 0;
+                    previousPaidAmount = 0;
+                    if(prevPaidBox) prevPaidBox.value = "0.00";
+                }
+                calculateMath();
+            })
+            .catch(error => console.error("Error fetching student details:", error));
+        }
+    }
+
+    const inputs = [courseFee, certFee, idCardFee, admitFee, otherFee, discount, newPaidAmount];
+    inputs.forEach(input => {
+        if (input) {
+            input.addEventListener('input', calculateMath);
+        }
+    });
+
+    function calculateMath() {
+        let course = courseFee ? (parseFloat(courseFee.value) || 0) : 0;
+        let cert = certFee ? (parseFloat(certFee.value) || 0) : 0;
+        let idCard = idCardFee ? (parseFloat(idCardFee.value) || 0) : 0;
+        let admit = admitFee ? (parseFloat(admitFee.value) || 0) : 0;
+        let other = otherFee ? (parseFloat(otherFee.value) || 0) : 0;
+        let disc = discount ? (parseFloat(discount.value) || 0) : 0;
+        let newPaid = newPaidAmount ? (parseFloat(newPaidAmount.value) || 0) : 0;
+
+        let totalGross = course + cert + idCard + admit + other;
+        let currentTotalPaid = previousPaidAmount + newPaid;
+        let netPayable = totalGross - disc;
+        let due = netPayable - currentTotalPaid;
+
+        if(totalGrossBox) totalGrossBox.value = totalGross.toFixed(2);
+        if(totalPaidBox) totalPaidBox.value = currentTotalPaid.toFixed(2);
+        if(dueBox) dueBox.value = due.toFixed(2);
+    }
+});
+</script>
+{% endblock %}
