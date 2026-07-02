@@ -1,3 +1,5 @@
+from django.conf import settings  # 👑 মিডিয়া সেটিংস ইমপোর্ট করা হলো
+from django.conf.urls.static import static  # 👑 স্ট্যাটিক রুট ইমপোর্ট করা হলো
 from django.contrib import admin
 from django.urls import include, path
 
@@ -18,14 +20,17 @@ urlpatterns = [
     # frontend/home pages urls
     path('', include('apps.front_pages.urls')),
 
-    # ড্যাশবোর্ড ইউআরএল (আলাদা এবং স্ল্যাশসহ সুরক্ষিত করা হলো)
+    # ড্যাশবোর্ড ইউআরএল
     path("dashboard/courses/", include("apps.courses.urls")),
     path('dashboard/students/', include('apps.students.urls')),
     path('dashboard/finance/', include('apps.finance.urls')),
     path('dashboard/marketing/', include('apps.marketing.urls')),
     path('dashboard/settings/', include('apps.setting.urls')),
-
 ]
+
+# 👑 লোকাল ডেভেলপমেন্টে (DEBUG=True) আপলোড করা ছবি দেখার জন্য মিডিয়া ইউআরএল যুক্ত করা হলো
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Custom Error Handlers
 handler404 = SystemView.as_view(template_name="pages_misc_error.html", status=404)

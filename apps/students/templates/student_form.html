@@ -5,7 +5,8 @@
 {% block content %}
 <div class="container-xxl flex-grow-1 container-p-y">
   <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Students /</span> {{ title }}</h4>
-{% if form.errors %}
+
+  {% if form.errors %}
     <div class="alert alert-danger">
         <ul>
             {% for field, errors in form.errors.items %}
@@ -13,13 +14,12 @@
             {% endfor %}
         </ul>
     </div>
-{% endif %}
+  {% endif %}
+
   <form method="POST" enctype="multipart/form-data" novalidate id="studentForm">
     {% csrf_token %}
 
-
-
-<div class="card mb-4">
+    <div class="card mb-4">
       <h5 class="card-header bg-light text-primary"><i class="bx bx-user me-2"></i>Student & Course Information</h5>
       <div class="card-body mt-3">
         <div class="row g-3">
@@ -41,8 +41,6 @@
             {{ form.student_id.errors }}
           </div>
 
-
-
           <hr class="my-3">
 
           <div class="col-md-4"><label class="form-label">Student / Applicant's Name *</label>{{ form.name }}{{ form.name.errors }}</div>
@@ -55,11 +53,12 @@
           <div class="col-md-3"><label class="form-label">Post Code</label>{{ form.post_code }}</div>
 
           <div class="col-md-2"><label class="form-label">Date of Birth *</label>{{ form.date_of_birth }}</div>
+          <div class="col-md-2"><label class="form-label">Gender</label>{{ form.gender }}</div>
           <div class="col-md-2"><label class="form-label">Marital Status</label>{{ form.marital_status }}</div>
           <div class="col-md-2"><label class="form-label">Birth Certificate No.</label>{{ form.birth_certificate_no }}</div>
           <div class="col-md-2"><label class="form-label">National ID No.</label>{{ form.national_id_no }}</div>
-          <div class="col-md-2"><label class="form-label">Religion</label>{{ form.religion }}</div>
-          <div class="col-md-2"><label class="form-label">Blood Group</label>{{ form.blood_group }}</div>
+          <div class="col-md-1"><label class="form-label">Religion</label>{{ form.religion }}</div>
+          <div class="col-md-1"><label class="form-label">Blood Group</label>{{ form.blood_group }}</div>
 
           <div class="col-md-12">
             <label class="form-label">Student Passport Size Photo</label>
@@ -103,12 +102,57 @@
       </div>
     </div>
 
+    <div class="card mb-4">
+      <h5 class="card-header bg-light text-warning"><i class="bx bx-briefcase me-2"></i>Office Section & Signatures</h5>
+      <div class="card-body mt-3">
+        <div class="row g-3">
+          <div class="col-md-4"><label class="form-label">Admission Date</label>{{ form.admission_date }}</div>
+          <div class="col-md-4"><label class="form-label">Student Signature</label>{{ form.student_signature }}</div>
+          <div class="col-md-4"><label class="form-label">Authority Signature & Date</label>{{ form.authority_signature }}</div>
+          <div class="col-md-12"><label class="form-label">Authority Comments</label>{{ form.authority_comments }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <h5 class="card-header bg-light text-secondary"><i class="bx bx-paperclip me-2"></i>Student Attachments</h5>
+      <div class="card-body mt-3">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="d-flex flex-wrap gap-4">
+              <div class="form-check">
+                {{ form.has_admission_form }}
+                <label class="form-check-label ms-1">Admission Form</label>
+              </div>
+              <div class="form-check">
+                {{ form.has_passport_photo }}
+                <label class="form-check-label ms-1">Applicant's Passport Size Photo</label>
+              </div>
+              <div class="form-check">
+                {{ form.has_nid_photocopy }}
+                <label class="form-check-label ms-1">National ID Card Photocopy</label>
+              </div>
+              <div class="form-check">
+                {{ form.has_birth_certificate }}
+                <label class="form-check-label ms-1">Birth Certificate Photocopy</label>
+              </div>
+              <div class="form-check">
+                {{ form.has_marksheet_photocopy }}
+                <label class="form-check-label ms-1">JSC/SSC/Others Marksheet Photocopy</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="mb-4">
       <button type="submit" class="btn btn-primary btn-lg px-5">Save Student Details</button>
       <a href="{% url 'student_list' %}" class="btn btn-outline-secondary btn-lg ms-2">Cancel</a>
     </div>
   </form>
 </div>
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const courseSelect = document.querySelector("select[name='course']");
@@ -123,7 +167,7 @@
 
         if (!courseId) return;
 
-        // 👑 ডাইনামিক ও নিরাপদ রিলেটিভ ইউআরএল পাথ
+        // ডাইনামিক ও নিরাপদ রিলেটিভ ইউআরএল পাথ
         const ajaxUrl = "{% url 'ajax_load_batches' %}";
 
         fetch(`${ajaxUrl}?course_id=${courseId}`)
@@ -135,14 +179,13 @@
             data.forEach(batch => {
               const option = document.createElement("option");
               option.value = batch.id;
-              // models.py অনুযায়ী field এর নাম batch_number
               option.textContent = `Batch ${batch.batch_number}`;
               batchSelect.appendChild(option);
             });
           })
           .catch(error => {
             console.error("Error loading batches:", error);
-            alert("Batch load করতে সমস্যা হয়েছে! দয়া করে ব্রাউজারের F12 Console চেক করুন।");
+            alert("Batch load করতে সমস্যা হয়েছে! দয়া করে ব্রাউজারের F12 Console চেক করুন।");
           });
       });
     }

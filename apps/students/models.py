@@ -78,6 +78,30 @@ class Student(models.Model):
     roll = models.IntegerField(blank=True, null=True)
     registration_number = models.CharField(max_length=50, blank=True, null=True)
 
+
+    # --- এগুলোর নিচে বা উপরে যোগ করুন ---
+
+    # Gender
+    GENDER_CHOICES = [('male', 'Male'), ('female', 'Female'), ('other', 'Other')]
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
+
+    # Admission Date
+    admission_date = models.DateField(blank=True, null=True)
+
+    # Signatures
+    student_signature = models.ImageField(upload_to='students/signatures/', blank=True, null=True)
+    authority_signature = models.ImageField(upload_to='authority/signatures/', blank=True, null=True)
+
+    # Comments
+    authority_comments = models.TextField(blank=True, null=True)
+
+    # Attachments (Checkbox list)
+    has_admission_form = models.BooleanField(default=False)
+    has_passport_photo = models.BooleanField(default=False)
+    has_nid_photocopy = models.BooleanField(default=False)
+    has_birth_certificate = models.BooleanField(default=False)
+    has_marksheet_photocopy = models.BooleanField(default=False)
+
     # অটোমেটিক তৈরি হওয়ার জন্য ৩টি ফিল্ড (👑 সেশনের লেন্থ বাড়িয়ে ১০০ করা হলো)
     session = models.CharField(max_length=100, blank=True, null=True, help_text="Auto-generated full session timestamp")
     submitted_at = models.DateTimeField(auto_now_add=True)

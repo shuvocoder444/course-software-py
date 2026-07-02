@@ -28,7 +28,11 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "jbdit.bd", "www.jbdit.bd"
 
 
 
+import os
 
+# মিডিয়া ফাইলের URL এবং রুট ডিরেক্টরি সেট করুন
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Current Environment Configuration

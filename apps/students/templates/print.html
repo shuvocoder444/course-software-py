@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JBDIT Form Print</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        @media print, screen {
+            html, body {
+                width: 210mm;
+                height: 297mm;
+                color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+                font-size: 11px;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #ffffff;
+            }
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+        .classTableDivCommon {
+            background-color: #F1C89F;
+            width: 200mm;
+            margin-left: 5mm;
+            padding: 3mm 4mm;
+            border-radius: 4px;
+        }
+        .classtabletile {
+            background-color: #0BAAE1;
+            color: #ffffff;
+            font-size: 14px;
+            text-align: left;
+            font-weight: 700;
+            padding: 4px 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 3px;
+        }
+        .classtopblank {
+            height: 4mm;
+        }
+        .classone {
+            height: 38mm;
+            width: 200mm;
+            margin-left: 5mm;
+            background-image: url("headernew-min.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+        .classtwo {
+            margin-top: 2mm;
+            margin-bottom: 2mm;
+        }
+        .classthree {
+            margin-bottom: 2mm;
+        }
+        .classfour {
+            margin-bottom: 2mm;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 4px;
+        }
+        td {
+            font-weight: 600;
+            vertical-align: middle;
+        }
+        .label-cell {
+            font-size: 12px;
+            color: #333;
+            padding-right: 2mm;
+        }
+        .value-cell {
+            font-size: 12px;
+            background-color: #ffffff;
+            padding: 4px 8px;
+            border-radius: 3px;
+        }
+
+        /* Office Section Customization for 1 Page Fit */
+        .office-section-main {
+            width: 200mm;
+            margin: 0 auto;
+            background-color: #F1C89F;
+            padding: 12px 15px;
+            font-family: Arial, sans-serif;
+            border-radius: 4px;
+        }
+
+        .office-header {
+            background-color: #00a0e3;
+            color: white;
+            font-weight: bold;
+            padding: 4px 10px;
+            font-size: 13px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 3px;
+        }
+
+        .office-flex-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .office-left-part { width: 55%; display: flex; flex-direction: column; justify-content: space-between; }
+        .office-right-part { width: 42%; border-left: 1px solid #c5a990; padding-left: 20px; }
+
+        .input-row { display: flex; align-items: center; margin-bottom: 6px; font-size: 11px; }
+        .office-label { width: 100px; font-weight: bold; color: #000000; }
+
+        .underline-input {
+            flex-grow: 1;
+            text-align: center; background: #fff;
+            padding: 3px; min-height: 22px; font-size: 11px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .data-box-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .single-digit-box {
+            width: 18px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            background: #fff;
+            border-radius: 2px;
+            font-weight: bold;
+        }
+
+        .data-box-container span {
+            font-weight: bold;
+            padding: 0 1px;
+        }
+
+        /* Checkbox Custom Design */
+        .custom-check {
+            display: flex;
+            align-items: center;
+            font-size: 11px;
+            margin-bottom: 4px;
+            cursor: default;
+            font-weight: 600;
+        }
+
+        .custom-check input { display: none; }
+
+        .custom-box {
+            width: 13px;
+            height: 13px;
+            border: 1px solid #999;
+            display: inline-block;
+            margin-right: 8px;
+            background: white;
+            position: relative;
+            flex-shrink: 0;
+            border-radius: 2px;
+        }
+
+        .custom-check input:checked + .custom-box {
+            background: #00a0e3;
+            border-color: #00a0e3;
+        }
+
+        .custom-check input:checked + .custom-box::after {
+            content: "✔";
+            position: absolute;
+            top: -3px;
+            left: 2px;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        @media screen {
+            * { visibility: hidden; }
+        }
+        @media print {
+            * { visibility: visible !important; }
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            window.print();
+        }
+    </script>
+</head>
+<body>
+<div class="classtopblank"></div>
+<div class="classone"></div>
+
+<!-- STUDENT INFORMATION SECTION -->
+<div class="classtwo classTableDivCommon">
+    <div class="classtabletile" style="margin-bottom: 6px;">STUDENT INFORMATION</div>
+
+    <div style="display: flex; gap: 15px; align-items: flex-start;">
+        <!-- Left Forms Side -->
+        <div style="flex-grow: 1;">
+            <table>
+                <tr>
+                    <td class="label-cell" style="width: 42mm;">Student/Applicant's Name:</td>
+                    <td class="value-cell" colspan="15">{{ student.name }}</td>
+                </tr>
+                <tr>
+                    <td class="label-cell">Vill/House/Area:</td>
+                    <td class="value-cell" style="width: 52mm;">{{ student.village_house_area|default:"" }}</td>
+                    <td class="label-cell" style="padding-left: 4mm; width: 28mm;">Date of Birth:</td>
+                    <td colspan="13" style="vertical-align: middle;">
+                        <div class="data-box-container">
+                            {% with dob=student.date_of_birth|date:"dmY" %}
+                            <div class="single-digit-box" style="height:18px; width:15px; font-size:11px;">{{ dob|slice:"0:1" }}</div>
+                            <div class="single-digit-box" style="height:18px; width:15px; font-size:11px;">{{ dob|slice:"1:2" }}</div>
+                            <span>-</span>
+                            <div class="single-digit-box" style="height:18px; width:15px; font-size:11px;">{{ dob|slice:"2:3" }}</div>
+                            <div class="single-digit-box" style="height:18px; width:15px; font-size:11px;">{{ dob|slice:"3:4" }}</div>
+                            <span>-</span>
+                            <div class="single-digit-box" style="height:18px; width:15px; font-size:11px;">{{ dob|slice:"4:5" }}</div>
+                            <div class="single-digit-box" style="height:18px; width:15px; font-size:11px;">{{ dob|slice:"5:6" }}</div>
+                            <div class="single-digit-box" style="height:18px; width:15px; font-size:11px;">{{ dob|slice:"6:7" }}</div>
+                            <div class="single-digit-box" style="height:18px; width:15px; font-size:11px;">{{ dob|slice:"7:8" }}</div>
+                            {% endwith %}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label-cell">Thana/Upazila:</td>
+                    <td class="value-cell">{{ student.thana_upazila|default:"" }}</td>
+                    <td class="label-cell" style="padding-left: 4mm;">Gender:</td>
+                    <td colspan="13">
+                        <span class="custom-check" style="display:inline-flex; margin-right:8px; margin-bottom:0;">
+                            <input type="checkbox" disabled {% if student.gender == 'male' %}checked{% endif %}><span class="custom-box"></span> Male
+                        </span>
+                        <span class="custom-check" style="display:inline-flex; margin-right:8px; margin-bottom:0;">
+                            <input type="checkbox" disabled {% if student.gender == 'female' %}checked{% endif %}><span class="custom-box"></span> Female
+                        </span>
+                        <span class="custom-check" style="display:inline-flex; margin-bottom:0;">
+                            <input type="checkbox" disabled {% if student.gender == 'other' %}checked{% endif %}><span class="custom-box"></span> Other
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label-cell">District/City:</td>
+                    <td class="value-cell">{{ student.district_city|default:"" }}</td>
+                    <td class="label-cell" style="padding-left: 4mm;">Marital Status:</td>
+                    <td colspan="13">
+                        <span class="custom-check" style="display:inline-flex; margin-right:12px; margin-bottom:0;">
+                            <input type="checkbox" disabled {% if student.marital_status == 'married' %}checked{% endif %}><span class="custom-box"></span> Married
+                        </span>
+                        <span class="custom-check" style="display:inline-flex; margin-bottom:0;">
+                            <input type="checkbox" disabled {% if student.marital_status == 'single' %}checked{% endif %}><span class="custom-box"></span> Single
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label-cell">Post Code:</td>
+                    <td class="value-cell">{{ student.post_code|default:"" }}</td>
+                    <td class="label-cell" style="padding-left: 4mm;">National ID No:</td>
+                    <td class="value-cell" colspan="13">{{ student.national_id_no|default:"" }}</td>
+                </tr>
+                <tr>
+                    <td class="label-cell">E-mail:</td>
+                    <td class="value-cell">{{ student.email }}</td>
+                    <td class="label-cell" style="padding-left: 4mm;">Religion:</td>
+                    <td class="value-cell" colspan="13">{{ student.get_religion_display|default:"" }}</td>
+                </tr>
+                <tr>
+                    <td class="label-cell">Mobile Number:</td>
+                    <td class="value-cell">{{ student.phone }}</td>
+                    <td class="label-cell" style="padding-left: 4mm;">Blood Group:</td>
+                    <td class="value-cell" colspan="13">{{ student.blood_group|default:"" }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Photo Placement -->
+        <div style="width: 32mm; height: 38mm; border: 2px solid #fff; background: #fafafa; display: flex; align-items: center; justify-content: center; border-radius: 4px; overflow: hidden; flex-shrink: 0; margin-top: 4px;">
+            {% if student.photo %}
+                <img src="{{ student.photo.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+            {% else %}
+                <span style="font-size: 10px; color: #aaa; text-align: center; padding: 5px;">Photo</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- GUARDIAN INFORMATION SECTION -->
+<div class="classthree classTableDivCommon">
+    <div class="classtabletile" style="margin-bottom: 6px;">GUARDIAN INFORMATION</div>
+    <table>
+        <tr>
+            <td class="label-cell" style="width: 32mm;">Father's Name:</td>
+            <td class="value-cell" style="width: 68mm;">{{ student.father_name|default:"" }}</td>
+            <td class="label-cell" style="padding-left: 4mm; width: 35mm;">Father's Phone:</td>
+            <td class="value-cell">{{ student.father_phone|default:"" }}</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Mother's Name:</td>
+            <td class="value-cell">{{ student.mother_name|default:"" }}</td>
+            <td class="label-cell" style="padding-left: 4mm;">Father's Occupation:</td>
+            <td class="value-cell">{{ student.father_occupation|default:"" }}</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Guardian's Name:</td>
+            <td class="value-cell">{{ student.guardian_name|default:"" }}</td>
+            <td class="label-cell" style="padding-left: 4mm;">Guardian's Phone:</td>
+            <td class="value-cell">{{ student.guardian_phone|default:"" }}</td>
+        </tr>
+    </table>
+</div>
+
+<!-- ACADEMIC INFORMATION SECTION -->
+<div class="classfour classTableDivCommon">
+    <div class="classtabletile" style="margin-bottom: 6px;">ACADEMIC INFORMATION</div>
+
+    <table style="border-spacing: 6px 2px;">
+        <tr>
+            <td class="value-cell" style="width: 60%; text-align: center; font-weight: bold; height: 24px;">{{ student.education_institute_name|default:"" }}</td>
+            <td class="value-cell" style="width: 40%; text-align: center; font-weight: bold;">{{ student.last_educational_qualification|default:"" }}</td>
+        </tr>
+        <tr>
+            <td style="font-size: 10px; text-align: center; color: #000; padding-bottom: 2px;">Education Institute's Name</td>
+            <td style="font-size: 10px; text-align: center; color: #000; padding-bottom: 2px;">Last Educational Qualification</td>
+        </tr>
+    </table>
+
+    <table style="border-spacing: 4px 2px; table-layout: fixed; width: 100%;">
+        <tr>
+            <td class="value-cell" style="text-align: center; font-weight: bold; height: 24px;">{{ student.examination|default:"" }}</td>
+            <td class="value-cell" style="text-align: center; font-weight: bold;">{{ student.passing_year|default:"" }}</td>
+            <td class="value-cell" style="text-align: center; font-weight: bold;">{{ student.board_name|default:"" }}</td>
+            <td class="value-cell" style="text-align: center; font-weight: bold;">{{ student.roll|default:"" }}</td>
+            <td class="value-cell" style="text-align: center; font-weight: bold;">{{ student.registration_number|default:"" }}</td>
+        </tr>
+        <tr>
+            <td style="font-size: 10px; text-align: center; color: #000;">Examination</td>
+            <td style="font-size: 10px; text-align: center; color: #000;">Passing Year</td>
+            <td style="font-size: 10px; text-align: center; color: #000;">Board</td>
+            <td style="font-size: 10px; text-align: center; color: #000;">Roll</td>
+            <td style="font-size: 10px; text-align: center; color: #000;">Reg. Number</td>
+        </tr>
+    </table>
+
+    <!-- Signature Block with White Box Above Text -->
+    <div style="margin-top: 8px; display: flex; justify-content: flex-start;">
+        <div style="width: 50mm; text-align: center;">
+            <div style="height: 12mm; background-color: #ffffff; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; padding: 2px;">
+                {% if student.student_signature %}
+                    <img src="{{ student.student_signature.url }}" style="max-height: 10mm; max-width: 46mm; object-fit: contain;">
+                {% endif %}
+            </div>
+            <div style="font-size: 11px; font-weight: bold; color: #222;">
+                Student/Applicant's Signature
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- OFFICE SECTION -->
+<div class="office-section-main">
+    <div class="office-header">OFFICE SECTION</div>
+
+    <div class="office-flex-container">
+        <!-- Left Part -->
+        <div class="office-left-part">
+            <div class="top-content">
+                <div class="input-row">
+                    <span class="office-label">Admission Date:</span>
+                    <div class="data-box-container">
+                        {% with ad_date=student.admission_date|date:"dmY" %}
+                        <div class="single-digit-box">{{ ad_date|slice:"0:1" }}</div>
+                        <div class="single-digit-box">{{ ad_date|slice:"1:2" }}</div>
+                        <span>/</span>
+                        <div class="single-digit-box">{{ ad_date|slice:"2:3" }}</div>
+                        <div class="single-digit-box">{{ ad_date|slice:"3:4" }}</div>
+                        <span>/</span>
+                        <div class="single-digit-box">{{ ad_date|slice:"4:5" }}</div>
+                        <div class="single-digit-box">{{ ad_date|slice:"5:6" }}</div>
+                        <div class="single-digit-box">{{ ad_date|slice:"6:7" }}</div>
+                        <div class="single-digit-box">{{ ad_date|slice:"7:8" }}</div>
+                        {% endwith %}
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <span class="office-label">Batch No:</span>
+                    <div class="underline-input">{{ student.batch.batch_number|default:"" }}</div>
+                </div>
+
+                <div class="input-row">
+                    <span class="office-label">Admission ID:</span>
+                    <div class="underline-input">{{ student.student_id }}</div>
+                </div>
+
+                <!-- Course/Trade Name Plain Text Style Without White Box -->
+<div style="margin-top: 6px;">
+    <span style="color: #0622a4; font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Course/Trade Name</span>
+    <div class="custom-check" style="margin-bottom: 0; cursor: default;">
+        <input type="checkbox" checked disabled>
+        <span class="custom-box" style="margin-right: 6px;"></span>
+        <span style="font-weight: bold; font-size: 12px; color: #333;">
+            {{ student.course.name|default:"Office applications" }}
+        </span>
+    </div>
+</div>
+            </div>
+
+            <!-- Authority Signature Area -->
+            <div style="margin-top: 10px; width: 50mm;">
+                <div style="height: 12mm; background-color: #ffffff; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; padding: 2px;">
+                    {% if student.authority_signature %}
+                        <img src="{{ student.authority_signature.url }}" style="max-height: 10mm; max-width: 46mm; object-fit: contain;">
+                    {% endif %}
+                </div>
+                <div style="font-size: 11px; font-weight: bold; text-align: center; color: #222;">
+                    Authority's Signature & Date
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Part -->
+        <div class="office-right-part">
+            <h3 style="font-size: 12px; margin-bottom: 6px; color: #222;">Student Attachments</h3>
+            <div class="attachments-container" style="margin-bottom: 10px;">
+                <label class="custom-check">
+                    <input type="checkbox" disabled {% if student.has_admission_form %}checked{% endif %}>
+                    <span class="custom-box"></span>
+                    <span>Admission Form</span>
+                </label>
+                <label class="custom-check">
+                    <input type="checkbox" disabled {% if student.has_passport_photo %}checked{% endif %}>
+                    <span class="custom-box"></span>
+                    <span>Applicant's Passport Size Photo</span>
+                </label>
+                <label class="custom-check">
+                    <input type="checkbox" disabled {% if student.has_nid_photocopy %}checked{% endif %}>
+                    <span class="custom-box"></span>
+                    <span>National ID Card Photocopy</span>
+                </label>
+                <label class="custom-check">
+                    <input type="checkbox" disabled {% if student.has_birth_certificate %}checked{% endif %}>
+                    <span class="custom-box"></span>
+                    <span>Birth Certificate Photocopy</span>
+                </label>
+                <label class="custom-check">
+                    <input type="checkbox" disabled {% if student.has_marksheet_photocopy %}checked{% endif %}>
+                    <span class="custom-box"></span>
+                    <span>JSC/SSC/Others Marksheet Photocopy</span>
+                </label>
+            </div>
+
+            <!-- Comments Area -->
+            <div style="width: 100%;">
+                <div style="width: 100%; min-height: 12mm; background: #fff; padding: 4px; font-size: 11px; font-weight: 500; border-radius: 3px; border: 1px solid #c5a990;">
+                    {{ student.authority_comments|default:"" }}
+                </div>
+                <div style="font-size: 11px; margin-top: 2px; font-weight: bold; color: #333;">
+                    Authority's Comments
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

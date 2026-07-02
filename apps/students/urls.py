@@ -6,7 +6,7 @@ urlpatterns = [
     path('add/', views.StudentCreateView.as_view(), name='student_create'),
     path('edit/<int:pk>/', views.StudentEditView.as_view(), name='student_edit'),
     path('delete/<int:pk>/', views.StudentDeleteView.as_view(), name='student_delete'),
-
+    path('ajax/load-batches/', views.LoadBatchesView.as_view(), name='ajax_load_batches'),
     # 🆕 নতুন যুক্ত করা পাথসমূহ (Approve এবং Print)
     path('approve/<int:pk>/', views.StudentApproveView.as_view(), name='student_approve'),
     path('print/<int:pk>/', views.StudentPrintView.as_view(), name='student_print'),

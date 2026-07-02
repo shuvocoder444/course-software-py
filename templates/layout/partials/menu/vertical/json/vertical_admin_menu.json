@@ -138,16 +138,16 @@
       "slug": "settings",
       "submenu": [
         {
-          "url": "institute",
+          "url": "institute_settings",
           "icon": "menu-icon tf-icons ti ti-info-circle",
           "name": "Institute Info",
           "slug": "institute"
         },
         {
-          "url": "sms",
+          "url": "institute_settings",
           "icon": "menu-icon tf-icons ti ti-device-mobile-message",
           "name": "Attendance and SMS",
-          "slug": "sms"
+          "slug": "institute_settings"
         }
       ]
     },
