@@ -1,19 +1,23 @@
-<!-- <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme"> -->
-<aside id="layout-menu" class="layout-menu menu-vertical menu bg-primary">
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+<!-- <aside id="layout-menu" style="background-color: #28a745;" class="layout-menu menu-vertical  menu"> -->
   <!-- ! Hide app brand if navbar-full -->
   {% if not navbar_full %}
   <div class="app-brand demo">
-    <a href="{% url 'index' %}" class="app-brand-link">
-      <span class="app-brand-logo demo">
+    <a href="{% url 'admin_dashboard' %}" class="app-brand-link ">
+
+      <img class="image-fluid py-3" src="{% static 'img\branding\logo.png' %}" alt="Default logo" width="60%" height="60%" />
+
+      <!-- {% include 'partials/logo.html' %} -->
+      <!-- <span class="app-brand-logo demo">
         {% include 'partials/logo.html' %}
-      </span>
-      <span class="app-brand-text demo menu-text fw-bold">{% get_theme_variables 'template_name' %}</span>
+      </span> -->
+      <!-- <span class="app-brand-text demo menu-text fw-bold">{% get_theme_variables 'template_name' %}</span> -->
     </a>
 
-    <!-- <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
       <i class="ti menu-toggle-icon d-none d-xl-block align-middle"></i>
       <i class="ti ti-x d-block d-xl-none ti-md align-middle"></i>
-    </a> -->
+    </a>
   </div>
   {% endif %}
 

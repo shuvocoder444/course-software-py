@@ -5,24 +5,43 @@
 {% block content %}
 <div class="container-xxl flex-grow-1 container-p-y">
   <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Students /</span> {{ title }}</h4>
-
+{% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field, errors in form.errors.items %}
+                <li><strong>{{ field }}:</strong> {{ errors|striptags }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
   <form method="POST" enctype="multipart/form-data" novalidate id="studentForm">
     {% csrf_token %}
 
-    <div class="card mb-4">
+
+
+<div class="card mb-4">
       <h5 class="card-header bg-light text-primary"><i class="bx bx-user me-2"></i>Student & Course Information</h5>
       <div class="card-body mt-3">
         <div class="row g-3">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label class="form-label fw-bold text-danger">Select Course *</label>
             {{ form.course }}
             {{ form.course.errors }}
           </div>
-          <div class="col-md-6">
+
+          <div class="col-md-4">
             <label class="form-label fw-bold text-danger">Select Batch *</label>
             {{ form.batch }}
             {{ form.batch.errors }}
           </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold text-danger">Student ID *</label>
+            {{ form.student_id }}
+            {{ form.student_id.errors }}
+          </div>
+
+
 
           <hr class="my-3">
 

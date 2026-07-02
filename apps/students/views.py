@@ -1,33 +1,37 @@
 from datetime import datetime
 
 from django.contrib import messages
+from django.contrib.auth import get_user_model  # <--- এটি যুক্ত করুন
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, View
 
+# কাস্টম ইউজার মডেল একটি ভেরিয়েবলে নেওয়া হলো
+User = get_user_model()  # <--- এটি যুক্ত করুন
+
 # আপনার অ্যাকাউন্টস অ্যাপ থেকে কাস্টম সিকিউরিটি ও লেআউট মিক্সিন ইম্পোর্ট
-from apps.account.views import AdminRoleRequiredMixin, VuxyVerticalLayoutMixin
-
-from .forms import StudentForm
-
-# বর্তমান অ্যাপের মডেল এবং ফর্ম ইম্পোর্ট
-from .models import Student
-
+# ... বাকি কোড অপরিবর্তিত থাকবে ...
 # ==============================================================================
 #  ৬. স্টুডেন্ট ম্যানেজমেন্ট CRUD ভিউ (CBV - Admin Only) - FULL FIXED
 # ==============================================================================
-
 from django.views.generic import DetailView
+
+from apps.account.views import AdminRoleRequiredMixin, VuxyVerticalLayoutMixin
+
+from .forms import StudentForm
+from .models import Student
+
+
 # আপনার প্রজেক্টের মিক্সিন ইম্পোর্ট করুন
 # from your_apps.mixins import AdminRoleRequiredMixin, VuxyVerticalLayoutMixin
-
-# ১. STUDENT LIST VIEW (With Live Filters)
+# ১. STUDENT LIST VIEW (With Live Filters & Pagination)
 class StudentListView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, ListView):
     model = Student
     context_object_name = 'students'
     template_name = 'student.html'
     ordering = ['-id']
+    paginate_by = 10  # 👑 প্রতি পেজে কয়টি রেকর্ড দেখাতে চান তা এখানে সেট করুন
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -50,67 +54,84 @@ class StudentListView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLa
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # ফিল্টার ড্রপডাউনে দেখানোর জন্য সব কোর্স ও ব্যাচ পাঠানো হচ্ছে
         from apps.courses.models import Batch, Course
         context['courses'] = Course.objects.all()
         context['batches'] = Batch.objects.all()
         return context
 
+from .models import Student
 
-# ২. STUDENT APPROVE VIEW (Approve বাটনের জন্য)
+# আপনার কাস্টম মিক্সিনগুলো ইমপোর্ট করে নিয়েন (যেমন: LoginRequiredMixin, AdminRoleRequiredMixin)
+
+# ৩. STUDENT PRINT VIEW
+class StudentPrintView(LoginRequiredMixin, AdminRoleRequiredMixin, DetailView):
+    model = Student
+    template_name = 'print.html' # আপনার ফাইলের নাম অনুযায়ী 'print.html' করা হলো
+    context_object_name = 'student'
+
+# ৪. STUDENT APPROVE VIEW (এই ভিউটি মিসিং ছিল)
 class StudentApproveView(LoginRequiredMixin, AdminRoleRequiredMixin, View):
     def post(self, request, pk, *args, **kwargs):
         student = get_object_or_404(Student, pk=pk)
-
-        # স্ট্যাটাস পরিবর্তন করে 'active' বা 'approved' করা (আপনার মডেল অনুযায়ী)
-        student.status = 'active'
+        student.status = 'approved' # অথবা আপনার মডেলে যেভাবে 'active'/'approved' সেট করা আছে
         student.save()
-
-        messages.success(request, f"{student.name}-এর আবেদন সফলভাবে অ্যাপ্রুভ করা হয়েছে।")
+        messages.success(request, f"{student.name}-এর অ্যাডমিশন অ্যাপ্রুভ করা হয়েছে।")
         return redirect('student_list') # আপনার স্টুডেন্ট লিস্টের URL name এখানে দিন
 
 
-# ৩. STUDENT PRINT VIEW (Print বাটনের জন্য)
-class StudentPrintView(LoginRequiredMixin, AdminRoleRequiredMixin, DetailView):
-    model = Student
-    template_name = 'student_print.html' # প্রিন্ট করার জন্য একটি আলাদা সিম্পল HTML টেমপ্লেট
-    context_object_name = 'student'
 
 
-# ২. CREATE STUDENT VIEW
+# ২. CREATE STUDENT VIEW (Username & Password = Phone Number)
 class StudentCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, CreateView):
     model = Student
     form_class = StudentForm
-    template_name = 'student_form.html'  # সরাসরি templates ফোল্ডার থেকে লোড হবে
+    template_name = 'student_form.html'
     success_url = reverse_lazy('student_list')
 
     def form_valid(self, form):
-        # ফর্ম সেভ করার আগে অবজেক্টটি মেমরিতে হোল্ড করা হলো (ডাটাবেজে এখনই সেভ হবে না)
+        # ১. ফর্মের ডেটা মেমরিতে হোল্ড করা (ফর্ম থেকে student_id সহ সব ডেটা আসবে)
         student = form.save(commit=False)
 
-        # ১. অটোমেটিক স্টুডেন্ট আইডি জেনারেশন লজিক (যেমন: STU-2026-0001)
-        current_year = datetime.now().year # ২০২৬ বা কারেন্ট ইয়ার নিবে
-        last_student = Student.objects.order_by('-id').first()
-
-        if last_student:
-            next_id = last_student.id + 1
-        else:
-            next_id = 1
-
-        student.student_id = f"STU-{current_year}-{next_id:04d}" # আউটপুট: STU-2026-0001
-
         # ২. অটোমেটিক সেশন সেট করা
+        current_year = datetime.now().year
         next_year = current_year + 1
-        student.session = f"{current_year}-{next_year}" # আউটপুট: 2026-2027
+        student.session = f"{current_year}-{next_year}"
 
-        # ৩. স্ট্যাটাস মডেলে ডিফল্ট 'pending' দেওয়া আছে, তাও নিশ্চিত করার জন্য:
+        # ৩. স্ট্যাটাস নিশ্চিত করা
         student.status = 'pending'
 
-        # ডেটাবেজে ফাইনাল সেভ
+        # ==============================================================================
+        # ৪. স্বয়ংক্রিয়ভাবে ইউজার অ্যাকাউন্ট তৈরি করার লজিক (Username & Password = Phone)
+        # ==============================================================================
+        student_phone = form.cleaned_data.get('phone')
+        student_email = form.cleaned_data.get('email')
+        student_name = form.cleaned_data.get('name')
+
+        if student_phone:
+            # চেক করা হচ্ছে এই ফোন নাম্বার দিয়ে অলরেডি কোনো অ্যাকাউন্ট আছে কি না
+            if not User.objects.filter(username=student_phone).exists():
+                # নতুন ইউজার তৈরি (ইউজারনেম এবং পাসওয়ার্ড দুটোই ফোন নাম্বার)
+                user = User.objects.create_user(
+                    username=student_phone,  # ডিফল্ট ইউজারনেম = ফোন নাম্বার
+                    password=student_phone,  # ডিফল্ট পাসওয়ার্ড = ফোন নাম্বার
+                    email=student_email if student_email else '', # ইমেইল থাকলে সেভ হবে, না থাকলে খালি থাকবে
+                    first_name=student_name
+                )
+
+                # আপনার Student মডেলে যদি User-এর সাথে সম্পর্ক (user field) থাকে, তবে লিংক করে দিন:
+                # student.user = user
+            else:
+                messages.warning(self.request, f"এই ফোন নাম্বার ({student_phone}) দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট তৈরি করা আছে!")
+        else:
+            messages.error(self.request, "স্টুডেন্টের মোবাইল নাম্বার পাওয়া যায়নি! অ্যাকাউন্ট তৈরি করা সম্ভব হয়নি।")
+            return self.form_invalid(form)
+        # ==============================================================================
+
+        # ৫. ডেটাবেজে ফাইনাল স্টুডেন্ট সেভ
         student.save()
 
-        messages.success(self.request, f"Student {student.name} created successfully with ID: {student.student_id}")
-        return super().form_valid(form)
+        messages.success(self.request, f"Student {student.name} created successfully! ID: {student.student_id}. User account created with Phone Number.")
+        return redirect(self.success_url)
 
 
 # ৩. EDIT / UPDATE STUDENT VIEW

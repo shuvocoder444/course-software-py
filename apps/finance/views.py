@@ -72,13 +72,12 @@ class InvoiceListView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLa
             'sessions': [],
         }
         return context
-
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 
-# আপনার অ্যাপ অনুযায়ী ইমপোর্টগুলো ঠিক রাখুন
-# from .models import Invoice, StudentLedger
+# আপনার অ্যাপ অনুযায়ী প্রয়োজনীয় মডেল ও ফর্ম ইমপোর্ট রাখুন
+# from .models import Invoice, StudentLedger, Student
 # from .forms import InvoiceForm
-# apps/finance/views.py ফাইলের ভেতর খুঁজে বের করুন এই ক্লাসটি:
 
 class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, CreateView):
     model = Invoice
@@ -86,7 +85,24 @@ class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
     template_name = 'add_payment.html'
     success_url = reverse_lazy('invoice_list')
 
-    # --- এই মেথডটি আগের মেথডের জায়গায় সম্পূর্ণ পেস্ট করে দিন ---
+    def post(self, request, *args, **kwargs):
+        """
+        কাস্টম ড্রপডাউন থেকে টাইপ/সিলেক্ট করা আইডিকে Django ফর্মে
+        বাধ্যতামূলকভাবে অ্যাসাইন করার জন্য POST রিকোয়েস্ট ওভাররাইড করা হলো।
+        """
+        # রিকোয়েস্ট কপি করে এডিটেবল করা
+        post_data = request.POST.copy()
+
+        # ফ্রন্টএন্ডের কাস্টম সার্চ ইনপুট থেকে আইডিটি নেওয়া
+        custom_student_id = request.POST.get('student_search_input', '').strip()
+
+        # যদি মেইন স্টুডেন্ট ফিল্ড খালি থাকে কিন্তু কাস্টম সার্চ ইনপুটে আইডি থাকে, তবে মেইন ফিল্ডে তা বসানো
+        if not post_data.get('student') and custom_student_id:
+            post_data['student'] = custom_student_id
+
+        request.POST = post_data
+        return super().post(request, *args, **kwargs)
+
     def form_valid(self, form):
         with transaction.atomic():
             invoice_instance = form.save(commit=False)
@@ -109,7 +125,11 @@ class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
                 existing_invoice.paid_amount += new_payment
                 existing_invoice.discount = new_discount
 
-                if hasattr(invoice_instance, 'payment_method'):
+                # পেমেন্ট মেথড আপডেট (HTML এ কাস্টম সিলেক্ট নেওয়া হয়েছিল)
+                custom_pm = self.request.POST.get('payment_method')
+                if custom_pm:
+                    existing_invoice.payment_method = custom_pm
+                elif hasattr(invoice_instance, 'payment_method'):
                     existing_invoice.payment_method = invoice_instance.payment_method
 
                 existing_invoice.additional_notes = invoice_instance.additional_notes
@@ -121,6 +141,12 @@ class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
                 # ৩. ইনভয়েস না থাকলে একদম নতুন ইনভয়েস তৈরি হবে
                 current_time = datetime.now()
                 invoice_instance.invoice_no = f"INV-{current_time.strftime('%Y%m%d-%H%M%S')}"
+
+                # পেমেন্ট মেথড অ্যাসাইন
+                custom_pm = self.request.POST.get('payment_method')
+                if custom_pm:
+                    invoice_instance.payment_method = custom_pm
+
                 invoice_instance.save()
 
                 active_invoice = invoice_instance
@@ -135,7 +161,7 @@ class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
                 credit_amount = new_payment
                 current_balance = previous_balance - new_payment
             else:
-                debit_amount = active_invoice.net_payable
+                debit_amount = active_invoice.net_payable if hasattr(active_invoice, 'net_payable') else Decimal('0.00')
                 credit_amount = active_invoice.paid_amount
                 current_balance = previous_balance + debit_amount - credit_amount
 
@@ -154,8 +180,9 @@ class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
 
             # NoneType এরর ফিক্স করার মেইন পার্ট
             self.object = active_invoice
-            from django.http import HttpResponseRedirect
             return HttpResponseRedirect(self.get_success_url())
+
+
 
 # ৩. STUDENT LEDGER / STATEMENT VIEW
 class StudentLedgerView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, ListView):
@@ -281,19 +308,18 @@ def get_student_payment_details(request):
 
 
 
-
-
-
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import date
-from .models import CompanyDeposit # আপনার সঠিক মডেল পাথ নিশ্চিত করুন
+from .models import CompanyDeposit  # মডেল চেক করে নিন
 
+# --- LIST VIEW WITH FILTERS & PAGINATION ---
 class DepositListView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, ListView):
     model = CompanyDeposit
     template_name = 'deposit_list.html'
     context_object_name = 'deposits'
+    paginate_by = 10  # প্রতি পেজে ১০টি রেকর্ড থাকবে
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -301,8 +327,21 @@ class DepositListView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLa
         return context
 
     def get_queryset(self):
-        # আপনার আগের সার্চ ও ফিল্টার লজিক এখানে থাকবে
         queryset = super().get_queryset().order_by('-date')
+
+        # গেট রিকোয়েস্ট থেকে প্যারামিটার রিসিভ করা
+        search_query = self.request.GET.get('search')
+        start_date = self.request.GET.get('start_date')
+        end_date = self.request.GET.get('end_date')
+
+        # সার্চ ফিল্টারিং লজিক
+        if search_query:
+            queryset = queryset.filter(title__icontains=search_query) | queryset.filter(description__icontains=search_query)
+        if start_date:
+            queryset = queryset.filter(date__gte=start_date)
+        if end_date:
+            queryset = queryset.filter(date__lte=end_date)
+
         return queryset
 
 # --- ADD / CREATE VIEW ---
@@ -319,29 +358,59 @@ class DepositCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, CreateView):
         messages.error(self.request, "Failed to add deposit. Please check the fields.")
         return redirect('deposit_list')
 
-# --- EDIT / UPDATE VIEW (নতুন যুক্ত করা হয়েছে) ---
-class DepositUpdateView(LoginRequiredMixin, AdminRoleRequiredMixin, UpdateView):
-    model = CompanyDeposit
-    fields = ['date', 'title', 'amount', 'file', 'description']
-    success_url = reverse_lazy('deposit_list')
+from django.views import View
+from .models import CompanyDeposit
 
-    def form_valid(self, form):
-        messages.success(self.request, "Deposit updated successfully!")
-        return super().form_valid(form)
+# --- FIX: MODAL BASED UPDATE VIEW ---
+class DepositUpdateView(LoginRequiredMixin, AdminRoleRequiredMixin, View):
+    def post(self, request, pk, *args, **kwargs):
+        # আইডি অনুযায়ী অবজেক্ট খুঁজে বের করা
+        deposit = get_object_or_404(CompanyDeposit, pk=pk)
 
-    def form_invalid(self, form):
-        messages.error(self.request, "Failed to update deposit. Invalid data.")
+        # মডাল ফর্ম থেকে পাঠানো ডেটা রিসিভ করা
+        title = request.POST.get('title')
+        amount = request.POST.get('amount')
+        date_val = request.POST.get('date')
+        description = request.POST.get('description')
+
+        # ফাইল আপলোড হ্যান্ডেল করা (যদি নতুন ফাইল দেওয়া হয়)
+        if request.FILES.get('file'):
+            deposit.file = request.FILES.get('file')
+
+        # ডেটা ভ্যালিডেশন এবং আপডেট
+        if title and amount and date_val:
+            deposit.title = title
+            deposit.amount = amount
+            deposit.date = date_val
+            deposit.description = description
+            deposit.save() # ডাটাবেসে সেভ করা
+
+            messages.success(request, "Deposit updated successfully!")
+        else:
+            messages.error(request, "Failed to update deposit. Invalid data.")
+
         return redirect('deposit_list')
 
-# --- DELETE VIEW ---
-class DepositDeleteView(LoginRequiredMixin, AdminRoleRequiredMixin, DeleteView):
-    model = CompanyDeposit
-    success_url = reverse_lazy('deposit_list')
 
-    def get(self, request, *args, **kwargs):
-        messages.warning(request, "Deposit record deleted!") # error এর জায়গায় warning বা success দেওয়া ভালো
-        return self.post(request, *args, **kwargs)
 
+
+from django.views import View
+from .models import CompanyDeposit
+
+# --- NEW & FIXED DELETE VIEW ---
+class DepositDeleteView(LoginRequiredMixin, AdminRoleRequiredMixin, View):
+    def get(self, request, pk, *args, **kwargs):
+        # আইডি অনুযায়ী অবজেক্টটি খুঁজে বের করবে
+        deposit = get_object_or_404(CompanyDeposit, pk=pk)
+
+        # অবজেক্টটি ডিলিট করবে
+        deposit.delete()
+
+        # মেসেজ দেখাবে
+        messages.warning(request, "Deposit record deleted successfully!")
+
+        # ডিলিট হওয়ার পর আবার লিস্ট পেজে ব্যাক করবে
+        return redirect('deposit_list')
 
 
 # Expense

@@ -7,8 +7,8 @@ from .models import Student
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        # account, student_id, status, session ব্যাকএন্ডে অটো-লিঙ্ক বা জেনারেট হবে, তাই ফর্ম থেকে বাদ।
-        exclude = ['account', 'student_id', 'status', 'session']
+        # পরিবর্তন ১: 'student_id' এখান থেকে বাদ দেওয়া হলো যাতে এটি ফর্মে শো করে
+        exclude = ['account', 'status', 'session']
 
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
@@ -28,11 +28,12 @@ class StudentForm(forms.ModelForm):
         elif self.instance.pk and self.instance.course:
             self.fields['batch'].queryset = self.instance.course.batches.order_by('batch_number')
         else:
-            # প্রথমবার ফর্ম লোড হলে ব্যাচ খালি থাকবে (AJAX দিয়ে পরে লোড হবে)
+            # প্রথমবার ফর্ম লোড হলে ব্যাচ খালি থাকবে (AJAX দিয়ে পরে লোড হবে)
             self.fields['batch'].queryset = Batch.objects.none()
 
-        # প্লেসহোল্ডার ডিকশনারি
+        # প্লেসহোল্ডার ডিকশনারি (পরিবর্তন ২: 'student_id'-এর প্লেসহোল্ডার যুক্ত করা হলো)
         placeholders = {
+            'student_id': 'e.g. STU-2026-0001',
             'name': 'Enter full name',
             'phone': '01XXXXXXXXX',
             'email': 'example@email.com',
@@ -74,3 +75,15 @@ class StudentForm(forms.ModelForm):
                 new_class = f"{existing_classes} form-control".strip()
 
             field.widget.attrs['class'] = new_class
+
+    # পরিবর্তন ৩: ইউনিক আইডি ভ্যালিডেশন (একই আইডি দুইবার দিলে এরর দেখাবে)
+    def clean_student_id(self):
+        student_id = self.cleaned_data.get('student_id')
+
+        # যদি আমরা এক্সিস্টিং স্টুডেন্ট এডিট করি, তবে আইডি চেক স্কিপ করবে
+        if self.instance.pk and self.instance.student_id == student_id:
+            return student_id
+
+        if Student.objects.filter(student_id=student_id).exists():
+            raise forms.ValidationError("এই স্টুডেন্ট আইডিটি ইতিমধ্যে ব্যবহার করা হয়েছে! দয়া করে অন্য আইডি দিন।")
+        return student_id

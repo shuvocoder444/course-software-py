@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import include, path
+
 from web_project.views import SystemView
 
 urlpatterns = [
@@ -21,6 +22,8 @@ urlpatterns = [
     path("dashboard/courses/", include("apps.courses.urls")),
     path('dashboard/students/', include('apps.students.urls')),
     path('dashboard/finance/', include('apps.finance.urls')),
+    path('dashboard/marketing/', include('apps.marketing.urls')),
+    path('dashboard/settings/', include('apps.setting.urls')),
 
 ]
 

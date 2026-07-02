@@ -19,9 +19,26 @@
                     <div class="card-body bg-white rounded">
                         <h6 class="text-secondary mb-3"><i class="fas fa-user-graduate me-2"></i> Student Information</h6>
                         <div class="row g-3">
-                            <div class="col-md-6">
+                            <div class="col-md-6 position-relative">
                                 <label class="form-label fw-bold">Select Student <span class="text-danger">*</span></label>
-                                {{ form.student }}
+
+                                <!-- আসল Django সিলেক্ট ফিল্ডটি হাইড করে রাখা হয়েছে -->
+                                <div style="display: none;">
+                                    {{ form.student }}
+                                </div>
+
+                                <!-- কাস্টম সার্চ ইনপুট -->
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                                    <input type="text" id="student_search_input" name="student_search_input" class="form-control" placeholder="Type Student ID..." autocomplete="off" required>
+                                </div>
+
+                                <!-- কাস্টম ড্রপডাউন প্যানেল (ফিক্সড ব্যাকগ্রাউন্ড এবং বর্ডারসহ) -->
+                                <div id="custom_dropdown_list" class="list-group position-absolute w-100 shadow-lg d-none"
+                                     style="z-index: 9999; max-height: 300px; overflow-y: auto; margin-top: 5px; background-color: #ffffff !important; border: 1px solid #dcdcdc; border-radius: 6px; padding: 5px 0;">
+                                    <!-- লাইভ ১০টি আইডি এখানে জেনারেট হবে -->
+                                </div>
+
                                 {% if form.student.errors %}
                                     <div class="text-danger small">{{ form.student.errors }}</div>
                                 {% endif %}
@@ -127,6 +144,8 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const studentSelect = document.getElementById('id_student') || document.querySelector('select[name="student"]');
+    const searchInput = document.getElementById('student_search_input');
+    const customDropdown = document.getElementById('custom_dropdown_list');
 
     const courseFee = document.getElementById('id_course_fee');
     const certFee = document.getElementById('id_certificate_fee');
@@ -142,12 +161,85 @@ document.addEventListener("DOMContentLoaded", function() {
     const dueBox = document.getElementById('amount_due_display');
 
     let previousPaidAmount = 0;
+    let allStudentIds = [];
 
+    // ১. ড্রপডাউন থেকে ডাটা রিড করা
     if (studentSelect) {
-        studentSelect.addEventListener('change', fetchStudentData);
-        studentSelect.addEventListener('input', fetchStudentData);
+        allStudentIds = Array.from(studentSelect.options)
+            .filter(opt => opt.value.trim() !== "")
+            .map(opt => {
+                return {
+                    db_id: opt.value.trim(),
+                    display_text: opt.text.trim()
+                };
+            });
+
+        if (studentSelect.value) {
+            const selectedOpt = studentSelect.options[studentSelect.selectedIndex];
+            searchInput.value = selectedOpt ? selectedOpt.text.split('-')[0].trim() : studentSelect.value;
+            fetchStudentData();
+        }
     }
 
+    // ২. লাইভ সার্চ ও ড্রপডাউন জেনারেট লজিক
+    if (searchInput && customDropdown) {
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim().toLowerCase();
+            customDropdown.innerHTML = '';
+
+            if (query === '') {
+                customDropdown.classList.add('d-none');
+                return;
+            }
+
+            const filteredStudents = allStudentIds.filter(item =>
+                item.display_text.toLowerCase().includes(query)
+            );
+
+            const top10 = filteredStudents.slice(0, 10);
+
+            if (top10.length > 0) {
+                top10.forEach(item => {
+                    let button = document.createElement('button');
+                    button.type = 'button';
+                    // এখানে bg-white এবং border-0 দিয়ে ফিক্স করা হয়েছে
+                    button.className = 'list-group-item list-group-item-action py-2 text-start bg-white border-0 text-dark';
+                    button.innerHTML = `<i class="fas fa-id-badge text-primary me-2"></i> <strong>${item.display_text}</strong>`;
+
+                    button.addEventListener('click', function() {
+                        const shortId = item.display_text.split('-')[0].trim();
+                        searchInput.value = shortId;
+                        studentSelect.value = item.db_id;
+                        customDropdown.classList.add('d-none');
+                        fetchStudentData();
+                    });
+
+                    customDropdown.appendChild(button);
+                });
+                customDropdown.classList.remove('d-none');
+            } else {
+                let noResult = document.createElement('div');
+                noResult.className = 'list-group-item text-muted small py-2 bg-white border-0';
+                noResult.textContent = 'No matching Student ID found';
+                customDropdown.appendChild(noResult);
+                customDropdown.classList.remove('d-none');
+            }
+        });
+
+        searchInput.addEventListener('focus', function() {
+            if (this.value.trim() !== '') {
+                this.dispatchEvent(new Event('input'));
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !customDropdown.contains(e.target)) {
+                customDropdown.classList.add('d-none');
+            }
+        });
+    }
+
+    // ৩. AJAX ডেটা লোড
     function fetchStudentData() {
         const studentId = studentSelect.value;
         if (studentId) {
@@ -180,6 +272,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    // ৪. ম্যাথ ক্যালকুলেশন
     const inputs = [courseFee, certFee, idCardFee, admitFee, otherFee, discount, newPaidAmount];
     inputs.forEach(input => {
         if (input) {
@@ -205,6 +298,14 @@ document.addEventListener("DOMContentLoaded", function() {
         if(totalPaidBox) totalPaidBox.value = currentTotalPaid.toFixed(2);
         if(dueBox) dueBox.value = due.toFixed(2);
     }
+
+    document.getElementById('paymentForm').addEventListener('reset', function() {
+        setTimeout(() => {
+            if(searchInput) searchInput.value = '';
+            if(customDropdown) customDropdown.classList.add('d-none');
+            calculateMath();
+        }, 10);
+    });
 });
 </script>
 {% endblock %}

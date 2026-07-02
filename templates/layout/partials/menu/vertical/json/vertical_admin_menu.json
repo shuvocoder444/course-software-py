@@ -1,91 +1,102 @@
 {
   "menu": [
     {
-      "url": "dashboard_redirect",
+      "url": "admin_dashboard",
       "icon": "menu-icon tf-icons ti ti-smart-home",
       "name": "Dashboard",
       "slug": "index"
     },
     {
-      "name": "Student",
-      "icon": "menu-icon tf-icons ti ti-user",
+      "name": "Student Portal",
+      "icon": "menu-icon tf-icons ti ti-users",
       "slug": "student-management",
       "submenu": [
         {
           "url": "student_create",
+          "icon": "menu-icon tf-icons ti ti-user-plus",
           "name": "Student Registration",
-          "slug": "student_create",
-          "icon": "menu-icon tf-icons ti ti-point"
+          "slug": "student_create"
         },
         {
           "url": "student_list",
-          "name": "All Student List",
-          "slug": "student_list",
-          "icon": "menu-icon tf-icons ti ti-point"
-        }
-      ]
-    },
-    {
-      "name": "Batch",
-      "icon": "menu-icon tf-icons ti ti-users",
-      "slug": "batch-management",
-      "submenu": [
-        {
-          "url": "batch_list",
-          "name": "Batch List",
-          "slug": "batch_list",
-          "icon": "menu-icon tf-icons ti ti-point"
+          "icon": "menu-icon tf-icons ti ti-users",
+          "name": "Student List",
+          "slug": "student_list"
         },
         {
-          "url": "batch_create",
-          "name": "Batch Create",
-          "slug": "batch_create",
-          "icon": "menu-icon tf-icons ti ti-point"
+          "url": "notification",
+          "icon": "menu-icon tf-icons ti ti-users",
+          "name": "Notification SMS",
+          "slug": "student_list"
         }
       ]
     },
     {
-      "name": "Course List",
+      "name": "Course Panel",
       "icon": "menu-icon tf-icons ti ti-book",
       "slug": "course-management",
       "submenu": [
         {
           "url": "course_list",
-          "name": "Course List",
-          "slug": "course_list",
-          "icon": "menu-icon tf-icons ti ti-point"
+          "icon": "menu-icon tf-icons ti ti-book",
+          "name": "Our Course",
+          "slug": "course_list"
         },
         {
-          "url": "course_create",
-          "name": "Course Create",
-          "slug": "course_create",
-          "icon": "menu-icon tf-icons ti ti-point"
+          "url": "batch_list",
+          "icon": "menu-icon tf-icons ti ti-users-group",
+          "name": "Student Batch",
+          "slug": "batch_list"
+        },
+        {
+          "url": "certificate",
+          "icon": "menu-icon tf-icons ti ti-award",
+          "name": "Student Certificate",
+          "slug": "certificate"
+        }
+      ]
+    },
+    {
+      "name": "Marketing Panel",
+      "icon": "menu-icon tf-icons ti ti-user",
+      "slug": "marketing",
+      "submenu": [
+        {
+          "url": "visitor",
+          "icon": "menu-icon tf-icons ti ti-user-plus",
+          "name": "Office Visitor",
+          "slug": "visitor"
+        },
+        {
+          "url": "contact",
+          "icon": "menu-icon tf-icons ti ti-mail",
+          "name": "Contact Form Data",
+          "slug": "contact"
         }
       ]
     },
     {
       "name": "Income",
-      "icon": "menu-icon tf-icons ti ti-currency-dollar",
-      "slug": "invoice_list",
+      "icon": "menu-icon tf-icons ti ti-currency-taka",
+      "slug": "income",
       "submenu": [
         {
           "url": "add_payment",
+          "icon": "menu-icon tf-icons ti ti-plus",
           "name": "Add Payment",
-          "slug": "add_payment",
-          "icon": "menu-icon tf-icons ti ti-point"
+          "slug": "add_payment"
         },
         {
           "url": "invoice_list",
-          "name": "Income list",
-          "slug": "invoice_list",
-          "icon": "menu-icon tf-icons ti ti-point"
+          "icon": "menu-icon tf-icons ti ti-file-invoice",
+          "name": "Income List",
+          "slug": "invoice_list"
         },
-
         {
           "url": "deposit_list",
+          "icon": "menu-icon tf-icons ti ti-cash",
           "name": "Deposit",
-          "slug": "deposit_list",
-          "icon": "menu-icon tf-icons ti ti-point"
+          "slug": "deposit_list"
         }
       ]
     },
@@ -96,28 +107,96 @@
       "submenu": [
         {
           "url": "expense_list",
-          "icon": "menu-icon tf-icons ti ti-point",
+          "icon": "menu-icon tf-icons ti ti-file-invoice",
           "name": "Expense List",
           "slug": "expense_list"
         },
         {
           "url": "expense_category_list",
-          "icon": "menu-icon tf-icons ti ti-point",
-          "name": "Category",
+          "icon": "menu-icon tf-icons ti ti-category",
+          "name": "Expense Category",
           "slug": "expense_category_list"
         }
       ]
     },
     {
       "name": "Report",
-      "icon": "menu-icon tf-icons ti ti-file-description",
-      "slug": "user-management",
+      "icon": "menu-icon tf-icons ti ti-chart-bar",
+      "slug": "report",
       "submenu": [
         {
           "url": "general_ledger",
-          "name": "ledger",
-          "slug": "general_ledger",
-          "icon": "menu-icon tf-icons ti ti-point"
+          "icon": "menu-icon tf-icons ti ti-report",
+          "name": "Ledger",
+          "slug": "general_ledger"
+        }
+      ]
+    },
+    {
+      "name": "Settings Panel",
+      "icon": "menu-icon tf-icons ti ti-settings",
+      "slug": "settings",
+      "submenu": [
+        {
+          "url": "institute",
+          "icon": "menu-icon tf-icons ti ti-info-circle",
+          "name": "Institute Info",
+          "slug": "institute"
+        },
+        {
+          "url": "sms",
+          "icon": "menu-icon tf-icons ti ti-device-mobile-message",
+          "name": "Attendance and SMS",
+          "slug": "sms"
+        }
+      ]
+    },
+    {
+      "name": "Website Panel",
+      "icon": "menu-icon tf-icons ti ti-world",
+      "slug": "website",
+      "submenu": [
+        {
+          "url": "slider",
+          "icon": "menu-icon tf-icons ti ti-slideshow",
+          "name": "Web Slider",
+          "slug": "slider"
+        },
+        {
+          "url": "header",
+          "icon": "menu-icon tf-icons ti ti-layout",
+          "name": "Header and Footer",
+          "slug": "header"
+        },
+        {
+          "url": "about",
+          "icon": "menu-icon tf-icons ti ti-info-circle",
+          "name": "About US",
+          "slug": "about"
+        },
+        {
+          "url": "photo",
+          "icon": "menu-icon tf-icons ti ti-photo",
+          "name": "Photo Gallery",
+          "slug": "photo"
+        },
+        {
+          "url": "video",
+          "icon": "menu-icon tf-icons ti ti-video",
+          "name": "Video Gallery",
+          "slug": "video"
+        },
+        {
+          "url": "tutorial",
+          "icon": "menu-icon tf-icons ti ti-playlist",
+          "name": "Tutorial Videos",
+          "slug": "tutorial"
+        },
+        {
+          "url": "students",
+          "icon": "menu-icon tf-icons ti ti-users",
+          "name": "Our Students",
+          "slug": "students"
         }
       ]
     },
@@ -128,15 +207,15 @@
       "submenu": [
         {
           "url": "user_create",
+          "icon": "menu-icon tf-icons ti ti-user-plus",
           "name": "Create User",
-          "slug": "user_create",
-          "icon": "menu-icon tf-icons ti ti-point"
+          "slug": "user_create"
         },
         {
           "url": "user_list",
+          "icon": "menu-icon tf-icons ti ti-users",
           "name": "User List",
-          "slug": "user_list",
-          "icon": "menu-icon tf-icons ti ti-point"
+          "slug": "user_list"
         }
       ]
     }
