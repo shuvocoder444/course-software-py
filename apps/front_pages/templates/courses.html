@@ -1,0 +1,283 @@
+{% extends layout_path %}
+
+{% block title %}Our Courses{% endblock %}
+
+{% block content %}
+<style>
+    /* ==========================================
+       ১. হিরো ব্যানার সেকশন স্টাইল (JBD IT Theme)
+       ========================================== */
+    .course-hero-banner {
+        background: radial-gradient(circle at 80% 20%, rgba(220, 53, 69, 0.15) 0%, transparent 50%),
+                    linear-gradient(135deg, #0b1116 0%, #1a2630 100%);
+        padding: 80px 20px;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 4px solid #dc3545; /* লোগোর লাল কালার দিয়ে বর্ডার */
+    }
+
+    /* ব্যানার টাইটেলের প্রিমিয়াম গ্রাডিয়েন্ট */
+    .banner-gradient-title {
+        background: linear-gradient(135deg, #ffffff 40%, #ff4d5a 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+        display: inline-block;
+        letter-spacing: 1px;
+    }
+
+    /* ==========================================
+       ২. কোর্স গ্রিড ও কার্ড স্টাইল (Scoped)
+       ========================================== */
+    .jbd-course-section .course-card {
+        border: none;
+        border-radius: 16px;
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(17, 28, 36, 0.05);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        overflow: hidden;
+    }
+
+    .jbd-course-section .course-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(17, 28, 36, 0.12);
+    }
+
+    .jbd-course-section .course-img-wrapper {
+        position: relative;
+        overflow: hidden;
+        background: #f4f6f9;
+        aspect-ratio: 16 / 10;
+    }
+
+    .jbd-course-section .course-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .jbd-course-section .price-box {
+        background-color: #f8f9fa;
+        border: 1px dashed #e2e8f0;
+        border-radius: 10px;
+        padding: 10px 14px;
+    }
+
+    .jbd-course-section .price-amount {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #dc3545;
+    }
+
+    .jbd-course-section .btn-buy-now {
+        background-color: #111c24 !important;
+        color: #ffffff !important;
+        border: none;
+        font-weight: 700;
+        font-size: 0.95rem;
+        letter-spacing: 0.5px;
+        padding: 12px 24px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .jbd-course-section .btn-buy-now:hover {
+        background-color: #dc3545 !important;
+        box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3);
+    }
+</style>
+
+<!-- ==========================================
+     কোর্স ব্যানার (Hero Section)
+     ========================================== -->
+<div class="course-hero-banner text-center text-white mb-5">
+    <div class="container">
+        <h1 class="display-3 fw-bold banner-gradient-title mb-3">আমাদের কোর্সসমূহ</h1>
+        <p class="lead text-white-50 max-w-600 mx-auto">
+            JBD IT-এর সাথে শিখুন প্রফেশনাল স্কিল, গড়ুন আইটি ক্যারিয়ার। দক্ষ মেন্টরদের তত্ত্বাবধানে আজই আপনার পছন্দের কোর্সে এনরোল করুন।
+        </p>
+    </div>
+</div>
+
+<!-- ==========================================
+     কোর্স লিস্ট সেকশন (৯টি প্রফেশনাল কোর্স গ্রিড)
+     ========================================== -->
+<div class="container my-5 jbd-course-section">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+
+        <!-- কোর্স ১: মাইক্রোসফট ওয়ার্ড -->
+        <div class="col">
+            <div class="card h-100 course-card">
+                <div class="course-img-wrapper">
+                    <img src="https://images.unspelash.com/photo-1586281380349-632531db7ed4?q=80&w=600" alt="Microsoft Word">
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <h5 class="card-title fw-bold text-dark text-center mb-4">মাইক্রোসফট ওয়ার্ড কোর্স</h5>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center price-box mb-3">
+                            <span class="text-secondary fw-semibold small">কোর্স ফি:</span>
+                            <span class="price-amount">৳ ২,৫০০</span>
+                        </div>
+                        <a href="#" class="btn btn-buy-now w-100 py-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- কোর্স ২: মাইক্রোসফট এক্সেল -->
+        <div class="col">
+            <div class="card h-100 course-card">
+                <div class="course-img-wrapper">
+                    <img src="https://images.unseplash.com/photo-1551288049-bebda4e38f71?q=80&w=600" alt="Microsoft Excel">
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <h5 class="card-title fw-bold text-dark text-center mb-4">মাইক্রোসফট এক্সেল কোর্স</h5>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center price-box mb-3">
+                            <span class="text-secondary fw-semibold small">কোর্স ফি:</span>
+                            <span class="price-amount">৳ ৩,০০০</span>
+                        </div>
+                        <a href="#" class="btn btn-buy-now w-100 py-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--静态 কোর্স ৩: মাইক্রোসফট পাওয়ার পয়েন্ট -->
+        <div class="col">
+            <div class="card h-100 course-card">
+                <div class="course-img-wrapper">
+                    <img src="https://images.unsplaesh.com/photo-1557804506-669a67965ba0?q=80&w=600" alt="PowerPoint">
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <h5 class="card-title fw-bold text-dark text-center mb-4">মাইক্রোসফট পাওয়ার পয়েন্ট</h5>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center price-box mb-3">
+                            <span class="text-secondary fw-semibold small">কোর্স ফি:</span>
+                            <span class="price-amount">৳ ২,০০০</span>
+                        </div>
+                        <a href="#" class="btn btn-buy-now w-100 py-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- কোর্স ৪: অফিস অ্যাপ্লিকেশন (কম্বো) -->
+        <div class="col">
+            <div class="card h-100 course-card">
+                <div class="course-img-wrapper">
+                    <img src="https://images.unsplaseh.com/photo-1497366216548-37526070297c?q=80&w=600" alt="Office Combo">
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <h5 class="card-title fw-bold text-dark text-center mb-4">অফিস অ্যাপ্লিকেশন (কম্বো) কোর্স</h5>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center price-box mb-3">
+                            <span class="text-secondary fw-semibold small">কোর্স ফি:</span>
+                            <span class="price-amount">৳ ৫,০০০</span>
+                        </div>
+                        <a href="#" class="btn btn-buy-now w-100 py-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- কোর্স ৫: অ্যাডোবি ফটোশপ -->
+        <div class="col">
+            <div class="card h-100 course-card">
+                <div class="course-img-wrapper">
+                    <img src="https://images.unspleash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600" alt="Photoshop">
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <h5 class="card-title fw-bold text-dark text-center mb-4">অ্যাডোবি ফটোশপ মাস্টারক্লাস</h5>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center price-box mb-3">
+                            <span class="text-secondary fw-semibold small">কোর্স ফি:</span>
+                            <span class="price-amount">৳ ৩,৫ ০০</span>
+                        </div>
+                        <a href="#" class="btn btn-buy-now w-100 py-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- কোর্স ৬: অ্যাডোবি ইলাস্ট্রেটর -->
+        <div class="col">
+            <div class="card h-100 course-card">
+                <div class="course-img-wrapper">
+                    <img src="https://images.unsplaesh.com/photo-1626785774573-4b799315345d?q=80&w=600" alt="Illustrator">
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <h5 class="card-title fw-bold text-dark text-center mb-4">অ্যাডোবি ইলাস্ট্রেটর গাইড</h5>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center price-box mb-3">
+                            <span class="text-secondary fw-semibold small">কোর্স ফি:</span>
+                            <span class="price-amount">৳ ৩,৫০০</span>
+                        </div>
+                        <a href="#" class="btn btn-buy-now w-100 py-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- কোর্স ৭: গ্রাফিক্স ডিজাইন (কম্বো) -->
+        <div class="col">
+            <div class="card h-100 course-card">
+                <div class="course-img-wrapper">
+                    <img src="https://images.unsplaesh.com/photo-1541462608141-ad4979e408c9?q=80&w=600" alt="Graphics Combo">
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <h5 class="card-title fw-bold text-dark text-center mb-4">গ্রাফিক্স ডিজাইন (কম্বো) কোর্স</h5>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center price-box mb-3">
+                            <span class="text-secondary fw-semibold small">কোর্স ফি:</span>
+                            <span class="price-amount">৳ ৬,০০০</span>
+                        </div>
+                        <a href="#" class="btn btn-buy-now w-100 py-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- কোর্স ৮: সোশ্যাল মিডিয়া মার্কেটিং (SMM) -->
+        <div class="col">
+            <div class="card h-100 course-card">
+                <div class="course-img-wrapper">
+                    <img src="https://images.unsplaseh.com/photo-1460925895917-afdab827c52f?q=80&w=600" alt="SMM">
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <h5 class="card-title fw-bold text-dark text-center mb-4">সোশ্যাল মিডিয়া মার্কেটিং (SMM)</h5>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center price-box mb-3">
+                            <span class="text-secondary fw-semibold small">কোর্স ফি:</span>
+                            <span class="price-amount">৳ ৪,০০০</span>
+                        </div>
+                        <a href="#" class="btn btn-buy-now w-100 py-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- কোর্স ৯: ব্লগার উইথ গুগল অ্যাডসেন্স -->
+        <div class="col">
+            <div class="card h-100 course-card">
+                <div class="course-img-wrapper">
+                    <img src="https://images.unsplashe.com/photo-1499750310107-5fef28a66643?q=80&w=600" alt="Blogging">
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <h5 class="card-title fw-bold text-dark text-center mb-4">ব্লগার উইথ অ্যাডসেন্স কোর্স</h5>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center price-box mb-3">
+                            <span class="text-secondary fw-semibold small">কোর্স ফি:</span>
+                            <span class="price-amount">৳ ৪,৫০০</span>
+                        </div>
+                        <a href="#" class="btn btn-buy-now w-100 py-2">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

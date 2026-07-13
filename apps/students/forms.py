@@ -2,7 +2,6 @@ from django import forms
 from ..courses.models import Batch  # (Relative Import)
 from .models import Student
 
-
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
@@ -21,6 +20,11 @@ class StudentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # 💡 [নতুনসংযোজন] অটো-জেনারেট আইডির জন্য এই ফিল্ডের রিকোয়ারমেন্ট অফ করা হলো এবং লক করা হলো
+        if 'student_id' in self.fields:
+            self.fields['student_id'].required = False
+            self.fields['student_id'].widget.attrs['readonly'] = 'readonly'
+
         # 👑 ডাইনামিক ড্রপডাউন হ্যান্ডেল করার লজিক (কোর্স সিলেক্ট করলে সেই কোর্সের ব্যাচ আসবে)
         if 'course' in self.data:
             try:
@@ -34,9 +38,10 @@ class StudentForm(forms.ModelForm):
             # প্রথমবার ফর্ম লোড হলে ব্যাচ খালি থাকবে (AJAX দিয়ে পরে লোড হবে)
             self.fields['batch'].queryset = Batch.objects.none()
 
-        # প্লেসহোল্ডার ডিকশনারি (নতুন ফিল্ডগুলোর প্লেসহোল্ডার সহ আপডেট করা হয়েছে)
+        # প্লেসহোল্ডার ও ডিফল্ট লেবেল ডিকশনারি
+        # (examination এবং board_name এখন ড্রপডাউন, তাই এগুলোর প্রথম অপশন সেট করা হয়েছে)
         placeholders = {
-            'student_id': 'e.g. STU-2026-0001',
+            'student_id': 'Auto-generated (Starts from 780)',
             'name': 'Enter full name',
             'phone': '01XXXXXXXXX',
             'email': 'example@email.com',
@@ -60,9 +65,12 @@ class StudentForm(forms.ModelForm):
             'guardian_phone': "Guardian's mobile number",
             'education_institute_name': 'School / College / University name',
             'last_educational_qualification': 'e.g. SSC, HSC, Bachelor',
-            'examination': 'e.g. SSC, HSC',
+
+            # 🎯 Choice Field এর জন্য ড্রপডাউন ডিফল্ট টেক্সট সেট করা হয়েছে
+            'examination': '--- Select Examination ---',
+            'board_name': '--- Select Board ---',
+
             'passing_year': 'e.g. 2023',
-            'board_name': 'e.g. Dhaka, Rajshahi',
             'roll': 'Roll No.',
             'registration_number': 'Reg. Number',
             'authority_comments': 'Write office/authority comments here...',
@@ -77,14 +85,14 @@ class StudentForm(forms.ModelForm):
                 else:
                     field.widget.attrs['placeholder'] = placeholders[field_name]
 
-            # ২. ক্লাসের ধরন অনুযায়ী CSS ক্লাস অ্যাসাইন (বুটস্ট্র্যাপ ফর্ম স্টাইলিং)
+            # ২. ক্লাসের ধরন অনুযায়ী CSS ক্লাস অ্যাসাইন (বুটস্ট্র্যাপ ফর্ম স্টাইলিং)
             existing_classes = field.widget.attrs.get('class', '')
 
             if isinstance(field.widget, forms.CheckboxInput):
-                # চেকবক্সের জন্য বুটস্ট্র্যাপ ক্লাস (যেমন Attachments ফিল্ডগুলো)
+                # চেকবক্সের জন্য বুটস্ট্র্যাপ ক্লাস
                 new_class = f"{existing_classes} form-check-input".strip()
             elif isinstance(field.widget, forms.Select):
-                # ড্রপডাউনের জন্য ক্লাস
+                # ড্রপডাউনের জন্য ক্লাস (examination এবং board_name এখন এই ক্লাসে পড়বে)
                 new_class = f"{existing_classes} form-select".strip()
             else:
                 # টেক্সট, ডেট, ফাইল ইত্যাদির জন্য ক্লাস
@@ -95,6 +103,10 @@ class StudentForm(forms.ModelForm):
     # ইউনিক আইডি ভ্যালিডেশন (একই আইডি দুইবার দিলে এরর দেখাবে)
     def clean_student_id(self):
         student_id = self.cleaned_data.get('student_id')
+
+        # যদি আইডিটি খালি থাকে (যেহেতু required=False), তবে এখানে ভ্যালিডেশন করার দরকার নেই
+        if not student_id:
+            return student_id
 
         # যদি আমরা এক্সিস্টিং স্টুডেন্ট এডিট করি, তবে আইডি চেক স্কিপ করবে
         if self.instance.pk and self.instance.student_id == student_id:

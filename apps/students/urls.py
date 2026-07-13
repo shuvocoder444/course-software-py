@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 
 urlpatterns = [
@@ -10,7 +11,6 @@ urlpatterns = [
     # 🆕 নতুন যুক্ত করা পাথসমূহ (Approve এবং Print)
     path('approve/<int:pk>/', views.StudentApproveView.as_view(), name='student_approve'),
     path('print/<int:pk>/', views.StudentPrintView.as_view(), name='student_print'),
-
     # 👑 এই লাইনটি অবশ্যই চেক করুন
     path('ajax/load-batches/', views.LoadBatchesView.as_view(), name='ajax_load_batches'),
 ]

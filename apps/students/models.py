@@ -44,7 +44,7 @@ class Student(models.Model):
     student_id = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(blank=True, null=True, unique=True)
 
     # Address Info
     village_house_area = models.CharField(max_length=255, blank=True, null=True)
@@ -72,11 +72,51 @@ class Student(models.Model):
     # 3. Academic Information
     education_institute_name = models.CharField(max_length=255, blank=True, null=True)
     last_educational_qualification = models.CharField(max_length=100, blank=True, null=True)
-    examination = models.CharField(max_length=50, blank=True, null=True)
     passing_year = models.IntegerField(blank=True, null=True)
-    board_name = models.CharField(max_length=100, blank=True, null=True)
+
+
+
+    # বাংলাদেশের সকল শিক্ষা বোর্ডের তালিকা
+    BOARD_CHOICES = [
+        ('Dhaka', 'Dhaka'),
+        ('Chattogram', 'Chattogram'),
+        ('Rajshahi', 'Rajshahi'),
+        ('Khulna', 'Khulna'),
+        ('Barishal', 'Barishal'),
+        ('Sylhet', 'Sylhet'),
+        ('Cumilla', 'Cumilla'),
+        ('Jashore', 'Jashore'),
+        ('Mymensingh', 'Mymensingh'),
+        ('Madrasah', 'Madrasah'),
+        ('Technical', 'Technical'),
+        ('DIBS', 'DIBS (Dhaka)'),
+    ]
+
+    # বাংলাদেশের প্রচলিত প্রধান পরীক্ষাগুলোর তালিকা
+    EXAMINATION_CHOICES = [
+        ('SSC', 'Secondary School Certificate (SSC)'),
+        ('Dakhil', 'Dakhil'),
+        ('SSC_Vocational', 'SSC (Vocational)'),
+        ('HSC', 'Higher Secondary Certificate (HSC)'),
+        ('Alim', 'Alim'),
+        ('HSC_Vocational', 'HSC (Vocational)'),
+        ('HSC_BM', 'HSC (Business Management)'),
+        ('Diploma', 'Diploma in Engineering'),
+        ('Degree', 'Degree (Pass)'),
+        ('Honours', 'Honours'),
+        ('Masters', 'Masters'),
+    ]
+
+
+
+# 🎯 [এখানে মিসিং ফিল্ড দুটি choices সহ অ্যাড করা হয়েছে]
+    examination = models.CharField(max_length=50, choices=EXAMINATION_CHOICES, blank=True, null=True)
+    board_name = models.CharField(max_length=100, choices=BOARD_CHOICES, blank=True, null=True)
+
     roll = models.IntegerField(blank=True, null=True)
     registration_number = models.CharField(max_length=50, blank=True, null=True)
+
+
 
 
     # --- এগুলোর নিচে বা উপরে যোগ করুন ---
@@ -106,6 +146,7 @@ class Student(models.Model):
     session = models.CharField(max_length=100, blank=True, null=True, help_text="Auto-generated full session timestamp")
     submitted_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='pending')
+
 
     def __str__(self):
         return self.name

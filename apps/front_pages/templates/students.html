@@ -1,0 +1,158 @@
+{% extends layout_path %}
+
+{% block title %}Our Students - আমাদের ছাত্র{% endblock %}
+
+{% block content %}
+<style>
+    /* হিরো ব্যানার */
+    .students-hero-banner {
+        background: radial-gradient(circle at 80% 20%, rgba(220, 53, 69, 0.15) 0%, transparent 50%),
+                    linear-gradient(135deg, #0b1116 0%, #1a2630 100%);
+        padding: 80px 20px;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 4px solid #dc3545;
+    }
+
+    .students-gradient-title {
+        background: linear-gradient(135deg, #ffffff 40%, #ff4d5a 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+        display: inline-block;
+        letter-spacing: 1px;
+    }
+
+    /* স্টুডেন্ট প্রোফাইল কার্ড */
+    .jbd-students-section .student-card {
+        border: none;
+        border-radius: 16px;
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(17, 28, 36, 0.04);
+        transition: all 0.3s ease;
+        position: relative;
+        padding-top: 40px; /* ইমেজের ওভারল্যাপের জন্য */
+    }
+
+    .jbd-students-section .student-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(17, 28, 36, 0.1);
+    }
+
+    /* স্টুডেন্ট ইমেজ সার্কেল */
+    .student-img-wrapper {
+        width: 85px;
+        height: 85px;
+        border-radius: 50%;
+        border: 4px solid #ffffff;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        position: absolute;
+        top: -42px;
+        left: 50%;
+        transform: translateX(-50%);
+        overflow: hidden;
+        background: #f4f6f9;
+    }
+
+    .student-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* রেটিং স্টার */
+    .rating-stars {
+        color: #ffc107;
+        font-size: 0.9rem;
+    }
+
+    /* সাকসেস ব্যাজ */
+    .success-badge {
+        background-color: #28a745;
+        color: white;
+        font-size: 0.75rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: 600;
+    }
+</style>
+
+<!-- হিরো ব্যানার -->
+<div class="students-hero-banner text-center text-white mb-5">
+    <div class="container">
+        <h1 class="display-3 fw-bold students-gradient-title mb-3">সফল শিক্ষার্থীদের গল্প</h1>
+        <p class="lead text-white-50 max-w-600 mx-auto">
+            JBD IT থেকে কোর্স সম্পন্ন করে যারা ফ্রিল্যান্সিং মার্কেটপ্লেস ও বিভিন্ন আইটি প্রতিষ্ঠানে সফলতার সাথে কাজ করছেন, তাদের মুখ থেকেই শুনুন।
+        </p>
+    </div>
+</div>
+
+<!-- সফল স্টুডেন্ট রিভিউ লিস্ট -->
+{% comment %} <div class="container my-5 pt-4 jbd-students-section">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5 justify-content-center">
+
+        <!-- স্টুডেন্ট কার্ড ১ -->
+        <div class="col">
+            <div class="card student-card h-100 text-center p-4">
+                <div class="student-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200" alt="Student Profile">
+                </div>
+                <div class="card-body">
+                    <h5 class="fw-bold text-dark mb-1">আসমা খাতুন</h5>
+                    <p class="text-muted small mb-2">সাবেক শিক্ষার্থী, গ্রাফিক্স ডিজাইন ব্যাচ</p>
+                    <div class="mb-3">
+                        <span class="success-badge">Level 2 Seller @ Fiverr</span>
+                    </div>
+                    <div class="rating-stars mb-3">⭐⭐⭐⭐⭐</div>
+                    <p class="text-secondary small fst-italic mb-0">
+                        "JBD IT-এর মেন্টরিং সিস্টেম অসাধারণ। কোর্স চলাকালীন সময়েই মেন্টরের সাপোর্টে আমি প্রথম অর্ডার পাই। বর্তমানে ফাইভারে সফলভাবে ফ্রিল্যান্সিং করছি।"
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- স্টুডেন্ট কার্ড ২ -->
+        <div class="col">
+            <div class="card student-card h-100 text-center p-4">
+                <div class="student-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200" alt="Student Profile">
+                </div>
+                <div class="card-body">
+                    <h5 class="fw-bold text-dark mb-1">রাশেদুল ইসলাম</h5>
+                    <p class="text-muted small mb-2">সাবেক শিক্ষার্থী, অফিস অ্যাপ্লিকেশন কম্বো</p>
+                    <div class="mb-3">
+                        <span class="success-badge" style="background-color: #007bff;">ডাটা এন্ট্রি এক্সপার্ট</span>
+                    </div>
+                    <div class="rating-stars mb-3">⭐⭐⭐⭐⭐</div>
+                    <p class="text-secondary small fst-italic mb-0">
+                        "বেসিক থেকে শুরু করে এক্সেল এবং পাওয়ারপয়েন্টের অ্যাডভান্সড কাজগুলো এত সহজে শেখানো হয়েছে যে এখন আমি যেকোনো কর্পোরেট ডাটা অ্যানালাইসিস সহজে করতে পারি।"
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- স্টুডেন্ট কার্ড ৩ -->
+        <div class="col">
+            <div class="card student-card h-100 text-center p-4">
+                <div class="student-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=200" alt="Student Profile">
+                </div>
+                <div class="card-body">
+                    <h5 class="fw-bold text-dark mb-1">মেহেদী হাসান</h5>
+                    <p class="text-muted small mb-2">সাবেক শিক্ষার্থী, সোশ্যাল মিডিয়া মার্কেটিং</p>
+                    <div class="mb-3">
+                        <span class="success-badge">Top Rated @ Upwork</span>
+                    </div>
+                    <div class="rating-stars mb-3">⭐⭐⭐⭐⭐</div>
+                    <p class="text-secondary small fst-italic mb-0">
+                        "ডিজিটাল মার্কেটিংয়ের রিয়েল-লাইফ ক্যাম্পেইন প্রজেক্টগুলো ক্লাসে শেখার কারণে লোকাল এবং গ্লোবাল ক্লায়েন্টদের হ্যান্ডেল করা আমার জন্য অনেক সহজ হয়েছে।"
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div> {% endcomment %}
+{% endblock %}

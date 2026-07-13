@@ -1,26 +1,133 @@
 {% extends layout_path %}
-
 {% load static %}
 {% load i18n %}
-
 {% block content %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Student Dashboard</h1>
-</div>
+<div class="container-xxl flex-grow-1 container-p-y  " >
 
-<div class="row g-3">
-    <div class="col-md-6">
-        <div class="card p-3">
-            <h4>🔔 Announcements</h4>
-            <p class="text-muted mt-2">Next mid-term examinations schedule has been published checking terminal file panel.</p>
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card bg-label-primary p-4">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h3 class="mb-1 text-primary">Welcome Back, {{ request.user.first_name|default:request.user.username }}! 👋</h3>
+                        <p class="mb-0 text-muted">এখানে আপনি আপনার ব্যাচ, কোর্স এবং প্রোফাইলের সব আপডেট পাবেন।</p>
+                    </div>
+                    <div>
+                        <span class="badge bg-primary">ID: {{ student.id|default:"709" }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card p-3">
-            <h4>📊 Quick Summary</h4>
-            <p>Attendance rate: <strong>92%</strong></p>
-            <p>Pending Invoices: <span class="badge bg-danger">None</span></p>
+
+    <div class="row">
+        <div class="col-lg-4 col-md-5 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="mx-auto mb-3">
+                        <div class="avatar avatar-xl d-inline-block">
+                            <span class="avatar-initial rounded-circle bg-label-warning" style="font-size: 2rem;">
+                                {{ request.user.username|slice:":2"|upper }}
+                            </span>
+                        </div>
+                    </div>
+                    <h5 class="mb-1">{{ request.user.get_full_name|default:request.user.username }}</h5>
+                    <p class="text-muted small mb-3">Email: {{ request.user.email }}</p>
+
+                    <hr class="my-3">
+
+                    <div class="text-start">
+                        <h6 class="text-uppercase text-muted small fw-bold mb-3">Batch Details</h6>
+                        {% if batch %}
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="bx bx-group me-2 text-primary"></i>
+                                    <strong>Batch:</strong> {{ batch.batch_number }} </li>
+                                <li class="mb-2">
+                                    <i class="bx bx-calendar me-2 text-success"></i>
+                                    <strong>Start Date:</strong> {{ batch.start_date|default:"Not Set" }}
+                                </li>
+                                <li>
+                                    <i class="bx bx-check-shield me-2 text-info"></i>
+                                    <strong>Status:</strong>
+                                    {% if batch.is_active %}
+                                        <span class="badge bg-label-success btn-sm py-0">Active</span>
+                                    {% else %}
+                                        <span class="badge bg-label-danger btn-sm py-0">Inactive</span>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        {% else %}
+                            <div class="alert alert-warning py-2 mb-0 small">আপনি এখনো কোনো ব্যাচে যুক্ত নন।</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 col-md-7 mb-4">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bx bx-book-open me-2"></i>My Enrolled Courses</h5>
+                    <span class="badge bg-label-success">{% if enrolled_course %}1 Active{% else %}0 Active{% endif %}</span>
+                </div>
+                <div class="card-body">
+                    {% if enrolled_course %}
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <div class="card border shadow-none p-3 h-100">
+                                    <h6 class="fw-bold mb-2 text-primary" style="font-size: 1.1rem;">{{ enrolled_course.name }}</h6>
+                                    <p class="text-muted small mb-3">
+                                        {{ enrolled_course.description|default:"No description available."|truncatewords:20 }}
+                                    </p>
+                                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                                        <span class="badge bg-label-secondary">Code: {{ enrolled_course.code|default:"N/A" }}</span>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">Enter Class</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="bx bx-book-reader display-4 text-muted mb-2"></i>
+                            <p class="text-muted">আপনার কোনো রানিং বা এনরোল করা কোর্স পাওয়া যায়নি।</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
+<div class="row mt-4">
+        <div class="col-12">
+            <h5 class="py-3 mb-2"><i class="bx bx-star me-2 text-warning"></i>Explore Other Courses</h5>
+
+            <div class="row">
+                {% for course in other_courses %}
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="card h-100 border shadow-none">
+                            <div class="card-body p-3 d-flex flex-column">
+                                <span class="badge bg-label-info align-self-start mb-2">Code: {{ course.code|default:"N/A" }}</span>
+                                <h6 class="fw-bold text-dark mb-1" style="font-size: 1rem;">{{ course.name }}</h6>
+                                <p class="text-muted small mb-3 flex-grow-1">
+                                    {{ course.description|default:"No description available."|truncatewords:12 }}
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
+                                    <span class="fw-semibold text-success">৳{{ course.default_fee }}</span>
+                                    <a href="#" class="btn btn-sm btn-label-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <p class="text-muted small"><i class="bx bx-info-circle me-1"></i>নতুন কোনো কোর্স এই মুহূর্তে উপলব্ধ নেই।</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+
 {% endblock %}

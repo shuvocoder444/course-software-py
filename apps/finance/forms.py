@@ -1,11 +1,11 @@
 from django import forms
 
 from .models import Invoice
-
+# E:\Course\apps\finance\forms.py
 
 class InvoiceForm(forms.ModelForm):
     class Meta:
-        model = Invoice
+        model = Invoice  # রিলেশন মডেলে থাকার কারণে এখানে শুধু মূল মডেলটিই থাকবে
         fields = [
             'student', 'date', 'course_fee', 'certificate_fee',
             'id_card_fee', 'admit_card_fee', 'other_fee',
@@ -19,11 +19,11 @@ class InvoiceForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # ফি এবং অ্যামাউন্টের ফিল্ডগুলোতে বুটস্ট্র্যাপ ক্লাস অ্যাড করা
         money_fields = ['course_fee', 'certificate_fee', 'id_card_fee', 'admit_card_fee', 'other_fee', 'discount', 'paid_amount']
         for field in money_fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control', 'value': '0.00'})
-
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+            if not self.initial.get(field):
+                self.fields[field].initial = 0.00
 
 
 

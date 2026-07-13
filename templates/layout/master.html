@@ -13,8 +13,9 @@
     <!-- Canonical SEO -->
     <link rel="canonical" href="{% get_theme_variables 'product_page' %}">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'cus/fav.png' %}" />
-
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'cus/icon.png' %}" />
+    <!-- Tabler Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <!-- Include the styles partial -->
     {% include is_front|yesno:"./partials/styles_front.html,./partials/styles.html" %}
 

@@ -1,0 +1,131 @@
+{% extends layout_path %}
+
+{% block title %}Tutorials - টিউটোরিয়াল{% endblock %}
+
+{% block content %}
+<style>
+    /* হিরো ব্যানার */
+    .tutorial-hero-banner {
+        background: radial-gradient(circle at 80% 20%, rgba(220, 53, 69, 0.15) 0%, transparent 50%),
+                    linear-gradient(135deg, #0b1116 0%, #1a2630 100%);
+        padding: 80px 20px;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 4px solid #dc3545;
+    }
+
+    .tutorial-gradient-title {
+        background: linear-gradient(135deg, #ffffff 40%, #ff4d5a 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+        display: inline-block;
+        letter-spacing: 1px;
+    }
+
+    /* টিউটোরিয়াল কার্ড স্টাইল */
+    .jbd-tutorial-section .tutorial-card {
+        border: none;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(17, 28, 36, 0.05);
+        transition: all 0.4s ease;
+        background: #ffffff;
+    }
+
+    .jbd-tutorial-section .tutorial-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(17, 28, 36, 0.12);
+    }
+
+    /* ক্যাটাগরি ব্যাজ */
+    .category-badge {
+        background-color: rgba(220, 53, 69, 0.1);
+        color: #dc3545;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+
+    /* ওয়াচ বাটন */
+    .btn-watch {
+        background-color: #111c24 !important;
+        color: #ffffff !important;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: background-color 0.3s;
+    }
+    .btn-watch:hover {
+        background-color: #dc3545 !important;
+    }
+</style>
+
+<!-- হিরো ব্যানার -->
+<div class="tutorial-hero-banner text-center text-white mb-5">
+    <div class="container">
+        <h1 class="display-3 Bars fw-bold tutorial-gradient-title mb-3">ফ্রি টিউটোরিয়াল</h1>
+        <p class="lead text-white-50 max-w-600 mx-auto">
+            নিজেকে দক্ষ করে তুলতে JBD IT-এর এক্সপার্ট মেন্টরদের তৈরি করা গুরুত্বপূর্ণ ফ্রি গাইডলাইন ও টিউটোরিয়ালগুলো দেখুন।
+        </p>
+    </div>
+</div>
+
+<!-- টিউটোরিয়াল গ্রিড -->
+{% comment %} <div class="container my-5 jbd-tutorial-section">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+        <!-- টিউটোরিয়াল ১ -->
+        <div class="col">
+            <div class="card h-100 tutorial-card">
+                <div class="ratio ratio-16x9">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Tutorial 1" allowfullscreen></iframe>
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <span class="category-badge mb-2">MS Word</span>
+                        <h5 class="fw-bold text-dark h6 mb-3">মাইক্রোসফট ওয়ার্ডে প্রফেশনাল সিভি (CV) তৈরির নিয়ম</h5>
+                    </div>
+                    <a href="#" class="btn btn-watch w-100 py-2 mt-3">ভিডিওটি দেখুন 🎬</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- টিউটোরিয়াল ২ -->
+        <div class="col">
+            <div class="card h-100 tutorial-card">
+                <div class="ratio ratio-16x9">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Tutorial 2" allowfullscreen></iframe>
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <span class="category-badge mb-2">MS Excel</span>
+                        <h5 class="fw-bold text-dark h6 mb-3">এক্সেলের ১০টি অ্যাডভান্সড ফর্মুলা যা জানা আবশ্যক</h5>
+                    </div>
+                    <a href="#" class="btn btn-watch w-100 py-2 mt-3">ভিডিওটি দেখুন 🎬</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- টিউটোরিয়াল ৩ -->
+        <div class="col">
+            <div class="card h-100 tutorial-card">
+                <div class="ratio ratio-16x9">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Tutorial 3" allowfullscreen></iframe>
+                </div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <span class="category-badge mb-2">Graphic Design</span>
+                        <h5 class="fw-bold text-dark h6 mb-3">ফটোশপে ব্যাকগ্রাউন্ড রিমুভ করার সহজ ৫টি পদ্ধতি</h5>
+                    </div>
+                    <a href="#" class="btn btn-watch w-100 py-2 mt-3">ভিডিওটি দেখুন 🎬</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div> {% endcomment %}
+{% endblock %}

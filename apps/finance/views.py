@@ -10,6 +10,7 @@ from django.views.generic import CreateView, ListView
 
 # আপনার কাস্টম লেআউট ও সিকিউরিটি মিক্সিন
 from apps.account.views import AdminRoleRequiredMixin, VuxyVerticalLayoutMixin
+from apps.courses.models import Batch, Course
 from apps.students.models import Student
 from web_project import TemplateHelper
 
@@ -18,25 +19,37 @@ from .forms import InvoiceForm
 # মডেল ইম্পোর্ট (শুধু যেগুলো নিশ্চিতভাবে আছে)
 from .models import Invoice, StudentLedger
 
-# ==============================================================================
-# ফাইন্যান্স ও ইনভয়েস ম্যানেজমেন্ট (CBV - Admin Only)
-# ==============================================================================
+from django.db.models import Q
+from apps.finance.models import Invoice
+# আপনার প্রজেক্টের পাথ অনুযায়ী ইমপোর্ট নিশ্চিত করুন
+# from apps.students.models import Batch, Course
+# আপনার অন্যান্য মডেল এবং মিক্সিন ইমপোর্ট নিশ্চিত করুন
+# from .models import Invoice, Batch, Course
 
-# ১. INVOICE / DEPOSIT LIST VIEW
 class InvoiceListView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, ListView):
     model = Invoice
     context_object_name = 'invoices'
-    template_name = 'invoice_list.html'  # সরাসরি templates ফোল্ডারে থাকার কারণে
+    template_name = 'invoice_list.html'
     ordering = ['-id']
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        # 💡 পারফরম্যান্স ফিক্স: select_related ব্যবহার করা হলো যাতে স্টুডেন্ট ও কোর্সের
+        # ডেটা এক কুয়েরিতেই চলে আসে এবং লুপের ভেতর কোনো ডেটা মিস না হয়।
+        queryset = Invoice.objects.select_related('student', 'student__course').all().order_by('-id')
 
-        # ইউআরএল এর জিইটি রিকোয়েস্ট থেকে ফিল্টার ভ্যালু নেওয়া
+        # URL এর GET রিকোয়েস্ট থেকে ফিল্টার ভ্যালু নেওয়া
+        search_student = self.request.GET.get('search_student')  # 👈 নতুন যুক্ত করা হয়েছে
         batch_id = self.request.GET.get('batch')
         course_id = self.request.GET.get('course')
         session_id = self.request.GET.get('session')
         fee_type = self.request.GET.get('fee_type')
+
+        # 🔍 স্টুডেন্ট নাম অথবা স্টুডেন্ট আইডি দিয়ে সার্চ ফিল্টারিং (নতুন যুক্ত)
+        if search_student:
+            queryset = queryset.filter(
+                Q(student__name__icontains=search_student) |
+                Q(student__student_id__icontains=search_student)
+            )
 
         # স্টুডেন্টের রিলেশন ধরে ফিল্টারিং
         if batch_id:
@@ -46,16 +59,24 @@ class InvoiceListView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLa
         if session_id:
             queryset = queryset.filter(student__session_id=session_id)
 
-        # ৫টি কাস্টম ফি-র ফিল্টারিং
+        # 👉 ফিক্স: ফর্ম ও মডেলের প্রকৃত ফিল্ডের নাম অনুযায়ী কন্ডিশন চেক
         if fee_type:
             if fee_type == 'course_fee':
                 queryset = queryset.filter(course_fee__gt=0)
             elif fee_type == 'cert_fee':
-                queryset = queryset.filter(cert_fee__gt=0)
+                # যদি মডেলে certificate_fee থাকে তবে সেটি লিখুন, নতুবা cert_fee রাখুন
+                if hasattr(Invoice, 'certificate_fee'):
+                    queryset = queryset.filter(certificate_fee__gt=0)
+                else:
+                    queryset = queryset.filter(cert_fee__gt=0)
             elif fee_type == 'id_card_fee':
                 queryset = queryset.filter(id_card_fee__gt=0)
             elif fee_type == 'admit_fee':
-                queryset = queryset.filter(admit_fee__gt=0)
+                # যদি মডেলে admit_card_fee থাকে তবে সেটি লিখুন
+                if hasattr(Invoice, 'admit_card_fee'):
+                    queryset = queryset.filter(admit_card_fee__gt=0)
+                else:
+                    queryset = queryset.filter(admit_fee__gt=0)
             elif fee_type == 'other_fee':
                 queryset = queryset.filter(other_fee__gt=0)
 
@@ -64,20 +85,136 @@ class InvoiceListView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLa
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # ImportError এড়াতে আপাতত খালি লিস্ট পাঠানো হলো।
-        # পরে আপনার আসল মডেলের নাম জানতে পারলে এগুলোকে ডাটাবেজের সাথে কানেক্ট করতে পারবেন।
+        # ড্রপডাউন ডেটা পাঠানো হচ্ছে
         context['filter_data'] = {
-            'batches': [],
-            'courses': [],
-            'sessions': [],
+            'batches': Batch.objects.all(),
+            'courses': Course.objects.all(),
         }
+
+        context['title'] = "Student Invoice List"
         return context
+
+
+
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 
 # আপনার অ্যাপ অনুযায়ী প্রয়োজনীয় মডেল ও ফর্ম ইমপোর্ট রাখুন
 # from .models import Invoice, StudentLedger, Student
 # from .forms import InvoiceForm
+
+# class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, CreateView):
+#     model = Invoice
+#     form_class = InvoiceForm
+#     template_name = 'add_payment.html'
+#     success_url = reverse_lazy('invoice_list')
+
+#     def post(self, request, *args, **kwargs):
+#         """
+#         কাস্টম ড্রপডাউন থেকে টাইপ/সিলেক্ট করা আইডিকে Django ফর্মে
+#         বাধ্যতামূলকভাবে অ্যাসাইন করার জন্য POST রিকোয়েস্ট ওভাররাইড করা হলো।
+#         """
+#         # রিকোয়েস্ট কপি করে এডিটেবল করা
+#         post_data = request.POST.copy()
+
+#         # ফ্রন্টএন্ডের কাস্টম সার্চ ইনপুট থেকে আইডিটি নেওয়া
+#         custom_student_id = request.POST.get('student_search_input', '').strip()
+
+#         # যদি মেইন স্টুডেন্ট ফিল্ড খালি থাকে কিন্তু কাস্টম সার্চ ইনপুটে আইডি থাকে, তবে মেইন ফিল্ডে তা বসানো
+#         if not post_data.get('student') and custom_student_id:
+#             post_data['student'] = custom_student_id
+
+#         request.POST = post_data
+#         return super().post(request, *args, **kwargs)
+
+#     def form_valid(self, form):
+#         with transaction.atomic():
+#             invoice_instance = form.save(commit=False)
+#             student = invoice_instance.student
+
+#             # ১. চেক করা হচ্ছে এই স্টুডেন্টের কোনো ইনভয়েস আগে থেকে আছে কিনা
+#             existing_invoice = Invoice.objects.filter(student=student).first()
+
+#             new_payment = invoice_instance.paid_amount or Decimal('0.00')
+#             new_discount = invoice_instance.discount or Decimal('0.00')
+
+#             if existing_invoice:
+#                 # ২. আগের ইনভয়েস থাকলে সেটি আপডেট হবে
+#                 existing_invoice.course_fee = invoice_instance.course_fee
+#                 existing_invoice.certificate_fee = invoice_instance.certificate_fee
+#                 existing_invoice.id_card_fee = invoice_instance.id_card_fee
+#                 existing_invoice.admit_card_fee = invoice_instance.admit_card_fee
+#                 existing_invoice.other_fee = invoice_instance.other_fee
+
+#                 existing_invoice.paid_amount += new_payment
+#                 existing_invoice.discount = new_discount
+
+#                 # পেমেন্ট মেথড আপডেট (HTML এ কাস্টম সিলেক্ট নেওয়া হয়েছিল)
+#                 custom_pm = self.request.POST.get('payment_method')
+#                 if custom_pm:
+#                     existing_invoice.payment_method = custom_pm
+#                 elif hasattr(invoice_instance, 'payment_method'):
+#                     existing_invoice.payment_method = invoice_instance.payment_method
+
+#                 existing_invoice.additional_notes = invoice_instance.additional_notes
+#                 existing_invoice.save()
+
+#                 active_invoice = existing_invoice
+#                 description_text = f"Additional Payment Received ({active_invoice.invoice_no})"
+#             else:
+#                 # ৩. ইনভয়েস না থাকলে একদম নতুন ইনভয়েস তৈরি হবে
+#                 current_time = datetime.now()
+#                 invoice_instance.invoice_no = f"INV-{current_time.strftime('%Y%m%d-%H%M%S')}"
+
+#                 # পেমেন্ট মেথড অ্যাসাইন
+#                 custom_pm = self.request.POST.get('payment_method')
+#                 if custom_pm:
+#                     invoice_instance.payment_method = custom_pm
+
+#                 invoice_instance.save()
+
+#                 active_invoice = invoice_instance
+#                 description_text = f"Fees Charged & Initial Payment Received ({active_invoice.invoice_no})"
+
+#             # ৪. স্টুডেন্টের লেজার ব্যালেন্স ক্যালকুলেশন
+#             last_ledger = StudentLedger.objects.filter(student=student).last()
+#             previous_balance = last_ledger.balance if last_ledger else Decimal('0.00')
+
+#             if existing_invoice:
+#                 debit_amount = Decimal('0.00')
+#                 credit_amount = new_payment
+#                 current_balance = previous_balance - new_payment
+#             else:
+#                 debit_amount = active_invoice.net_payable if hasattr(active_invoice, 'net_payable') else Decimal('0.00')
+#                 credit_amount = active_invoice.paid_amount
+#                 current_balance = previous_balance + debit_amount - credit_amount
+
+#             # লেজার রেকর্ড তৈরি
+#             StudentLedger.objects.create(
+#                 student=student,
+#                 date=active_invoice.date,
+#                 description=description_text,
+#                 invoice=active_invoice,
+#                 debit=debit_amount,
+#                 credit=credit_amount,
+#                 balance=current_balance
+#             )
+
+#             messages.success(self.request, f"Payment process successfully completed for {active_invoice.invoice_no}!")
+
+#             # NoneType এরর ফিক্স করার মেইন পার্ট
+#             self.object = active_invoice
+#             return HttpResponseRedirect(self.get_success_url())
+
+
+
+
+
+
+
+from apps.finance.models import Invoice, StudentLedger
+# মিক্সিন এবং ফর্মের ইমপোর্ট নিশ্চিত করে নেবেন
 
 class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, CreateView):
     model = Invoice
@@ -88,15 +225,11 @@ class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
     def post(self, request, *args, **kwargs):
         """
         কাস্টম ড্রপডাউন থেকে টাইপ/সিলেক্ট করা আইডিকে Django ফর্মে
-        বাধ্যতামূলকভাবে অ্যাসাইন করার জন্য POST রিকোয়েস্ট ওভাররাইড করা হলো।
+        বাধ্যতামূলকভাবে অ্যাসাইন করার জন্য POST রিকোয়েস্ট ওভাররাইড করা হলো।
         """
-        # রিকোয়েস্ট কপি করে এডিটেবল করা
         post_data = request.POST.copy()
-
-        # ফ্রন্টএন্ডের কাস্টম সার্চ ইনপুট থেকে আইডিটি নেওয়া
         custom_student_id = request.POST.get('student_search_input', '').strip()
 
-        # যদি মেইন স্টুডেন্ট ফিল্ড খালি থাকে কিন্তু কাস্টম সার্চ ইনপুটে আইডি থাকে, তবে মেইন ফিল্ডে তা বসানো
         if not post_data.get('student') and custom_student_id:
             post_data['student'] = custom_student_id
 
@@ -108,62 +241,34 @@ class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
             invoice_instance = form.save(commit=False)
             student = invoice_instance.student
 
-            # ১. চেক করা হচ্ছে এই স্টুডেন্টের কোনো ইনভয়েস আগে থেকে আছে কিনা
-            existing_invoice = Invoice.objects.filter(student=student).first()
+            # 💡 ফিক্স: আগের ইনভয়েস খোঁজার বা আপডেট করার কোনো লজিক থাকবে না।
+            # প্রতিবার পেমেন্টে সরাসরি একদম নতুন ইনভয়েস তৈরি হবে।
+            current_time = datetime.now()
+            invoice_instance.invoice_no = f"INV-{current_time.strftime('%Y%m%d-%H%M%S')}"
 
-            new_payment = invoice_instance.paid_amount or Decimal('0.00')
-            new_discount = invoice_instance.discount or Decimal('0.00')
+            # পেমেন্ট মেথড অ্যাসাইন
+            custom_pm = self.request.POST.get('payment_method')
+            if custom_pm:
+                invoice_instance.payment_method = custom_pm
 
-            if existing_invoice:
-                # ২. আগের ইনভয়েস থাকলে সেটি আপডেট হবে
-                existing_invoice.course_fee = invoice_instance.course_fee
-                existing_invoice.certificate_fee = invoice_instance.certificate_fee
-                existing_invoice.id_card_fee = invoice_instance.id_card_fee
-                existing_invoice.admit_card_fee = invoice_instance.admit_card_fee
-                existing_invoice.other_fee = invoice_instance.other_fee
+            # নতুন ইনভয়েস ডেটাবেজে সেভ করা হলো
+            invoice_instance.save()
+            active_invoice = invoice_instance
 
-                existing_invoice.paid_amount += new_payment
-                existing_invoice.discount = new_discount
+            # ডিসক্রিপশন টেক্সট
+            description_text = f"Payment Received ({active_invoice.invoice_no})"
 
-                # পেমেন্ট মেথড আপডেট (HTML এ কাস্টম সিলেক্ট নেওয়া হয়েছিল)
-                custom_pm = self.request.POST.get('payment_method')
-                if custom_pm:
-                    existing_invoice.payment_method = custom_pm
-                elif hasattr(invoice_instance, 'payment_method'):
-                    existing_invoice.payment_method = invoice_instance.payment_method
-
-                existing_invoice.additional_notes = invoice_instance.additional_notes
-                existing_invoice.save()
-
-                active_invoice = existing_invoice
-                description_text = f"Additional Payment Received ({active_invoice.invoice_no})"
-            else:
-                # ৩. ইনভয়েস না থাকলে একদম নতুন ইনভয়েস তৈরি হবে
-                current_time = datetime.now()
-                invoice_instance.invoice_no = f"INV-{current_time.strftime('%Y%m%d-%H%M%S')}"
-
-                # পেমেন্ট মেথড অ্যাসাইন
-                custom_pm = self.request.POST.get('payment_method')
-                if custom_pm:
-                    invoice_instance.payment_method = custom_pm
-
-                invoice_instance.save()
-
-                active_invoice = invoice_instance
-                description_text = f"Fees Charged & Initial Payment Received ({active_invoice.invoice_no})"
-
-            # ৪. স্টুডেন্টের লেজার ব্যালেন্স ক্যালকুলেশন
+            # 🎯 স্টুডেন্টের লেজার ব্যালেন্স ক্যালকুলেশন (১০০% আপনার লজিক অনুযায়ী)
+            # আগের সর্বশেষ লেজার রেকর্ড খুঁজে বের করা
             last_ledger = StudentLedger.objects.filter(student=student).last()
             previous_balance = last_ledger.balance if last_ledger else Decimal('0.00')
 
-            if existing_invoice:
-                debit_amount = Decimal('0.00')
-                credit_amount = new_payment
-                current_balance = previous_balance - new_payment
-            else:
-                debit_amount = active_invoice.net_payable if hasattr(active_invoice, 'net_payable') else Decimal('0.00')
-                credit_amount = active_invoice.paid_amount
-                current_balance = previous_balance + debit_amount - credit_amount
+            # প্রতিটা নতুন ইনভয়েসের জন্য ডেবিট, ক্রেডিট এবং কারেন্ট ব্যালেন্স হিসাব
+            debit_amount = active_invoice.net_payable if hasattr(active_invoice, 'net_payable') else Decimal('0.00')
+            credit_amount = active_invoice.paid_amount or Decimal('0.00')
+
+            # নতুন ব্যালেন্স = পূর্বের ব্যালেন্স + নতুন চার্জ (Debit) - নতুন পেমেন্ট (Credit)
+            current_balance = previous_balance + debit_amount - credit_amount
 
             # লেজার রেকর্ড তৈরি
             StudentLedger.objects.create(
@@ -181,6 +286,7 @@ class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
             # NoneType এরর ফিক্স করার মেইন পার্ট
             self.object = active_invoice
             return HttpResponseRedirect(self.get_success_url())
+
 
 
 
@@ -257,27 +363,25 @@ class InvoiceDeleteView(LoginRequiredMixin, AdminRoleRequiredMixin, DeleteView):
         return redirect(self.get_success_url())
 
 
-# ৩. ইনভয়েস প্রিন্ট ভিউ (সরাসরি ব্রাউজারে প্রিন্ট লেআউট ওপেন হবে)
+
 class InvoicePrintView(LoginRequiredMixin, DetailView):
     model = Invoice
-    template_name = 'invoice_print.html' # একটি প্লেইন প্রিন্ট টেমপ্লেট বানাতে হবে
+    template_name = 'invoice_print.html'  # আগে শুধু 'invoice_print.html' ছিল
     context_object_name = 'invoice'
 
 
 
 
-
-
-
 from django.http import JsonResponse
-
 from .models import Invoice
-
 
 def get_student_payment_details(request):
     student_id = request.GET.get('student_id')
     data = {
         'exists': False,
+        'name': '',
+        'phone': '',
+        'course_name': '',
         'total_paid': 0,
         'discount': 0,
         'course_fee': 0,
@@ -288,24 +392,59 @@ def get_student_payment_details(request):
     }
 
     if student_id:
-        # স্টুডেন্ট আইডি দিয়ে তার ইনভয়েসটি খুঁজে বের করা হচ্ছে
-        invoice = Invoice.objects.filter(student_id=student_id).first()
-        if invoice:
+        print(f"\n[DEBUG] Fetching data for Student ID: {student_id}")
+
+        invoice = Invoice.objects.filter(student_id=student_id)\
+                                 .select_related('student__account', 'student__course')\
+                                 .first()
+
+        if invoice and invoice.student:
+            student = invoice.student
+
+            # ১. শিক্ষার্থীর নাম বের করা
+            student_name = ""
+            if student.account:
+                student_name = student.account.get_full_name() or student.account.username
+
+            # ২. শিক্ষার্থীর ফোন নম্বর বের করা
+            student_phone = ""
+            if student.account and hasattr(student.account, 'phone'):
+                student_phone = student.account.phone
+            elif hasattr(student, 'phone'):
+                student_phone = student.phone
+
+            # ৩. কোর্সের নাম বের করা
+            course_title = ""
+            if student.course:
+                course_title = getattr(student.course, 'title', getattr(student.course, 'name', ''))
+
+            # ৪. 👑 কোর্স ফি নির্ধারণ (ইনভয়েসে না থাকলে Course মডেলের default_fee থেকে আসবে)
+            db_course_fee = float(invoice.course_fee or 0)
+
+            if db_course_fee == 0 and student.course:
+                # আপনার মডেলে থাকা default_fee ফিল্ডটি এখানে সরাসরি কল করা হয়েছে
+                db_course_fee = float(student.course.default_fee or 0)
+                print(f"[DEBUG] Invoice course_fee was 0. Pulled from Course Model (default_fee): {db_course_fee}")
+
             data = {
                 'exists': True,
+                'name': student_name,
+                'phone': student_phone,
+                'course_name': course_title,
+                'course_fee': db_course_fee, # একদম সঠিক কোর্স ফি সেট হলো
+
+                # অন্যান্য ফি ও হিসাব
                 'total_paid': float(invoice.paid_amount or 0),
                 'discount': float(invoice.discount or 0),
-                'course_fee': float(invoice.course_fee or 0),
                 'certificate_fee': float(invoice.certificate_fee or 0),
                 'id_card_fee': float(invoice.id_card_fee or 0),
                 'admit_card_fee': float(invoice.admit_card_fee or 0),
                 'other_fee': float(invoice.other_fee or 0),
             }
 
+            print(f"[DEBUG] Final Sending Data to Frontend: {data}\n")
+
     return JsonResponse(data)
-
-
-
 
 
 from django.urls import reverse_lazy
@@ -344,6 +483,8 @@ class DepositListView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLa
 
         return queryset
 
+
+
 # --- ADD / CREATE VIEW ---
 class DepositCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, CreateView):
     model = CompanyDeposit
@@ -357,6 +498,10 @@ class DepositCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, CreateView):
     def form_invalid(self, form):
         messages.error(self.request, "Failed to add deposit. Please check the fields.")
         return redirect('deposit_list')
+
+
+
+
 
 from django.views import View
 from .models import CompanyDeposit
@@ -413,12 +558,19 @@ class DepositDeleteView(LoginRequiredMixin, AdminRoleRequiredMixin, View):
         return redirect('deposit_list')
 
 
+
+
+
+
+
+
+
 # Expense
 # ==========================================
 # ১. EXPENSE VIEWS (খরচ ব্যবস্থাপনা)
 # ==========================================
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q, Sum
+from django.db.models import Sum
 from django.utils.timezone import now
 from django.views.generic import ListView, View
 
@@ -538,6 +690,10 @@ class ExpenseView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayout
                 return JsonResponse({"success": False, "message": f"Database Error: {str(e)}"}, status=500)
 
         return JsonResponse({"success": False, "errors": form.errors, "message": "Validation error."}, status=400)
+
+
+
+
 
 class ExpenseDataAPIView(LoginRequiredMixin, AdminRoleRequiredMixin, View):
     """ ফ্রন্টএন্ড ডাটা-টেবিলের সার্ভার সাইড জেসন ডাটা প্রোভাইডার """
@@ -732,17 +888,20 @@ def expense_export_pdf(request):
 
 
 
-
-
-# আপনার প্রজেক্টের সঠিক মিক্সিন পাথ অনুযায়ী এগুলো ইম্পোর্ট নিশ্চিত করুন
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 
+# আপনার প্রজেক্টের সঠিক মিক্সিন পাথ অনুযায়ী এগুলো ইম্পোর্ট নিশ্চিত করুন
+# from .mixins import AdminRoleRequiredMixin, VuxyVerticalLayoutMixin
+from .models import CompanyDeposit, Expense, Invoice
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+# আপনার প্রজেক্টের সঠিক মিক্সিন ও মডেল পাথ অনুযায়ী এগুলো নিশ্চিত করুন
+# from .mixins import AdminRoleRequiredMixin, VuxyVerticalLayoutMixin
 from .models import CompanyDeposit, Expense, Invoice
 
 
-# VuxyVerticalLayoutMixin যুক্ত করায় থিমের layout_path অটোমেটিক সেট হয়ে যাবে
 class GeneralLedgerView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, TemplateView):
     template_name = 'general_ledger.html'
 
@@ -754,7 +913,9 @@ class GeneralLedgerView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
         end_date_str = self.request.GET.get('end_date')
 
         today = date.today()
-        start_date = datetime(today.year, today.month, 1).date()
+
+        # ডিফল্ট ফিল্টার: চলতি বছরের ১ জানুয়ারি থেকে আজকের দিন পর্যন্ত (যেন জুনের ডেটাও অটো দেখায়)
+        start_date = datetime(today.year, 1, 1).date()
         end_date = today
 
         if start_date_str:
@@ -771,12 +932,12 @@ class GeneralLedgerView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
         context['start_date'] = start_date
         context['end_date'] = end_date
 
-        # ২. ডাটাহেড ফিল্টারিং
-        invoices = Invoice.objects.filter(date__range=[start_date, end_date], paid_amount__gt=0)
+        # ২. ডাটাবেজ ফিল্টারিং (অপ্টিমাইজড কুয়েরি)
+        invoices = Invoice.objects.filter(date__range=[start_date, end_date], paid_amount__gt=0).select_related('student')
         deposits = CompanyDeposit.objects.filter(date__range=[start_date, end_date])
-        expenses = Expense.objects.filter(date__range=[start_date, end_date])
+        expenses = Expense.objects.filter(date__range=[start_date, end_date]).select_related('exp_category')
 
-        # ৩. ইনকাম সাইডের ডেটা একসাথে কম্বাইন করা (Invoice + Deposit)
+        # ৩. ইনকাম সাইডের ডেটা কম্বাইন করা (Invoice + Deposit)
         income_list = []
         for inv in invoices:
             income_list.append({
@@ -791,10 +952,22 @@ class GeneralLedgerView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
                 'amount': float(dep.amount)
             })
 
-        # তারিখ অনুযায়ী সর্টিং
-        income_list = sorted(income_list, key=lambda x: x['date'], reverse=True)
+        # ৪. এক্সপেন্স সাইডের ডেটা লেজার ফরম্যাটে তৈরি করা
+        expense_list = []
+        for exp in expenses:
+            category_name = exp.exp_category.name if exp.exp_category else "General"
+            expense_list.append({
+                'date': exp.date,
+                'particulars': f"{exp.exp_name} ({category_name})",
+                'amount': float(exp.amount),
+                'note': exp.note or ""
+            })
 
-        # ৪. সামারি কার্ডের জন্য ক্যালকুলেশন
+        # তারিখ অনুযায়ী সর্টিং (নতুন ডাটা উপরে থাকবে)
+        income_list = sorted(income_list, key=lambda x: x['date'], reverse=True)
+        expense_list = sorted(expense_list, key=lambda x: x['date'], reverse=True)
+
+        # ৫. সামারি কার্ডের জন্য ক্যালকুলেশন
         total_invoice_income = invoices.aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
         total_deposit_income = deposits.aggregate(Sum('amount'))['amount__sum'] or 0
         total_income = float(total_invoice_income) + float(total_deposit_income)
@@ -802,11 +975,133 @@ class GeneralLedgerView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
         total_expense = float(expenses.aggregate(Sum('amount'))['amount__sum'] or 0)
         net_balance = total_income - total_expense
 
-        # ৫. টেমপ্লেটে ডাটা পাঠানো
+        # ৬. টেমপ্লেটে ডাটা পাঠানো
         context['incomes'] = income_list
-        context['expenses'] = expenses.order_by('-date')
+        context['expenses'] = expense_list
         context['total_income'] = total_income
         context['total_expense'] = total_expense
         context['net_balance'] = net_balance
 
         return context
+
+
+
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+# আপনার স্টুডেন্ট মডেলটি ইমপোর্ট করুন
+# from .models import Student
+
+class StudentSearchAjaxView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get('q', '').strip()
+        results = []
+
+        # 🔍 DEBUG: রিকোয়েস্ট আসছে কিনা এবং কি কোয়েরি আসছে তা টার্মিনালে দেখাবে
+        print("\n[DEBUG] --- Student Search AJAX Called ---")
+        print(f"[DEBUG] Search Query Received: '{query}'")
+
+        if query:
+            students = Student.objects.filter(
+                Q(student_id__icontains=query) | Q(name__icontains=query)
+            )
+
+            # 🔍 DEBUG: ডাটাবেজ থেকে কয়টি রেকর্ড ম্যাচ করলো
+            print(f"[DEBUG] Total Students Found in DB: {students.count()}")
+
+            for student in students:
+                results.append({
+                    'id': student.id,           # ডাটাবেজের প্রাইমারি কী (PK)
+                    'student_id': student.student_id, # যেমন: 780
+                    'name': student.name,       # যেমন: Md Maruf hossen
+                })
+        else:
+            print("[DEBUG] Warning: Empty query received.")
+
+        # 🔍 DEBUG: ফাইনাল রেসপন্স ডেটা টার্মিনালে প্রিন্ট করে দেখা
+        print(f"[DEBUG] JSON Response Data: {results}\n")
+
+        return JsonResponse({'students': results})
+
+
+
+
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from apps.finance.models import Invoice  # আপনার ইনভয়েস মডেলের সঠিক ইম্পোর্ট পাথ
+
+def search_student_ajax(request):
+    """
+    ১. ইনপুট বক্সে আইডি (যেমন: 780) বা নাম টাইপ করলে ড্রপডাউন সাজেশন দেখানোর ভিউ
+    """
+    query = request.GET.get('q', '').strip()
+    results = []
+
+    if query:
+        # student_id অথবা name ফিল্ডের সাথে মিলিয়ে টপ ১০ জন স্টুডেন্ট খোঁজা
+        students = Student.objects.filter(
+            Q(student_id__icontains=query) | Q(name__icontains=query)
+        )
+
+        for student in students:
+            results.append({
+                'id': student.id,                 # ডাটাবেজের অটো-ইনক্রিমেন্ট ID (PK)
+                'student_id': student.student_id, # কাস্টম স্টুডেন্ট আইডি (যেমন: 780)
+                'name': student.name,
+            })
+
+    return JsonResponse({'students': results})
+
+
+
+from apps.finance.models import Invoice
+
+def get_student_details_ajax(request):
+    """
+    শিক্ষার্থীর আইডি অনুযায়ী তার প্রোফাইল ও курс ফির ডিটেইলস স্বয়ংক্রিয়ভাবে রিটার্ন করার মাস্টার ভিউ
+    """
+    student_id = request.GET.get('student_id', '').strip()
+    custom_id = request.GET.get('custom_id', '').strip()
+
+    try:
+        student = None
+
+        # ১. প্রথমে ডাটাবেজের প্রাইমারি কি (PK/ID) দিয়ে খোঁজা
+        if student_id and student_id.isdigit():
+            student = Student.objects.filter(id=student_id).first()
+
+        # ২. ব্যাকআপ হিসেবে শিক্ষার্থীর কাস্টম রোল/আইডি (student_id) দিয়ে খোঁজা
+        if not student and custom_id:
+            student = Student.objects.filter(student_id=custom_id).first()
+
+        if not student:
+            return JsonResponse({
+                'exists': False,
+                'error': f"Student not found for DB-ID: '{student_id}' or Custom-ID: '{custom_id}'"
+            })
+
+        course_name = ""
+        course_fee = 0.00
+        if student.course:
+            course_name = getattr(student.course, 'name', '')
+            course_fee = float(getattr(student.course, 'default_fee', 0.00))
+
+        # ৪. পূর্বের ইনভয়েসগুলোর মোট পরিশোধিত টাকা (পারফেক্টলি আগের মতোই)
+        total_paid = 0.00
+        invoice_summary = Invoice.objects.filter(student=student).aggregate(total=Sum('paid_amount'))
+        if invoice_summary['total'] is not None:
+            total_paid = float(invoice_summary['total'])
+
+        return JsonResponse({
+            'exists': True,
+            'name': student.name if student.name else "",
+            'phone': student.phone if student.phone else "",
+            'course_name': course_name,
+            'course_fee': course_fee,
+            'total_paid': total_paid
+        })
+
+    except Exception as e:
+        return JsonResponse({
+            'exists': False,
+            'error': f"Internal Server Error: {str(e)}"
+        })

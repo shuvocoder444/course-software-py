@@ -1,0 +1,25 @@
+{% extends layout_path %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Category /</span> {% if form.instance.pk %}Edit Category{% else %}Create Category{% endif %}
+  </h4>
+
+  <div class="card mb-4">
+    <h5 class="card-header text-white" style="background-color: #17a2b8;">Category Form</h5>
+    <div class="card-body pt-4">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label">Category Name <span class="text-danger">*</span></label>
+          {{ form.name }}
+          {{ form.name.errors }}
+        </div>
+        <button type="submit" class="btn btn-primary me-2">Save Category</button>
+        <a href="{% url 'visitor_category_list' %}" class="btn btn-label-secondary">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

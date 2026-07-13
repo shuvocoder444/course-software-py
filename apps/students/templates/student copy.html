@@ -1,0 +1,197 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">🎯 Student Dashboard</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <span class="badge {% if student.status == 'active' %}bg-success{% elif student.status == 'pending' %}bg-warning text-dark{% else %}bg-danger{% endif %} px-3 py-2 fs-6">
+            Status: {{ student.get_status_display }}
+        </span>
+    </div>
+</div>
+
+<!-- Top Stats Widgets -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm p-3 bg-light">
+            <div class="d-flex align-items-center">
+                <div class="fs-1 me-3">📚</div>
+                <div>
+                    <h6 class="text-muted mb-1">Enrolled Course</h6>
+                    <h5 class="fw-bold mb-0">{% if student.course %}{{ student.course.name }}{% else %}Not Assigned{% endif %}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm p-3 bg-light">
+            <div class="d-flex align-items-center">
+                <div class="fs-1 me-3">👥</div>
+                <div>
+                    <h6 class="text-muted mb-1">Batch / Session</h6>
+                    <h5 class="fw-bold mb-0">
+                        {% if student.batch %}{{ student.batch.batch_number }}{% else %}N/A{% endif %}
+                        <small class="text-muted fs-6">({{ student.session|default:"N/A" }})</small>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm p-3 bg-light">
+            <div class="d-flex align-items-center">
+                <div class="fs-1 me-3"></div>
+                <div>
+                    <h6 class="text-muted mb-1">Student ID</h6>
+                    <h5 class="fw-bold mb-0 text-primary">{{ student.student_id|default:"Not Generated" }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Panels Profile & Checklists -->
+<div class="row g-4">
+    <!-- Left Column: Announcements & Profile Info -->
+    <div class="col-lg-7">
+        <!-- Announcements -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4 class="card-title mb-3"> Announcements</h4>
+                <div class="alert alert-info mb-0" role="alert">
+                    Next mid-term examinations schedule has been published. Please check the terminal file panel.
+                </div>
+            </div>
+        </div>
+
+        <!-- Academic & Personal Info Summary -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="card-title mb-3"> Profile Information</h4>
+                <div class="table-responsive">
+                    <table class="table table-sm table-borderless mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="fw-bold text-muted" style="width: 35%;">Full Name:</td>
+                                <td>{{ student.name }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-muted">Phone:</td>
+                                <td>{{ student.phone }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-muted">Email:</td>
+                                <td>{{ student.email }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-muted">Blood Group:</td>
+                                <td><span class="badge bg-secondary">{{ student.blood_group|default:"N/A" }}</span></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-muted">Last Qualification:</td>
+                                <td>{{ student.last_educational_qualification|default:"N/A" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Quick Summary & Documents Checklist -->
+    <div class="col-lg-5">
+        <!-- Quick Summary -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4 class="card-title mb-3">📊 Quick Summary</h4>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>Attendance Rate:</span>
+                    <span class="fw-bold text-success">92%</span>
+                </div>
+                <div class="progress mb-3" style="height: 6px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 92%" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>Pending Invoices:</span>
+                    <span class="badge bg-danger">None</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submitted Documents Checklist -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="card-title mb-3">📁 Submitted Documents</h4>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        Admission Form
+                        {% if student.has_admission_form %}<span class="text-success">✔ Submitted</span>{% else %}<span class="text-muted">❌ Missing</span>{% endif %}
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        Passport Photo
+                        {% if student.has_passport_photo %}<span class="text-success">✔ Submitted</span>{% else %}<span class="text-muted">❌ Missing</span>{% endif %}
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        NID Photocopy
+                        {% if student.has_nid_photocopy %}<span class="text-success">✔ Submitted</span>{% else %}<span class="text-muted">❌ Missing</span>{% endif %}
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        Birth Certificate
+                        {% if student.has_birth_certificate %}<span class="text-success">✔ Submitted</span>{% else %}<span class="text-muted">❌ Missing</span>{% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- --- Best Courses Section --- -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="fw-bold m-0">🔥 Best Courses For You</h3>
+            <a href="#" class="btn btn-sm btn-outline-primary">View All Courses</a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    {% for course in best_courses %}
+    <div class="col-md-6 col-lg-3">
+        <div class="card h-100 shadow-sm border-0 position-relative overflow-hidden">
+            <!-- Course Image Placeholder (যেহেতু মডেলে কোনো ইমেজ ফিল্ড নেই) -->
+            <div class="bg-primary text-white d-flex flex-column align-items-center justify-content-center" style="height: 140px;">
+                <span class="fs-1">💻</span>
+                {% if course.code %}
+                    <span class="badge bg-light text-primary mt-2">{{ course.code }}</span>
+                {% endif %}
+            </div>
+
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title fw-bold text-dark mb-2">{{ course.name }}</h5>
+                <p class="card-text text-muted small flex-grow-1">
+                    {{ course.description|default:"Enhance your tech skills with our industry-led comprehensive training program."|truncatewords:12 }}
+                </p>
+
+                <hr class="text-muted opacity-25 my-3">
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-primary fw-bold fs-5">৳ {{ course.default_fee }}</span>
+                    </div>
+                    <a href="#" class="btn btn-sm btn-primary px-3">Enroll Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-warning text-center">No featured courses available at the moment.</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

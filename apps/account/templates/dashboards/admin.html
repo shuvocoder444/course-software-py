@@ -1,7 +1,8 @@
 {% extends layout_path %}
 
 {% block title %}Admin Dashboard{% endblock %}
-
+{% load static %}
+{% load i18n %}
 {% block content %}
 
 <div class="">
@@ -131,12 +132,16 @@
                 <td>{{ student.name }}</td>
                 <td>{{ student.phone }}</td>
                 <td>
-                  {% if student.status == 'active' %}
-                    <span class="badge bg-label-success bg-light text-success px-2 py-1">Active</span>
-                  {% else %}
-                    <span class="badge bg-label-warning bg-light text-warning px-2 py-1">Pending</span>
-                  {% endif %}
-                </td>
+  {% if student.status == 'active' or student.status == 'approved' %}
+    <span class="badge bg-label-success bg-light text-success px-2 py-1">Active</span>
+  {% elif student.status == 'pending' %}
+    <span class="badge bg-label-warning bg-light text-warning px-2 py-1">Pending</span>
+  {% elif student.status == 'cancelled' or student.status == 'inactive' %}
+    <span class="badge bg-label-danger bg-light text-danger px-2 py-1">Inactive</span>
+  {% else %}
+    <span class="badge bg-label-secondary bg-light text-secondary px-2 py-1">{{ student.status|capfirst }}</span>
+  {% endif %}
+</td>
               </tr>
               {% empty %}
               <tr>

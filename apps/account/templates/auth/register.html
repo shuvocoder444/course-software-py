@@ -1,0 +1,246 @@
+{% extends layout_path %}
+
+{% block content %}
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center p-4 bg-light">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden w-100" style="max-width: 950px;">
+        <div class="row g-0">
+
+            <div class="col-lg-5 bg-dark text-white p-5 d-flex flex-column justify-content-between">
+                <div>
+                    <h2 class="fw-bold mb-3">অফলাইন ভর্তি <br>ফরম পূরণ করুন</h2>
+                    <p class="text-muted small mb-4">ফরম সাবমিট করার পর ২৪ ঘণ্টার মধ্যে আমাদের অফিস থেকে সিট নিশ্চিতকরণে যোগাযোগ করা হবে।</p>
+
+                    <div class="d-flex flex-column gap-4 mt-4">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="p-2 bg-secondary bg-opacity-10 text-success rounded-3 border border-secondary border-opacity-25">
+                                <i class="ti ti-clock text-xl"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-white">দ্রুত কনফার্মেশন</h6>
+                                <p class="text-muted small mb-0">২৪ ঘণ্টার মধ্যে ফোনে নিশ্চিত করুন</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="p-2 bg-secondary bg-opacity-10 text-success rounded-3 border border-secondary border-opacity-25">
+                                <i class="ti ti-shield-check text-xl"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-white">তথ্যের নিরাপত্তা</h6>
+                                <p class="text-muted small mb-0">আপনার ব্যক্তিগত তথ্য সম্পূর্ণ সুরক্ষিত</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 pt-3 border-top border-secondary">
+                    <span class="text-muted d-block small">সরাসরি যোগাযোগ:</span>
+                    <a href="tel:+8801716905615" class="text-white fw-bold text-decoration-none"><i class="ti ti-phone text-success me-1"></i> +88 01716 905615</a>
+                </div>
+            </div>
+
+            <div class="col-lg-7 p-5 d-flex flex-column justify-content-center bg-white">
+                <form id="dynamic-reg-form" method="POST">
+                    {% csrf_token %}
+
+<div id="credentials-section">
+    <div class="mb-4">
+        <h4 class="text-danger fw-bold mb-1"><i class="ti ti-user-plus me-1"></i> প্রাথমিক সিট বুকিং ফরম</h4>
+        <p class="text-muted small">ফরমটি নির্ভুলভাবে পূরণ করুন — সব তথ্য আবশ্যক</p>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-semibold">আপনার পূর্ণ নাম *</label>
+        {{ form.full_name }}
+        <div class="text-danger small mt-1 id-error-full_name"></div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-semibold">মোবাইল নম্বর *</label>
+        <div class="input-group">
+            <span class="input-group-text bg-light text-muted">+88</span>
+            {{ form.phone_number }}
+        </div>
+        <div class="text-danger small mt-1 id-error-phone_number"></div>
+    </div>
+
+<div class="mb-3">
+    <label class="form-label fw-semibold">পাসওয়ার্ড *</label>
+    <div class="input-group input-group-merge">
+        {{ form.password }}
+        <span class="input-group-text cursor-pointer" onclick="togglePasswordVisibility('id_password', this)">
+            <i class="ti ti-eye"></i>
+        </span>
+    </div>
+    <div class="text-danger small mt-1 id-error-password"></div>
+</div>
+
+<div class="mb-4">
+    <label class="form-label fw-semibold">কনফার্ম পাসওয়ার্ড *</label>
+    <div class="input-group input-group-merge">
+        {{ form.confirm_password }}
+        <span class="input-group-text cursor-pointer" onclick="togglePasswordVisibility('id_confirm_password', this)">
+            <i class="ti ti-eye"></i>
+        </span>
+    </div>
+    <div class="text-danger small mt-1 id-error-confirm_password"></div>
+</div>
+
+    <button type="button" onclick="submitRegistration()" class="btn btn-danger w-100 py-3 rounded-3 fw-bold shadow-sm">
+        ওটিপি পাঠান <i class="ti ti-arrow-right ms-1"></i>
+    </button>
+</div>
+
+                    <div id="otp-section" class="d-none">
+                        <div class="mb-4">
+                            <h4 class="text-danger fw-bold mb-1"><i class="ti ti-lock me-1"></i> ওটিপি যাচাইকরণ</h4>
+                            <p class="text-muted small">আপনার মোবাইল নম্বরে পাঠানো ৪ ডিজিটের কোডটি দিন</p>
+                        </div>
+
+                        <div id="otp-boxes-container" class="d-flex justify-content-center gap-3 my-4"></div>
+
+                        <div id="otp-error-msg" class="text-danger text-center small mb-3"></div>
+
+                        <div class="d-flex gap-2">
+                            <button type="button" onclick="backToStep1()" class="btn btn-outline-secondary w-25 py-3 rounded-3">পেছনে</button>
+                            <button type="button" onclick="submitOTP()" class="btn btn-danger w-75 py-3 rounded-3 fw-bold">ভেরিফাই ও নিশ্চিত করুন</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    // ১ম ধাপ সাবমিট করা (ওটিপি পাঠানো)
+    function submitRegistration() {
+        const formData = new FormData(document.getElementById('dynamic-reg-form'));
+        formData.append('action', 'send_otp');
+
+        document.querySelectorAll('.text-danger, #otp-error-msg').forEach(el => el.innerText = '');
+
+        fetch(window.location.href, {
+            method: 'POST',
+            body: formData,
+            headers: {'X-CSRFToken': csrfToken}
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("서버 Error 500");
+            }
+            return res.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                document.getElementById('credentials-section').classList.add('d-none');
+                document.getElementById('otp-section').classList.remove('d-none');
+
+                // ওটিপি বক্সগুলো রানটাইমে জেনারেট করা (থিম ক্র্যাশ প্রোটেকশন)
+                renderOTPFields();
+            }  else if (data.status === 'error') {
+                if (data.errors) {
+                    // ফর্মে কোনো ফিল্ডে ভুল থাকলে বা পাসওয়ার্ড না মিললে নির্দিষ্ট জায়গায় লাল লেখা দেখাবে
+                    if (data.errors.phone_number) document.querySelector('.id-error-phone_number').innerText = data.errors.phone_number[0].message;
+                    if (data.errors.full_name) document.querySelector('.id-error-full_name').innerText = data.errors.full_name[0].message;
+                    if (data.errors.password) document.querySelector('.id-error-password').innerText = data.errors.password[0].message;
+                    if (data.errors.confirm_password) document.querySelector('.id-error-confirm_password').innerText = data.errors.confirm_password[0].message;
+                } else if (data.message) {
+                    document.querySelector('.id-error-phone_number').innerText = data.message;
+                }
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            document.querySelector('.id-error-phone_number').innerText = "সার্ভারে অভ্যন্তরীণ ত্রুটি (500) হয়েছে। আপনার টার্মিনাল লগ চেক করুন।";
+        });
+    }
+
+    // ওটিপি ইনপুট এলিমেন্ট তৈরি ও অটো-ফোকাস সেটআপ
+    function renderOTPFields() {
+        const container = document.getElementById('otp-boxes-container');
+        container.innerHTML = ''; // ক্লিন করা
+
+        for (let i = 0; i < 4; i++) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.maxLength = 1;
+            input.className = 'form-control dynamic-otp-box text-center fw-bold fs-4';
+            input.style.width = '55px';
+            input.style.height = '55px';
+            input.style.background = '#f8f9fa';
+            container.appendChild(input);
+        }
+
+        const boxes = document.querySelectorAll('.dynamic-otp-box');
+        boxes.forEach((box, idx) => {
+            box.addEventListener('keyup', (e) => {
+                if (e.key >= 0 && e.key <= 9) {
+                    if (idx < boxes.length - 1) boxes[idx + 1].focus();
+                } else if (e.key === 'Backspace') {
+                    if (idx > 0) boxes[idx - 1].focus();
+                }
+            });
+        });
+
+        if(boxes[0]) boxes[0].focus();
+    }
+
+    // ২য় ধাপ সাবমিট করা (ওটিপি ভেরিফিকেশন)
+    function submitOTP() {
+        let otpCode = "";
+        document.querySelectorAll('.dynamic-otp-box').forEach(box => otpCode += box.value);
+
+        if (otpCode.length < 4) {
+            document.getElementById('otp-error-msg').innerText = "সম্পূর্ণ ৪ ডিজিটের ওটিপি কোডটি লিখুন।";
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('action', 'verify_otp');
+        formData.append('otp_code', otpCode);
+
+        fetch(window.location.href, {
+            method: 'POST',
+            body: formData,
+            headers: {'X-CSRFToken': csrfToken}
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'verified') {
+                window.location.href = data.redirect_url;
+            } else {
+                document.getElementById('otp-error-msg').innerText = data.message;
+            }
+        });
+    }
+
+    function backToStep1() {
+        document.getElementById('otp-section').classList.add('d-none');
+        document.getElementById('credentials-section').classList.remove('d-none');
+    }
+
+
+
+
+
+    // পাসওয়ার্ড দেখা এবং লুকানোর ডাইনামিক ফাংশন
+function togglePasswordVisibility(fieldId, toggleIconSpan) {
+    const passwordField = document.getElementById(fieldId);
+    const icon = toggleIconSpan.querySelector('i');
+
+    if (passwordField && icon) {
+        if (passwordField.type === 'password') {
+            // পাসওয়ার্ড দেখাবে
+            passwordField.type = 'text';
+            icon.className = 'ti ti-eye-off'; // চোখ বন্ধ আইকন
+        } else {
+            // পাসওয়ার্ড লুকাবে
+            passwordField.type = 'password';
+            icon.className = 'ti ti-eye'; // চোখ খোলা আইকন
+        }
+    }
+}
+</script>
+{% endblock %}

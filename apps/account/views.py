@@ -284,9 +284,14 @@ class UserDeleteView(LoginRequiredMixin, AdminRoleRequiredMixin, View):
 
 
 
+
+
+
+
 from django.contrib.auth import get_user_model
 
-from apps.students.models import Student  # স্টুডেন্ট মডেল ইম্পোর্ট করুন
+from apps.students.models import Student
+from apps.courses.models import Course
 
 Account = get_user_model() # আপনার ইউজার অ্যাকাউন্ট মডেল পেতে
 
@@ -311,3 +316,184 @@ def admin_dashboard(request):
 
     context = get_vuxy_context(request, extra_context=extra_context)
     return render(request, 'dashboards/admin.html', context)
+
+
+
+
+@login_required
+@role_required(allowed_roles=['STUDENT'])
+def student_dashboard(request):
+    """
+    লগইন করা স্টুডেন্টের প্রোফাইল, রানিং ব্যাচ, কোর্স
+    এবং অন্যান্য উপলব্ধ (Explore) কোর্সগুলো ডাইনামিকালি লোড করার ভিউ।
+    """
+    student = None
+    batch = None
+    enrolled_course = None
+    other_courses = Course.objects.all() # ডিফল্টভাবে সব কোর্স
+
+    try:
+        # ১. লগইন করা ইউজারের সাথে যুক্ত স্টুডেন্ট প্রোফাইল খোঁজা
+        student = request.user.student_profile
+
+        if student:
+            # ২. স্টুডেন্টের ব্যাচ খোঁজা
+            batch = getattr(student, 'batch', None)
+
+            # ৩. ব্যাচ থেকে সরাসরি মূল কোর্সটি বের করা
+            if batch and hasattr(batch, 'course'):
+                enrolled_course = batch.course
+                # ৪. (ডাইনামিক ফিক্স) স্টুডেন্ট যে কোর্সে অলরেডি আছে, সেটি বাদে বাকি কোর্সগুলো আনা হচ্ছে
+                other_courses = Course.objects.exclude(id=enrolled_course.id)
+
+    except (Student.DoesNotExist, AttributeError):
+        student = None
+
+    # ৫. এক্সট্রা কনটেক্সটে 'other_courses' পাস করা হলো (সর্বোচ্চ ৪টি দেখানোর জন্য [:4] ব্যবহার করতে পারেন)
+    extra_context = {
+        "student": student,
+        "batch": batch,
+        "enrolled_course": enrolled_course,
+        "other_courses": other_courses[:4], # ড্যাশবোর্ডে সুন্দর দেখানোর জন্য ৪টি লিমিট করা হলো
+        "title": "Student Dashboard"
+    }
+
+    # ৬. Vuxy লেআউট ও মেনুসহ কনটেক্সট জেনারেট করা
+    context = get_vuxy_context(request, extra_context=extra_context)
+
+    return render(request, "dashboards/student.html", context)
+
+
+
+
+
+
+
+import random
+from django.views.generic import TemplateView
+from django.http import JsonResponse
+from django.contrib.auth import login
+
+# থিম লেআউট কনফিগারেশন
+
+# অ্যাপ কম্পোনেন্ট ইম্পোর্টস
+from .forms import OTPRegistrationForm
+from .models import Account, SMSVerification
+from apps.setting.utils import send_sms
+
+
+class StudentAjaxRegisterView(TemplateView):
+    template_name = 'auth/register.html'
+
+    def get_context_data(self, **kwargs):
+        context = TemplateLayout.init(self, super().get_context_data(**kwargs))
+        context.update({
+            "title": "Student Registration",
+            "form": OTPRegistrationForm(),
+            "layout": "front",
+            "layout_path": TemplateHelper.set_layout("layout_front.html", context),
+            "active_url": self.request.path,
+        })
+        TemplateHelper.map_context(context)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get('action')
+
+        # ---------------------------------------------------------------------
+        # অ্যাকশন ১: ওটিপি জেনারেট ও সেশনে পাসওয়ার্ডসহ ডেটা রাখা
+        # ---------------------------------------------------------------------
+        if action == 'send_otp':
+            form = OTPRegistrationForm(request.POST)
+            if form.is_valid():
+                try:
+                    full_name = form.cleaned_data.get('full_name')
+                    phone_number = form.cleaned_data.get('phone_number')
+                    password = form.cleaned_data.get('password')  # 🟢 ফরম থেকে পাসওয়ার্ড রিড
+
+                    # ওটিপি তৈরি ও সেশন অ্যাসাইনমেন্ট
+                    otp_code = str(random.randint(1000, 9999))
+                    request.session['reg_full_name'] = full_name
+                    request.session['reg_phone_number'] = phone_number
+                    request.session['reg_password'] = password  # 🟢 পাসওয়ার্ড সাময়িকভাবে সেশনে সেভ
+
+                    # ওটিপি ডাটাবেজে ট্র্যাক রাখা
+                    SMSVerification.objects.create(phone_number=phone_number, otp_code=otp_code)
+
+                    # গেটওয়ে দিয়ে ওটিপি টেক্সট ফায়ার করা
+                    sms_sent = False
+                    sms_error_reason = "Unknown Gateway Issue"
+                    message_text = f"আপনার ওটিপি কোড হলো: {otp_code}। এটি ৫ মিনিটের জন্য প্রযোজ্য।"
+
+                    is_success, api_message = send_sms(phone_number, message_text)
+                    if is_success:
+                        sms_sent = True
+                    else:
+                        sms_error_reason = api_message
+
+                    if sms_sent:
+                        return JsonResponse({'status': 'success', 'message': 'ওটিপি সফলভাবে পাঠানো হয়েছে।'})
+                    else:
+                        return JsonResponse({'status': 'error', 'message': f'⚠️ এসএমএস গেটওয়ে ব্যর্থ: {sms_error_reason}'})
+
+                except Exception as system_err:
+                    return JsonResponse({'status': 'error', 'message': f'সিস্টেম ক্র্যাশ এড়ানো হয়েছে: {str(system_err)}'})
+            else:
+                return JsonResponse({'status': 'error', 'errors': form.errors.get_json_data()})
+
+        # ---------------------------------------------------------------------
+        # অ্যাকশন ২: ওটিপি ম্যাচিং এবং অ্যাকাউন্ট প্রোফাইলে পাসওয়ার্ড রাইট করা
+        # ---------------------------------------------------------------------
+        elif action == 'verify_otp':
+            try:
+                otp_code = request.POST.get('otp_code')
+                phone_number = request.session.get('reg_phone_number')
+                full_name = request.session.get('reg_full_name')
+                password = request.session.get('reg_password')
+
+                if not phone_number or not otp_code or not password:
+                    return JsonResponse({'status': 'error', 'message': 'রেজিস্ট্রেশন সেশনের মেয়াদ শেষ। পুনরায় চেষ্টা করুন।'})
+
+                otp_record = SMSVerification.objects.filter(phone_number=phone_number, otp_code=otp_code).last()
+
+                if otp_record and otp_record.is_valid():
+                    otp_record.is_used = True
+                    otp_record.save()
+
+                    username = f"std_{phone_number}"
+                    name_parts = full_name.split(' ', 1)
+                    first_name = name_parts[0]
+                    last_name = name_parts[1] if len(name_parts) > 1 else ""
+
+                    # 🎯 আপনার আগের পেজগুলোর ডেকোরেটরের সাথে হুবহু ম্যাচ করানোর জন্য রোল এখানে 'STUDENT' রাখা হলো
+                    user, created = Account.objects.get_or_create(
+                        username=username,
+                        defaults={
+                            'first_name': first_name,
+                            'last_name': last_name,
+                            'role': 'STUDENT',  # আপনার @role_required(allowed_roles=['STUDENT']) এর সাথে ম্যাচিং
+                            'is_active': True
+                        }
+                    )
+
+                    # পাসওয়ার্ড হ্যাস করে সেভ করা
+                    user.set_password(password)
+                    user.save()
+
+                    # সেশন লগইন চালু করা
+                    login(request, user)
+
+                    # সেশন ক্লিয়ারেন্স
+                    request.session.pop('reg_full_name', None)
+                    request.session.pop('reg_phone_number', None)
+                    request.session.pop('reg_password', None)
+
+                    messages.success(request, "নিবন্ধন সফল হয়েছে!")
+                    return JsonResponse({'status': 'verified', 'redirect_url': '/dashboard/students/'})
+                else:
+                    return JsonResponse({'status': 'error', 'message': 'ভুল অথবা মেয়াদোত্তীর্ণ ওটিপি কোড।'})
+
+            except Exception as verify_err:
+                return JsonResponse({'status': 'error', 'message': f'ভেরিফিকেশন প্রসেস ত্রুটি: {str(verify_err)}'})
+
+        return JsonResponse({'status': 'error', 'message': 'Invalid Action Submissions'})

@@ -15,7 +15,7 @@ urlpatterns = [
     path("pages/", include("apps.pages.urls")),
 
     # users & accounts urls
-    path('account/', include('apps.account.urls')),
+    path('dashboard/account/', include('apps.account.urls')),
 
     # frontend/home pages urls
     path('', include('apps.front_pages.urls')),
@@ -24,7 +24,7 @@ urlpatterns = [
     path("dashboard/courses/", include("apps.courses.urls")),
     path('dashboard/students/', include('apps.students.urls')),
     path('dashboard/finance/', include('apps.finance.urls')),
-    path('dashboard/marketing/', include('apps.marketing.urls')),
+    path('dashboard/visitors/', include('apps.marketing.urls')),
     path('dashboard/settings/', include('apps.setting.urls')),
 ]
 

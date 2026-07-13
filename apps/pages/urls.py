@@ -32,6 +32,13 @@ urlpatterns = [
         name="ledger",
     ),
 
+
+    path(
+        "institute/",
+        MiscPagesView.as_view(template_name="pages_misc_under_maintenance.html"),
+        name="ins",
+    ),
+
     path(
         "info/",
         MiscPagesView.as_view(template_name="pages_misc_under_maintenance.html"),

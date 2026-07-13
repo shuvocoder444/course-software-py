@@ -1,15 +1,13 @@
 from datetime import date
-
 from django.db import models
 
-# ইনভয়েস স্ট্যাটাসের চয়েসসমূহ
-STATUS_CHOICES = [
-    ('Due', 'Due'),
-    ('Partially Paid', 'Partially Paid'),
-    ('Paid', 'Paid'),
-]
-
 class Invoice(models.Model):
+    STATUS_CHOICES = [
+        ('Paid', 'Paid'),
+        ('Partially Paid', 'Partially Paid'),
+        ('Due', 'Due'),
+    ]
+
     # স্ট্রিং রেফারেন্স ব্যবহার করে অন্য অ্যাপের মডেল কানেক্ট করা হলো
     student = models.ForeignKey('students.Student', on_delete=models.CASCADE, related_name='invoices')
     invoice_no = models.CharField(max_length=50, unique=True, blank=True, null=True)
@@ -32,6 +30,14 @@ class Invoice(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Due')
     additional_notes = models.TextField(blank=True, null=True)
 
+    @property
+    def course_due(self):
+        """
+        স্বয়ংক্রিয়ভাবে Course Fee থেকে Discount এবং Paid Amount বাদ দিয়ে Course Due হিসাব করে।
+        (Course Fee - Discount - Paid Amount = Course Due)
+        """
+        return self.course_fee - self.discount - self.paid_amount
+
     def save(self, *args, **kwargs):
         # অটোমেটিক হিসাব-নিকাশ
         self.total_gross = self.course_fee + self.certificate_fee + self.id_card_fee + self.admit_card_fee + self.other_fee
@@ -46,9 +52,9 @@ class Invoice(models.Model):
         else:
             self.status = 'Due'
 
-        # ডেমো ইনভয়েস নম্বর জেনারেশন (যদি না থাকে)
+        # ডেমো ইনভয়েস নম্বর জেনারেশন (যদি না থাকে)
         if not self.invoice_no:
-            super().save(*args, **kwargs) # আইডি পাওয়ার জন্য প্রথমে একবার সেভ
+            super().save(*args, **kwargs) # আইডি পাওয়ার জন্য প্রথমে একবার সেভ
             self.invoice_no = f"INV-{date.today().strftime('%Y%m%d')}-{self.id}"
 
         super().save(*args, **kwargs)
@@ -84,6 +90,11 @@ class CompanyDeposit(models.Model):
     def __str__(self):
         return f"{self.title} - {self.amount}"
 
+
+
+
+
+
 # Expense Section
 class ExpenseCategory(models.Model):
     name = models.CharField(max_length=100, verbose_name="Expense Type", null=True, blank=True)
@@ -91,11 +102,6 @@ class ExpenseCategory(models.Model):
 
     def __str__(self):
         return self.name
-
-
-
-
-
 
 class Expense(models.Model):
     exp_category = models.ForeignKey(

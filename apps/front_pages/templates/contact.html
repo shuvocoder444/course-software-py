@@ -1,0 +1,108 @@
+{% extends layout_path %}
+
+{% block title %}Contact Us - যোগাযোগ করুন{% endblock %}
+
+{% block content %}
+<style>
+    /* ==========================================
+       ১. হিরো ব্যানার সেকশন
+       ========================================== */
+    .contact-hero-banner {
+        background: radial-gradient(circle at 80% 20%, rgba(220, 53, 69, 0.15) 0%, transparent 50%),
+                    linear-gradient(135deg, #0b1116 0%, #1a2630 100%);
+        padding: 80px 20px;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 4px solid #dc3545;
+    }
+
+    .contact-gradient-title {
+        background: linear-gradient(135deg, #ffffff 40%, #ff4d5a 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+        display: inline-block;
+        letter-spacing: 1px;
+    }
+
+    /* ==========================================
+       ২. পেজ ব্যাকগ্রাউন্ড ও ফর্ম কার্ড স্টাইল
+       ========================================== */
+    .contact-page-body {
+        background-color: #f4f6f9; /* হালকা ব্যাকগ্রাউন্ড কালার */
+        border-radius: 16px;
+        padding: 50px 20px;
+    }
+
+    .custom-form-card {
+        background-color: #ffffff !important;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(17, 28, 36, 0.05) !important;
+    }
+
+    /* ব্র্যান্ড থিম বাটন */
+    .btn-black {
+        background-color: #111c24 !important; /* ফুটারের ডার্ক কালার */
+        color: #ffffff !important;
+        border: none;
+        font-weight: 700;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-black:hover {
+        background-color: #dc3545 !important; /* লোগোর লাল কালার */
+        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+    }
+</style>
+
+<!-- ==========================================
+     ১. হিরো ব্যানার (Hero Section)
+     ========================================== -->
+<div class="contact-hero-banner text-center text-white mb-5">
+    <div class="container">
+        <h1 class="display-3 fw-bold contact-gradient-title mb-3">যোগাযোগ করুন</h1>
+        <p class="lead text-white-50 max-w-600 mx-auto">
+            যেকোনো প্রশ্ন, মতামত বা কোর্স সম্পর্কিত তথ্যের জন্য সরাসরি আমাদের বার্তা পাঠান।
+        </p>
+    </div>
+</div>
+
+<!-- ==========================================
+     ২. ফর্ম সেকশন
+     ========================================== -->
+<div class="container my-5">
+    <div class="contact-page-body">
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-6">
+                <!-- পিওর হোয়াইট প্রিমিয়াম কার্ড -->
+                <div class="card custom-form-card p-4 p-md-5">
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold text-secondary">আপনার নাম</label>
+                            <input type="text" class="form-control py-2" placeholder="নাম লিখুন" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold text-secondary">ইমেইল ঠিকানা</label>
+                            <input type="email" class="form-control py-2" placeholder="ইমেইল লিখুন" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold text-secondary">বার্তা</label>
+                            <textarea class="form-control" rows="5" placeholder="আপনার বার্তাটি এখানে লিখুন..." required></textarea>
+                        </div>
+
+                        <!-- ব্র্যান্ড সাবমিট বাটন -->
+                        <button type="submit" class="btn btn-black w-100 py-3 mt-2">বার্তা পাঠান</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

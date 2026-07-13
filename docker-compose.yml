@@ -12,11 +12,13 @@ services:
   web-project-nginx:
     container_name: web_project_nginx
     restart: always
-    image: "nginx:latest"
+    image: 'nginx:latest'
     ports:
-      - "5050:5050"
+      - '5050:5050'
     volumes:
       - ./nginx:/etc/nginx/conf.d
+      - ./staticfiles:/static:ro
+      - ./media:/media:ro
     networks:
       - web_network
     depends_on:

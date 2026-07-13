@@ -2,7 +2,6 @@
 
 {% block content %}
 <div class="container-fluid py-4" style="background-color: #f8fafc; min-height: 100vh;">
-    <!-- Top Dashboard Header & Filter Bar -->
     <div class="row align-items-center mb-4 g-3">
         <div class="col-md-6">
             <div class="d-flex align-items-center gap-3">
@@ -28,15 +27,13 @@
         </div>
     </div>
 
-    <!-- Premium Metrics Widgets -->
     <div class="row g-3 mb-4">
-        <!-- Inflow Card -->
         <div class="col-md-4">
             <div class="card border-0 shadow-sm rounded-4 bg-white position-relative overflow-hidden" style="border-left: 4px solid #10b981 !important;">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <span class="text-uppercase font-monospace text-muted small tracking-wider fw-bold">Total Inflow</span>
+                            <span class="text-uppercase font-monospace text-muted small tracking-wider fw-bold">Total Income</span>
                             <h3 class="fw-extrabold text-dark mt-2 mb-0" style="font-family: 'Inter', sans-serif;">৳ {{ total_income|stringformat:".2f" }}</h3>
                         </div>
                         <div class="p-3 bg-light rounded-circle" style="color: #10b981;">
@@ -47,13 +44,12 @@
             </div>
         </div>
 
-        <!-- Outflow Card -->
         <div class="col-md-4">
             <div class="card border-0 shadow-sm rounded-4 bg-white position-relative overflow-hidden" style="border-left: 4px solid #ef4444 !important;">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <span class="text-uppercase font-monospace text-muted small tracking-wider fw-bold">Total Outflow</span>
+                            <span class="text-uppercase font-monospace text-muted small tracking-wider fw-bold">Total Expense</span>
                             <h3 class="fw-extrabold text-dark mt-2 mb-0">৳ {{ total_expense|stringformat:".2f" }}</h3>
                         </div>
                         <div class="p-3 bg-light rounded-circle" style="color: #ef4444;">
@@ -64,13 +60,12 @@
             </div>
         </div>
 
-        <!-- Net Balance Card -->
         <div class="col-md-4">
             <div class="card border-0 shadow-sm rounded-4 bg-white position-relative overflow-hidden" style="border-left: 4px solid #3b82f6 !important;">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <span class="text-uppercase font-monospace text-muted small tracking-wider fw-bold">Net Account Balance</span>
+                            <span class="text-uppercase font-monospace text-muted small tracking-wider fw-bold"> Account Balance</span>
                             <h3 class="fw-extrabold text-dark mt-2 mb-0">৳ {{ net_balance|stringformat:".2f" }}</h3>
                         </div>
                         <div class="p-3 bg-light rounded-circle text-primary">
@@ -82,15 +77,13 @@
         </div>
     </div>
 
-    <!-- Data Tables Section -->
     <div class="row g-4">
-        <!-- Incomes List -->
         <div class="col-md-6">
             <div class="card border-0 shadow-sm rounded-4 bg-white">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center py-4 px-4 border-bottom-0">
                     <div class="d-flex align-items-center gap-2">
                         <span class="d-inline-block rounded-circle bg-success" style="width: 8px; height: 8px;"></span>
-                        <h5 class="mb-0 text-dark fw-bold">Inflows / Receipts</h5>
+                        <h5 class="mb-0 text-dark fw-bold">Income</h5>
                     </div>
                     <span class="badge px-3 py-2 rounded-pill font-monospace" style="background-color: #e6f4ea; color: #137333;">৳ {{ total_income|stringformat:".2f" }}</span>
                 </div>
@@ -125,13 +118,12 @@
             </div>
         </div>
 
-        <!-- Expenses List -->
         <div class="col-md-6">
             <div class="card border-0 shadow-sm rounded-4 bg-white">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center py-4 px-4 border-bottom-0">
                     <div class="d-flex align-items-center gap-2">
                         <span class="d-inline-block rounded-circle bg-danger" style="width: 8px; height: 8px;"></span>
-                        <h5 class="mb-0 text-dark fw-bold">Outflows / Payments</h5>
+                        <h5 class="mb-0 text-dark fw-bold">Expenses</h5>
                     </div>
                     <span class="badge px-3 py-2 rounded-pill font-monospace" style="background-color: #fce8e6; color: #c5221f;">৳ {{ total_expense|stringformat:".2f" }}</span>
                 </div>
@@ -152,8 +144,8 @@
                                     <td class="ps-4 text-secondary small font-monospace">{{ forloop.counter }}</td>
                                     <td class="text-secondary small">{{ exp.date|date:"d M, Y" }}</td>
                                     <td>
-                                        <div class="text-dark fw-medium">{{ exp.name }}</div>
-                                        {% if exp.category %}<span class="badge bg-light text-secondary border rounded-1 mt-1" style="font-size: 10px; font-weight: 500;">{{ exp.category }}</span>{% endif %}
+                                        <div class="text-dark fw-medium">{{ exp.particulars }}</div>
+
                                     </td>
                                     <td class="text-end pe-4 fw-bold font-monospace" style="color: #ef4444;">- ৳{{ exp.amount|stringformat:".2f" }}</td>
                                 </tr>

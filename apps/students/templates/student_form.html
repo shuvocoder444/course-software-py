@@ -23,50 +23,91 @@
       <h5 class="card-header bg-light text-primary"><i class="bx bx-user me-2"></i>Student & Course Information</h5>
       <div class="card-body mt-3">
         <div class="row g-3">
-          <div class="col-md-4">
+
+          <div class="col-md-3">
             <label class="form-label fw-bold text-danger">Select Course *</label>
             {{ form.course }}
             {{ form.course.errors }}
           </div>
-
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label class="form-label fw-bold text-danger">Select Batch *</label>
             {{ form.batch }}
             {{ form.batch.errors }}
           </div>
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Student Name *</label>
+            {{ form.name }}
+            {{ form.name.errors }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Mobile Number *</label>
+            {{ form.phone }}
+            {{ form.phone.errors }}
+          </div>
 
-          <div class="col-md-4">
-            <label class="form-label fw-bold text-danger">Student ID *</label>
-            {{ form.student_id }}
-            {{ form.student_id.errors }}
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Email Address</label>
+            {{ form.email }}
+            {{ form.email.errors }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Vill / House / Area</label>
+            {{ form.village_house_area }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Thana / Upazila</label>
+            {{ form.thana_upazila }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">District / City</label>
+            {{ form.district_city }}
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Post Code</label>
+            {{ form.post_code }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Date of Birth *</label>
+            {{ form.date_of_birth }}
+            {{ form.date_of_birth.errors }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Gender</label>
+            {{ form.gender }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Marital Status</label>
+            {{ form.marital_status }}
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Birth Certificate No.</label>
+            {{ form.birth_certificate_no }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">National ID No.</label>
+            {{ form.national_id_no }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Religion</label>
+            {{ form.religion }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Blood Group</label>
+            {{ form.blood_group }}
           </div>
 
           <hr class="my-3">
 
-          <div class="col-md-4"><label class="form-label">Student / Applicant's Name *</label>{{ form.name }}{{ form.name.errors }}</div>
-          <div class="col-md-4"><label class="form-label">Mobile Number *</label>{{ form.phone }}{{ form.phone.errors }}</div>
-          <div class="col-md-4"><label class="form-label">Email Address</label>{{ form.email }}{{ form.email.errors }}</div>
-
-          <div class="col-md-3"><label class="form-label">Vill / House / Area</label>{{ form.village_house_area }}</div>
-          <div class="col-md-3"><label class="form-label">Thana / Upazila</label>{{ form.thana_upazila }}</div>
-          <div class="col-md-3"><label class="form-label">District / City</label>{{ form.district_city }}</div>
-          <div class="col-md-3"><label class="form-label">Post Code</label>{{ form.post_code }}</div>
-
-          <div class="col-md-2"><label class="form-label">Date of Birth *</label>{{ form.date_of_birth }}</div>
-          <div class="col-md-2"><label class="form-label">Gender</label>{{ form.gender }}</div>
-          <div class="col-md-2"><label class="form-label">Marital Status</label>{{ form.marital_status }}</div>
-          <div class="col-md-2"><label class="form-label">Birth Certificate No.</label>{{ form.birth_certificate_no }}</div>
-          <div class="col-md-2"><label class="form-label">National ID No.</label>{{ form.national_id_no }}</div>
-          <div class="col-md-1"><label class="form-label">Religion</label>{{ form.religion }}</div>
-          <div class="col-md-1"><label class="form-label">Blood Group</label>{{ form.blood_group }}</div>
-
           <div class="col-md-12">
-            <label class="form-label">Student Passport Size Photo</label>
+            <label class="form-label fw-bold">Student Passport Size Photo</label>
             <div class="border rounded p-3 text-center bg-light">
               {{ form.photo }}
               <p class="text-muted small mt-1 mb-0">JPEG, PNG — Max 10MB — Passport size preferred</p>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -93,11 +134,31 @@
           <div class="col-md-6"><label class="form-label">Education Institute's Name</label>{{ form.education_institute_name }}</div>
           <div class="col-md-6"><label class="form-label">Last Educational Qualification</label>{{ form.last_educational_qualification }}</div>
 
-          <div class="col-md-2"><label class="form-label">Examination</label>{{ form.examination }}</div>
-          <div class="col-md-2"><label class="form-label">Passing Year</label>{{ form.passing_year }}</div>
-          <div class="col-md-3"><label class="form-label">Board Name</label>{{ form.board_name }}</div>
-          <div class="col-md-2"><label class="form-label">Roll Number</label>{{ form.roll }}</div>
-          <div class="col-md-3"><label class="form-label">Registration Number</label>{{ form.registration_number }}</div>
+          <div class="col-md-2">
+            <label class="form-label">Examination</label>
+            {{ form.examination }}
+            {{ form.examination.errors }}
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Passing Year</label>
+            {{ form.passing_year }}
+            {{ form.passing_year.errors }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Board Name</label>
+            {{ form.board_name }}
+            {{ form.board_name.errors }}
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Roll Number</label>
+            {{ form.roll }}
+            {{ form.roll.errors }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Registration Number</label>
+            {{ form.registration_number }}
+            {{ form.registration_number.errors }}
+          </div>
         </div>
       </div>
     </div>
@@ -167,7 +228,7 @@
 
         if (!courseId) return;
 
-        // ডাইনামিক ও নিরাপদ রিলেটিভ ইউআরএল পাথ
+        // ডাইনামিক ও নিরাপদ রিলেティブ ইউআরএল পাথ
         const ajaxUrl = "{% url 'ajax_load_batches' %}";
 
         fetch(`${ajaxUrl}?course_id=${courseId}`)

@@ -24,10 +24,10 @@
           "slug": "student_list"
         },
         {
-          "url": "notification",
+          "url": "sms_history",
           "icon": "menu-icon tf-icons ti ti-users",
           "name": "Notification SMS",
-          "slug": "student_list"
+          "slug": "sms_history"
         }
       ]
     },
@@ -62,16 +62,16 @@
       "slug": "marketing",
       "submenu": [
         {
-          "url": "visitor",
+          "url": "visitor_list",
           "icon": "menu-icon tf-icons ti ti-user-plus",
           "name": "Office Visitor",
-          "slug": "visitor"
+          "slug": "visitor_list"
         },
         {
-          "url": "contact",
-          "icon": "menu-icon tf-icons ti ti-mail",
-          "name": "Contact Form Data",
-          "slug": "contact"
+          "url": "visitor_category_list",
+          "icon": "menu-icon tf-icons ti ti-user-plus",
+          "name": "Visitor Categories",
+          "slug": "visitor_category_list"
         }
       ]
     },
@@ -138,7 +138,7 @@
       "slug": "settings",
       "submenu": [
         {
-          "url": "institute_settings",
+          "url": "ins",
           "icon": "menu-icon tf-icons ti ti-info-circle",
           "name": "Institute Info",
           "slug": "institute"

@@ -39,3 +39,37 @@ def institute_settings_view(request):
     # Vuxy টেমপ্লেট লেআউট কনটেক্সট লোড করা
     context = get_vuxy_context(request, extra_context=extra_context)
     return render(request, 'attendance.html', context)
+
+
+
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
+from .models import SMSLog
+
+# ১. এসএমএস হিস্টোরি ভিউ (পেজে ১০০টি করে দেখাবে)
+class SMSHistoryListView(LoginRequiredMixin, ListView):
+    model = SMSLog
+    template_name = 'sms_history.html'
+    context_object_name = 'sms_logs'
+    paginate_by = 100  # 🎯 প্রতি পেজে ১০০টি ডাটা থাকবে
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vuxy_context = get_vuxy_context(self.request, extra_context=context)
+        return vuxy_context
+
+# 🎯 ২. বাল্ক ও সিঙ্গেল ডিলিট হ্যান্ডেল করার জন্য নতুন ভিউ
+class SMSLogDeleteView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        # টেমপ্লেট থেকে সিলেক্ট করা আইডিগুলোর লিস্ট নেওয়া
+        log_ids = request.POST.getlist('log_ids')
+
+        if log_ids:
+            # একসাথে সবগুলো সিলেক্টেড লগ ডিলিট করা
+            deleted_count, _ = SMSLog.objects.filter(id__in=log_ids).delete()
+            messages.success(request, f"সফলভাবে {deleted_count}টি এসএমএস লগ ডিলিট করা হয়েছে।")
+        else:
+            messages.warning(request, "ডিলিট করার জন্য কোনো লগ সিলেক্ট করা হয়নি!")
+
+        return redirect('sms_history')

@@ -1,0 +1,262 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JBD IT - Invoice #{{ invoice.id }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        /* A4 Page Setup */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            background-color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top Action Bar (Buttons) */
+        .action-bar {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        /* Pure A4 Container Layout */
+        .a4-container {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: #ffffff;
+            box-sizing: border-box;
+            position: relative;
+            padding: 0;
+        }
+
+        /* Screen view optimization */
+        @media screen {
+            body {
+                background-color: #e9ecef;
+            }
+            .a4-container {
+                box-shadow: 0 0 15px rgba(0,0,0,0.1);
+                margin-top: 20px;
+                margin-bottom: 20px;
+                border-radius: 4px;
+            }
+        }
+
+        /* Full Width Header Image Banner */
+        .invoice-header-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 25px;
+        }
+
+        /* Content Wrapper with 20px padding */
+        .invoice-content {
+            padding: 0 20px;
+        }
+
+        /* Table Styling */
+        .info-table {
+            border: 1px solid #ced4da !important;
+            margin-bottom: 25px;
+        }
+
+        .info-table th, .info-table td {
+            font-size: 14px;
+            padding: 8px 12px !important;
+            border: 1px solid #000000 !important;
+        }
+
+        .info-label {
+            font-weight: bold;
+            background-color: #f8f9fa;
+            width: 22%;
+        }
+
+        .receipt-table {
+            border: 1px solid #000000 !important;
+        }
+
+        .receipt-table th {
+            color: #000000 !important;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+            padding: 10px !important;
+            border: 1px solid #212529 !important;
+        }
+
+        .receipt-table td {
+            text-align: center;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 10px !important;
+            border: 1px solid #000000 !important;
+        }
+
+        /* Authority Signature Block */
+        .signature-wrapper {
+            margin-top: 70px;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 20px;
+        }
+
+        .signature-line {
+            width: 220px;
+            text-align: center;
+            border-top: 1.5px solid #000000;
+            font-size: 14px;
+            font-weight: bold;
+            padding-top: 5px;
+        }
+
+        /* Footer Alignment */
+        .footer-copy {
+            position: absolute;
+            bottom: 15mm;
+            left: 20px;
+            right: 20px;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+            padding-top: 10px;
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        /* Print Configuration */
+        @media print {
+            .no-print {
+                display: none !important;
+                }
+            body {
+                background-color: #ffffff;
+            }
+            .a4-container {
+                margin: 0;
+                box-shadow: none;
+                border: none;
+                width: 100%;
+                height: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="action-bar no-print">
+    <button onclick="window.print();" class="btn btn-sm btn-primary px-3 me-2">
+        <i class="fas fa-print me-1"></i> Print Invoice
+    </button>
+    <button onclick="downloadPDF();" class="btn btn-sm btn-success px-3">
+        <i class="fas fa-download me-1"></i> Download PDF
+    </button>
+</div>
+
+<div class="a4-container" id="invoice-page">
+
+    <img src="{% static 'cus/banner.jpg' %}" alt="JBD IT Header Banner" class="invoice-header-img">
+
+    <div class="invoice-content">
+
+        <h5 class="text-center text-decoration-underline fw-bold mb-3" style="letter-spacing: 0.5px;">Student Information</h5>
+
+        <table class="table info-table align-middle">
+            <tbody>
+                <tr>
+                    <td class="info-label">Program Name:</td>
+                    <td style="width: 28%;">{{ invoice.student.course.name|default:"Office applications" }}</td>
+                    <td class="info-label">Mobile No (Std):</td>
+                    <td style="width: 28%;">{{ invoice.student.mobile|default:"01770785946" }}</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Student ID:</td>
+                    <td>{{ invoice.student.student_id|default:"779" }}</td>
+                    <td class="info-label">Mobile No (Grd):</td>
+                    <td>{{ invoice.student.father_phone|default:"N/A" }}</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Student Name:</td>
+                    <td>{{ invoice.student.name|default:"Ariana Boyd" }}</td>
+                    <td class="info-label">Reference:</td>
+                    <td>{{ invoice.reference|default:"N/A" }}</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Fathers Name:</td>
+                    <td>{{ invoice.student.father_name|default:"Genevieve Bullock" }}</td>
+                    <td class="info-label">Institute Name:</td>
+                    <td>{{ invoice.student.education_institute_name|default:"N/A" }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5 class="text-center text-decoration-underline fw-bold mb-3" style="letter-spacing: 0.5px;">Money Receipt</h5>
+
+        <table class="table table-bordered receipt-table">
+            <thead>
+                <tr>
+                    <th>Course Fee</th>
+                    <th>Payment Amount</th>
+                    <th>Due Amount</th>
+                    <th>Payment Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-dark">৳ {{ invoice.student.course.default_fee|default:"2000.00" }}</td>
+                    <td class="text-success">৳ {{ invoice.paid_amount|default:"200.00" }}</td>
+                    <td class="text-danger">৳ {{ invoice.due_amount|default:"1650.00" }}</td>
+                    <td>{{ invoice.date|date:"d-M-Y"|default:"11-Jul-2026" }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="signature-wrapper">
+            <div class="signature-line">
+                Authority Signature
+            </div>
+        </div>
+
+        <div class="footer-copy">
+            This is software generated copy. Design Developed by JBD IT
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function downloadPDF() {
+        const element = document.getElementById('invoice-page');
+
+        // PDF কনফিগারেশন সেটআপ (A4 সাইজ এবং মার্জিন ০)
+        const opt = {
+            margin:       0,
+            filename:     'Invoice-{{ invoice.id|default:"779" }}.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true }, // ইমেজ রেজোলিউশন ঠিক রাখার জন্য
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // PDF জেনারেট এবং ডাউনলোড প্রসেস
+        html2pdf().set(opt).from(element).save();
+    }
+</script>
+
+</body>
+</html>

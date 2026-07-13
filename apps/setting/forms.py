@@ -7,7 +7,7 @@ class AttendanceSettingForm(forms.ModelForm):
     class Meta:
         model = AttendenceSetting
         # 🟢 fields লিস্টে 'reg_sms' ইনক্লুড করা হলো
-        fields = ['website_name', 'send_id_token', 'reg_sms']
+        fields = ['website_name', 'send_id_token', 'reg_sms', 'approve_sms']
         widgets = {
             'website_name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -21,11 +21,13 @@ class AttendanceSettingForm(forms.ModelForm):
             'reg_sms': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 4,
+                'cols': '80',
                 'placeholder': 'মেসেজ লিখতে [name] এবং [phone] শর্টকোডগুলো ব্যবহার করুন...'
             }),
         }
         labels = {
             'website_name': 'Sender ID',
             'send_id_token': 'Token',
-            'reg_sms': 'Student Registration SMS Template (বাংলা)'
+            'reg_sms': 'Student Registration SMS Template (বাংলা)',
+            'approve_sms': 'Student Approval Confirmation SMS Template (বাংলা)'
         }

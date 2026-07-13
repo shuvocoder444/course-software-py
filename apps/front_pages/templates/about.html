@@ -1,0 +1,189 @@
+{% extends layout_path %}
+
+{% block title %}About Us - আমাদের সম্পর্কে{% endblock %}
+
+{% block content %}
+<style>
+    /* ==========================================
+       ১. হিরো ব্যানার সেকশন
+       ========================================== */
+    .about-hero-banner {
+        background: radial-gradient(circle at 80% 20%, rgba(220, 53, 69, 0.15) 0%, transparent 50%),
+                    linear-gradient(135deg, #0b1116 0%, #1a2630 100%);
+        padding: 80px 20px;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 4px solid #dc3545;
+    }
+
+    .about-gradient-title {
+        background: linear-gradient(135deg, #ffffff 40%, #ff4d5a 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+        display: inline-block;
+        letter-spacing: 1px;
+    }
+
+    /* ==========================================
+       ২. কন্টেন্ট ও কার্ড স্টাইল (Scoped)
+       ========================================== */
+    .jbd-about-section .about-card {
+        border: none;
+        border-radius: 16px;
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(17, 28, 36, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .jbd-about-section .about-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(17, 28, 36, 0.1);
+    }
+
+    /* আইকন বক্স */
+    .jbd-about-section .icon-box {
+        width: 60px;
+        height: 60px;
+        background-color: rgba(220, 53, 69, 0.1);
+        color: #dc3545;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    /* স্ট্যাটস কাউন্টার সেকশন */
+    .stats-section {
+        background-color: #111c24;
+        color: #ffffff;
+        border-radius: 16px;
+        padding: 40px 20px;
+    }
+
+    .stats-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #dc3545;
+    }
+</style>
+
+<!-- ==========================================
+     ১. হিরো ব্যানার (Hero Section)
+     ========================================== -->
+<div class="about-hero-banner text-center text-white mb-5">
+    <div class="container">
+        <h1 class="display-3 fw-bold about-gradient-title mb-3">আমাদের সম্পর্কে</h1>
+        <p class="lead text-white-50 max-w-600 mx-auto">
+            প্রযুক্তি ও দক্ষতার সমন্বয়ে আগামী দিনের আইটি লিডার তৈরি করাই আমাদের লক্ষ্য।
+        </p>
+    </div>
+</div>
+
+<!-- ==========================================
+     ২. মূল বিবরণ ও মিশন-ভিশন
+     ========================================== -->
+<div class="container my-5 jbd-about-section">
+    <div class="row align-items-center g-5 mb-5">
+        <div class="col-lg-6">
+            <h2 class="fw-bold text-dark mb-4">JBD IT-এর পথচলা</h2>
+            <p class="text-muted leading-relaxed">
+                JBD IT একটি আধুনিক
+            </p>
+            <p class="text-muted leading-relaxed">
+
+            </p>
+        </div>
+        <div class="col-lg-6">
+            <div class="row g-4">
+                <!-- মিশন কার্ড -->
+                <div class="col-12">
+                    <div class="card about-card p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="icon-box me-3 flex-shrink-0">🎯</div>
+                            <div>
+                                <h5 class="fw-bold text-dark">আমাদের মিশন</h5>
+                                <p class="text-muted mb-0">সহজ এবং মানসম্মত শিক্ষার মাধ্যমে প্রত্যেক শিক্ষার্থীকে মার্কেটপ্লেসের জন্য শতভাগ প্রস্তুত করে তোলা।</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ভিশন কার্ড -->
+                <div class="col-12">
+                    <div class="card about-card p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="icon-box me-3 flex-shrink-0">🚀</div>
+                            <div>
+                                <h5 class="fw-bold text-dark">আমাদের ভিশন</h5>
+                                <p class="text-muted mb-0">দেশের অন্যতম শীর্ষস্থানীয় আইটি প্রতিষ্ঠান হিসেবে প্রযুক্তিগত উন্নয়ন এবং বেকারত্ব দূরীকরণে অগ্রণী ভূমিকা পালন করা।</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         ৩. কেন আমাদের বেছে নেবেন? (Features)
+         ========================================== -->
+    <div class="text-center my-5 pt-4">
+        <h2 class="fw-bold text-dark">কেন আমরা সেরা?</h2>
+        <p class="text-muted">আমাদের বিশেষত্ব যা আমাদের অন্য সবার চেয়ে আলাদা করে।</p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <!-- বৈশিষ্ট্য ১ -->
+        <div class="col-md-4">
+            <div class="card about-card p-4 text-center h-100">
+                <div class="icon-box mx-auto">👨‍🏫</div>
+                <h5 class="fw-bold text-dark">অভিজ্ঞ মেন্টর</h5>
+                <p class="text-muted small mb-0">ইন্ডাস্ট্রির রিয়েল-প্রজেক্টে অভিজ্ঞ এবং দক্ষ মেন্টরদের সরাসরি তত্ত্বাবধান।</p>
+            </div>
+        </div>
+        <!-- বৈশিষ্ট্য ২ -->
+        <div class="col-md-4">
+            <div class="card about-card p-4 text-center h-100">
+                <div class="icon-box mx-auto">💻</div>
+                <h5 class="fw-bold text-dark">হ্যান্ডস-অন প্রজেক্ট</h5>
+                <p class="text-muted small mb-0">তত্ত্বীয় আলোচনার পাশাপাশি প্রতিটি ক্লাসে রিয়েল-লাইফ প্রজেক্ট প্র্যাকটিস।</p>
+            </div>
+        </div>
+        <!-- বৈশিষ্ট্য ৩ -->
+        <div class="col-md-4">
+            <div class="card about-card p-4 text-center h-100">
+                <div class="icon-box mx-auto">🤝</div>
+                <h5 class="fw-bold text-dark">লাইফটাইম সাপোর্ট</h5>
+                <p class="text-muted small mb-0">কোর্স শেষ হওয়ার পরেও যেকোনো সমস্যায় আমাদের ডেডিকেটেড ফোরাম থেকে লাইফটাইম সাপোর্ট।</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         ৪. স্ট্যাটস কাউন্টার (Stats Section)
+         ========================================== -->
+    <div class="stats-section text-center my-5">
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="stats-number">১,২০০+</div>
+                <div class="text-white-50 small mt-1">সফল শিক্ষার্থী</div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stats-number">১৫+</div>
+                <div class="text-white-50 small mt-1">প্রফেশনাল কোর্স</div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stats-number">৫০+</div>
+                <div class="text-white-50 small mt-1">কর্পোরেট প্রজেক্ট</div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stats-number">২৪/৭</div>
+                <div class="text-white-50 small mt-1">লার্নিং সাপোর্ট</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

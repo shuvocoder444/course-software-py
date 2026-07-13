@@ -1,0 +1,54 @@
+{% extends layout_path %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Visitor /</span> {% if form.instance.pk %}Edit Visitor{% else %}Add Visitor{% endif %}</h4>
+
+  <div class="card mb-4">
+    <h5 class="card-header text-white" style="background-color: #17a2b8;">Visitor Entry</h5>
+    <div class="card-body pt-4">
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Visitor's Name <span class="text-danger">*</span></label>
+            {{ form.name }}
+            {{ form.name.errors }}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Visiting Purpose Category <span class="text-danger">*</span></label>
+            {{ form.purpose_category }}
+            {{ form.purpose_category.errors }}
+            <small class="text-muted"><a href="{% url 'visitor_category_list' %}" target="_blank">+ Manage Categories</a></small>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
+            {{ form.mobile_number }}
+            {{ form.mobile_number.errors }}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Visiting Date</label>
+            {{ form.visiting_date }}
+            {{ form.visiting_date.errors }}
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Additional Notes</label>
+            {{ form.additional_notes }}
+            {{ form.additional_notes.errors }}
+          </div>
+        </div>
+
+        <div class="pt-4">
+          <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
+          <a href="{% url 'visitor_list' %}" class="btn btn-label-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

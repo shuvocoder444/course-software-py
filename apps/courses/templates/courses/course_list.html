@@ -29,7 +29,7 @@
                 <table class="table table-hover align-middle mb-0 text-nowrap">
                     <thead class="table-light">
                         <tr>
-                            <th class="ps-4">#ID</th>
+                            <th class="ps-4">Sl. No.</th>
                             <th>Course Name</th>
                             <th>Course Code</th>
                             <th>Default Fee</th>
@@ -40,7 +40,19 @@
                     <tbody>
                         {% for course in courses %}
                         <tr>
-                            <td class="ps-4 fw-semibold">#{{ course.id }}</td>
+                            <td class="ps-4 fw-semibold">
+                                {% if page_obj %}
+                                    {{ page_obj.start_index|add:forloop.counter0 }}
+                                    {% comment %}
+                                        যদি আপনি ভিউতে ListView/Pagination ব্যবহার করেন তবে এটি ১, ২, ৩... ১১, ১২, ১৩ এভাবে সিরিয়াল ঠিক রাখবে।
+                                    {% endcomment %}
+                                {% else %}
+                                    {{ forloop.counter }}
+                                    {% comment %}
+                                        যদি পেজিনেশন না থাকে তবে এটি নরমালি ১ থেকে শুরু করে সিরিয়াল দেখাবে।
+                                    {% endcomment %}
+                                {% endif %}
+                            </td>
                             <td>
                                 <span class="fw-bold text-dark">{{ course.name }}</span>
                                 {% if course.description %}

@@ -1,152 +1,186 @@
 {% extends layout_path %}
-
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<div class="container-fluid my-4">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 text-white"><i class="fas fa-receipt me-2"></i> Create/Update Invoice & Add Payment</h5>
-            <a href="{% url 'invoice_list' %}" class="btn btn-sm btn-light text-primary fw-bold">
-                <i class="fas fa-list me-1"></i> Invoice List
-            </a>
+<div class="container-fluid">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" id="paymentForm" autocomplete="off">
+        {% csrf_token %}
+
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-light py-3">
+                <h5 class="card-title mb-0 text-primary fw-bold">
+                    <i class="fas fa-user-graduate me-2"></i> Student & Course Information
+                    {% if invoice.student %}
+                        <span class="badge bg-secondary ms-2">ID: {{ invoice.student.student_id }}</span>
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold text-secondary">Search Student ID *</label>
+                        <div class="position-relative">
+                            <input type="text" id="student_search_input" class="form-control" placeholder="Type Student ID (e.g. 780)..." autocomplete="off">
+
+                            <div class="d-none">
+                                {{ form.student }}
+                            </div>
+                            <div id="custom_dropdown_list" class="position-absolute w-100 bg-white border rounded shadow-sm d-none" style="z-index: 1050; max-height: 250px; overflow-y: auto;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold text-secondary">Student Name</label>
+                        <input type="text" id="id_student_name" class="form-control bg-light" readonly placeholder="Auto-filled">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold text-secondary">Phone Number</label>
+                        <input type="text" id="id_student_phone" class="form-control bg-light" readonly placeholder="Auto-filled">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold text-secondary">Enrolled Course</label>
+                        <input type="text" id="id_student_course" class="form-control bg-light" readonly placeholder="Auto-filled">
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body bg-light">
-            <form method="POST" action="{% url 'add_payment' %}" id="paymentForm">
-                {% csrf_token %}
 
-                <div class="card mb-4 border-0 shadow-sm">
-                    <div class="card-body bg-white rounded">
-                        <h6 class="text-secondary mb-3"><i class="fas fa-user-graduate me-2"></i> Student Information</h6>
-                        <div class="row g-3">
-                            <div class="col-md-6 position-relative">
-                                <label class="form-label fw-bold">Select Student <span class="text-danger">*</span></label>
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-light py-3">
+                <h5 class="card-title mb-0 text-success fw-bold">
+                    <i class="fas fa-money-check-alt me-2"></i> Fees Distribution Details
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap g-3 justify-content-between">
+                    <div class="p-1" style="width: 20%;">
+                        <label class="form-label fw-semibold text-secondary">Course Fee</label>
+                        {{ form.course_fee }}
+                    </div>
+                    <div class="p-1" style="width: 20%;">
+                        <label class="form-label fw-semibold text-secondary">Certificate Fee</label>
+                        {{ form.certificate_fee }}
+                    </div>
+                    <div class="p-1" style="width: 20%;">
+                        <label class="form-label fw-semibold text-secondary">ID Card Fee</label>
+                        {{ form.id_card_fee }}
+                    </div>
+                    <div class="p-1" style="width: 20%;">
+                        <label class="form-label fw-semibold text-secondary">Admit Card Fee</label>
+                        {{ form.admit_card_fee }}
+                    </div>
+                    <div class="p-1" style="width: 20%;">
+                        <label class="form-label fw-semibold text-secondary">Other Fee</label>
+                        {{ form.other_fee }}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                                <!-- আসল Django সিলেক্ট ফিল্ডটি হাইড করে রাখা হয়েছে -->
-                                <div style="display: none;">
-                                    {{ form.student }}
-                                </div>
-
-                                <!-- কাস্টম সার্চ ইনপুট -->
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
-                                    <input type="text" id="student_search_input" name="student_search_input" class="form-control" placeholder="Type Student ID..." autocomplete="off" required>
-                                </div>
-
-                                <!-- কাস্টম ড্রপডাউন প্যানেল (ফিক্সড ব্যাকগ্রাউন্ড এবং বর্ডারসহ) -->
-                                <div id="custom_dropdown_list" class="list-group position-absolute w-100 shadow-lg d-none"
-                                     style="z-index: 9999; max-height: 300px; overflow-y: auto; margin-top: 5px; background-color: #ffffff !important; border: 1px solid #dcdcdc; border-radius: 6px; padding: 5px 0;">
-                                    <!-- লাইভ ১০টি আইডি এখানে জেনারেট হবে -->
-                                </div>
-
-                                {% if form.student.errors %}
-                                    <div class="text-danger small">{{ form.student.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Invoice Date <span class="text-danger">*</span></label>
-                                {{ form.date }}
-                            </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-light py-3">
+                        <h5 class="card-title mb-0 text-warning fw-bold">
+                            <i class="fas fa-info-circle me-2"></i> Payment  Information
+                        </h5>
+                    </div>
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">Invoice Date *</label>
+                            {{ form.date }}
+                        </div>
+                        <div>
+                            <label class="form-label fw-semibold text-secondary">Payment Method *</label>
+                            <select name="payment_method" class="form-control" id="id_payment_method" required>
+                                <option value="Cash">Cash</option>
+                                <option value="Bkash">bKash</option>
+                                <option value="Nagad">Nagad</option>
+                                <option value="Bank">Bank Transfer</option>
+                            </select>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="card mb-4 border-0 shadow-sm">
-                    <div class="card-body bg-white rounded">
-                        <h6 class="text-secondary mb-3"><i class="fas fa-file-invoice-dollar me-2"></i> Fees Distribution Details</h6>
-                        <div class="row g-3">
-                            <div class="col-md-3">
-                                <label class="form-label">Course Fee (৳)</label>
-                                {{ form.course_fee }}
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Certificate Fee (৳)</label>
-                                {{ form.certificate_fee }}
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">ID Card Fee (৳)</label>
-                                {{ form.id_card_fee }}
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Admit Card Fee (৳)</label>
-                                {{ form.admit_card_fee }}
-                            </div>
-                            <div class="col-md-3 mt-3">
-                                <label class="form-label">Other Fee (৳)</label>
-                                {{ form.other_fee }}
-                            </div>
-                        </div>
+            <div class="col-md-8">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-light py-3">
+                        <h5 class="card-title mb-0 text-danger fw-bold">
+                            <i class="fas fa-calculator me-2"></i> Payment Summary
+                        </h5>
                     </div>
-                </div>
-
-                <div class="card mb-4 border-0 shadow-sm">
-                    <div class="card-body bg-white rounded">
-                        <h6 class="text-secondary mb-3"><i class="fas fa-calculator me-2"></i> Payment Summary</h6>
-                        <div class="row g-3">
-                            <div class="col-md-2">
-                                <label class="form-label text-warning fw-bold">Discount (৳)</label>
-                                {{ form.discount }}
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label text-info fw-bold">Total Gross (৳)</label>
-                                <input type="number" id="total_gross_display" class="form-control fw-bold" readonly style="background-color: #e9ecef;">
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label text-secondary fw-bold">Previously Paid (৳)</label>
-                                <input type="number" id="prev_paid_display" class="form-control fw-bold" value="0.00" readonly style="background-color: #e9ecef;">
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label text-success fw-bold">New Payment / Cash (৳)</label>
-                                {{ form.paid_amount }}
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label text-primary fw-bold">Total Paid (৳)</label>
-                                <input type="number" id="total_paid_display" class="form-control fw-bold" readonly style="background-color: #e9ecef;">
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label text-danger fw-bold">Amount Due (৳)</label>
-                                <input type="number" id="amount_due_display" class="form-control fw-bold text-danger" readonly style="background-color: #f8d7da;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-4 border-0 shadow-sm">
-                    <div class="card-body bg-white rounded">
+                    <div class="card-body">
                         <div class="row g-3">
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">Payment Method <span class="text-danger">*</span></label>
-                                <select name="payment_method" id="payment_method" class="form-select" required>
-                                    <option value="Cash">Cash</option>
-                                    <option value="Bkash">Bkash</option>
-                                    <option value="Nagad">Nagad</option>
-                                    <option value="Rocket">Rocket</option>
-                                    <option value="Bank">Bank Transfer</option>
-                                </select>
+                                <label class="form-label fw-semibold text-secondary">Total  Amount</label>
+                                <input type="text" id="total_gross_display" class="form-control bg-light fw-bold text-dark" readonly value="0.00">
                             </div>
-                            <div class="col-md-8">
-                                <label class="form-label fw-bold">Additional Notes</label>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold text-secondary">Discount</label>
+                                {{ form.discount }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold text-secondary">Net Payable Amount</label>
+                                <input type="text" id="net_payable_display" class="form-control bg-light fw-bold text-primary" readonly value="0.00">
+                            </div>
+<div class="col-md-4">
+    <label class="form-label fw-semibold text-secondary">Previous Total Paid</label>
+    <input type="text" id="previous_paid_display" class="form-control bg-light fw-bold text-success" readonly value="0.00">
+</div>
+<div class="col-md-4">
+    <label class="form-label fw-semibold text-secondary">New Paid Amount *</label>
+    {{ form.paid_amount }}
+</div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold text-secondary">Current Total Due</label>
+                                <input type="text" id="current_due_display" class="form-control bg-light fw-bold text-danger" readonly value="0.00">
+                            </div>
+
+                            <div class="col-md-12 mt-2">
+                                <label class="form-label fw-semibold text-secondary">Additional Notes</label>
                                 {{ form.additional_notes }}
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="d-flex justify-content-end gap-2">
-                    <button type="reset" class="btn btn-warning px-4 text-white"><i class="fas fa-undo me-1"></i> Reset</button>
-                    <button type="submit" class="btn btn-primary px-5"><i class="fas fa-check-circle me-1"></i> Save Payment</button>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
+
+        <div class="row mt-4 mb-5">
+            <div class="col-10 text-end">
+                <a href="{% url 'invoice_list' %}" class="btn btn-secondary px-4 fw-semibold">Cancel</a>
+                <button type="submit" class="btn btn-primary px-4 fw-semibold shadow-sm">Save Invoice & Print</button>
+            </div>
+        </div>
+    </form>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const studentSelect = document.getElementById('id_student') || document.querySelector('select[name="student"]');
+document.addEventListener("DOMContentLoaded", function () {
+    // DOM Element Fetching
     const searchInput = document.getElementById('student_search_input');
     const customDropdown = document.getElementById('custom_dropdown_list');
+    const realStudentSelect = document.getElementById('id_student');
 
+    // Dynamic Profile Outputs
+    const studentNameBox = document.getElementById('id_student_name');
+    const studentPhoneBox = document.getElementById('id_student_phone');
+    const studentCourseBox = document.getElementById('id_student_course');
+
+    // Mathematical Core Fields
     const courseFee = document.getElementById('id_course_fee');
     const certFee = document.getElementById('id_certificate_fee');
     const idCardFee = document.getElementById('id_id_card_fee');
@@ -155,157 +189,207 @@ document.addEventListener("DOMContentLoaded", function() {
     const discount = document.getElementById('id_discount');
     const newPaidAmount = document.getElementById('id_paid_amount');
 
+    // Summary Virtual Fields
     const totalGrossBox = document.getElementById('total_gross_display');
-    const prevPaidBox = document.getElementById('prev_paid_display');
-    const totalPaidBox = document.getElementById('total_paid_display');
-    const dueBox = document.getElementById('amount_due_display');
+    const netPayableBox = document.getElementById('net_payable_display');
+    const prevPaidBox = document.getElementById('previous_paid_display');
+    const currentDueBox = document.getElementById('current_due_display');
 
-    let previousPaidAmount = 0;
-    let allStudentIds = [];
+    let previousPaidAmount = 0.00;
 
-    // ১. ড্রপডাউন থেকে ডাটা রিড করা
-    if (studentSelect) {
-        allStudentIds = Array.from(studentSelect.options)
-            .filter(opt => opt.value.trim() !== "")
-            .map(opt => {
-                return {
-                    db_id: opt.value.trim(),
-                    display_text: opt.text.trim()
-                };
-            });
+    // 1. SYNC EDIT MODE FIELDS (এডিটের সময় ডাটাবেজ আইডির বদলে কাস্টম স্টুডেন্ট আইডি সেট করার ফিক্স)
+    function syncEditModeFields() {
+        // জ্যাঙ্গো অবজেক্ট থেকে সরাসরি কাস্টম আইডি ও ডাটাবেজ প্রাইমারি-কি রিড করা হচ্ছে
+        const editModeStudentId = "{{ invoice.student.student_id|default:'' }}";
+        const editModeDatabaseId = "{{ invoice.student.id|default:'' }}";
+        const editModeStudentName = "{{ invoice.student.name|default:'' }}";
 
-        if (studentSelect.value) {
-            const selectedOpt = studentSelect.options[studentSelect.selectedIndex];
-            searchInput.value = selectedOpt ? selectedOpt.text.split('-')[0].trim() : studentSelect.value;
-            fetchStudentData();
-        }
-    }
+        if (editModeStudentId && editModeDatabaseId) {
+            // ১. সার্চ বক্সে আপনার কাঙ্ক্ষিত কাস্টম স্টুডেন্ট আইডি (যেমন: 780) বসানো হলো
+            searchInput.value = editModeStudentId;
 
-    // ২. লাইভ সার্চ ও ড্রপডাউন জেনারেট লজিক
-    if (searchInput && customDropdown) {
-        searchInput.addEventListener('input', function() {
-            const query = this.value.trim().toLowerCase();
-            customDropdown.innerHTML = '';
+            // ২. হিডেন সিলেক্ট ফিল্ড নিশ্চিত করা হলো
+            ensureOptionInRealSelect(editModeDatabaseId, `${editModeStudentId} - ${editModeStudentName}`);
 
-            if (query === '') {
-                customDropdown.classList.add('d-none');
-                return;
-            }
+            // ৩. ব্যাকএন্ড থেকে বাকি প্রোফাইল ও পূর্বের পরিশোধিত টাকার হিসাব লোড করা হলো
+            fetchStudentFullProfile(editModeDatabaseId);
+        } else if (realStudentSelect && realStudentSelect.value) {
+            // সেফটি ফলব্যাক (যদি কোনো কারণে অবজেক্ট সরাসরি না পাওয়া যায়)
+            const currentSelectedValue = realStudentSelect.value;
+            const currentSelectedText = realStudentSelect.options[realStudentSelect.selectedIndex]?.text || '';
 
-            const filteredStudents = allStudentIds.filter(item =>
-                item.display_text.toLowerCase().includes(query)
-            );
-
-            const top10 = filteredStudents.slice(0, 10);
-
-            if (top10.length > 0) {
-                top10.forEach(item => {
-                    let button = document.createElement('button');
-                    button.type = 'button';
-                    // এখানে bg-white এবং border-0 দিয়ে ফিক্স করা হয়েছে
-                    button.className = 'list-group-item list-group-item-action py-2 text-start bg-white border-0 text-dark';
-                    button.innerHTML = `<i class="fas fa-id-badge text-primary me-2"></i> <strong>${item.display_text}</strong>`;
-
-                    button.addEventListener('click', function() {
-                        const shortId = item.display_text.split('-')[0].trim();
-                        searchInput.value = shortId;
-                        studentSelect.value = item.db_id;
-                        customDropdown.classList.add('d-none');
-                        fetchStudentData();
-                    });
-
-                    customDropdown.appendChild(button);
-                });
-                customDropdown.classList.remove('d-none');
+            if (currentSelectedText && currentSelectedText.includes('-')) {
+                const parts = currentSelectedText.split('-');
+                searchInput.value = parts[0].trim();
             } else {
-                let noResult = document.createElement('div');
-                noResult.className = 'list-group-item text-muted small py-2 bg-white border-0';
-                noResult.textContent = 'No matching Student ID found';
-                customDropdown.appendChild(noResult);
-                customDropdown.classList.remove('d-none');
+                searchInput.value = currentSelectedValue;
             }
-        });
-
-        searchInput.addEventListener('focus', function() {
-            if (this.value.trim() !== '') {
-                this.dispatchEvent(new Event('input'));
-            }
-        });
-
-        document.addEventListener('click', function(e) {
-            if (!searchInput.contains(e.target) && !customDropdown.contains(e.target)) {
-                customDropdown.classList.add('d-none');
-            }
-        });
-    }
-
-    // ৩. AJAX ডেটা লোড
-    function fetchStudentData() {
-        const studentId = studentSelect.value;
-        if (studentId) {
-            fetch(`/dashboard/finance/ajax/get-student-details/?student_id=${studentId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.exists) {
-                    if(courseFee) courseFee.value = data.course_fee;
-                    if(certFee) certFee.value = data.certificate_fee;
-                    if(idCardFee) idCardFee.value = data.id_card_fee;
-                    if(admitFee) admitFee.value = data.admit_card_fee;
-                    if(otherFee) otherFee.value = data.other_fee;
-                    if(discount) discount.value = data.discount;
-
-                    previousPaidAmount = data.total_paid;
-                    if(prevPaidBox) prevPaidBox.value = previousPaidAmount.toFixed(2);
-                } else {
-                    if(courseFee) courseFee.value = 0;
-                    if(certFee) certFee.value = 0;
-                    if(idCardFee) idCardFee.value = 0;
-                    if(admitFee) admitFee.value = 0;
-                    if(otherFee) otherFee.value = 0;
-                    if(discount) discount.value = 0;
-                    previousPaidAmount = 0;
-                    if(prevPaidBox) prevPaidBox.value = "0.00";
-                }
-                calculateMath();
-            })
-            .catch(error => console.error("Error fetching student details:", error));
+            fetchStudentFullProfile(currentSelectedValue);
         }
     }
+    syncEditModeFields();
 
-    // ৪. ম্যাথ ক্যালকুলেশন
-    const inputs = [courseFee, certFee, idCardFee, admitFee, otherFee, discount, newPaidAmount];
-    inputs.forEach(input => {
-        if (input) {
-            input.addEventListener('input', calculateMath);
+    // 2. LIVE BACKEND AJAX SEARCH
+    if (searchInput) {
+        ['input', 'focus', 'keyup'].forEach(eventName => {
+            searchInput.addEventListener(eventName, function () {
+                let queryText = searchInput.value.trim();
+                if (queryText.length < 1) {
+                    customDropdown.classList.add('d-none');
+                    return;
+                }
+
+                const searchEndpoint = `/dashboard/finance/ajax/search-student/?q=${encodeURIComponent(queryText)}`;
+
+                fetch(searchEndpoint)
+                    .then(response => response.json())
+                    .then(data => {
+                        customDropdown.innerHTML = '';
+                        const studentsList = data.results || data.students || [];
+
+                        if (studentsList && studentsList.length > 0) {
+                            customDropdown.classList.remove('d-none');
+                            studentsList.forEach(student => {
+                                let sId = student.student_id || student.id;
+                                let sName = student.name || student.text;
+                                let dbId = student.id; // Database Primary Key
+
+                                let optionRow = document.createElement('button');
+                                optionRow.type = 'button';
+                                optionRow.className = 'list-group-item list-group-item-action py-2 text-start bg-white border-bottom text-dark';
+                                optionRow.style.cursor = 'pointer';
+                                optionRow.innerHTML = `<i class="fas fa-id-badge text-primary me-2"></i> <strong>${sId}</strong> - ${sName}`;
+
+                                optionRow.addEventListener('click', function (e) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+
+                                    searchInput.value = sId;
+                                    customDropdown.classList.add('d-none');
+
+                                    ensureOptionInRealSelect(dbId, `${sId} - ${sName}`);
+                                    fetchStudentFullProfile(dbId);
+                                });
+                                customDropdown.appendChild(optionRow);
+                            });
+                        } else {
+                            customDropdown.innerHTML = '<div class="list-group-item text-muted small bg-light text-center py-2">No active/pending match found</div>';
+                            customDropdown.classList.remove('d-none');
+                        }
+                    })
+                    .catch(err => console.error("Live DB-Search Ajax Mismatch Error: ", err));
+            });
+        });
+    }
+
+    // Dropdown ক্লোজ হ্যান্ডলার
+    document.addEventListener('click', function (e) {
+        if (customDropdown && !customDropdown.contains(e.target) && e.target !== searchInput) {
+            customDropdown.classList.add('d-none');
         }
     });
 
-    function calculateMath() {
+    // Hidden সিলেক্ট অপশন অ্যাসাইন লজিক
+    function ensureOptionInRealSelect(studentId, fullLabelText) {
+        if (!realStudentSelect) return;
+        let existingOption = Array.from(realStudentSelect.options).find(opt => opt.value == studentId);
+        if (!existingOption) {
+            let newOpt = document.createElement('option');
+            newOpt.value = studentId;
+            newOpt.text = fullLabelText;
+            realStudentSelect.appendChild(newOpt);
+        }
+        realStudentSelect.value = studentId;
+        realStudentSelect.dispatchEvent(new Event('change'));
+    }
+
+
+// 3. FETCH STUDENT DEEP PROFILE DATA
+    function fetchStudentFullProfile(studentDatabaseID) {
+        if (!studentDatabaseID) return;
+
+        // একদম সিম্পল ও ক্লিন এন্ডপয়েন্ট (আপনার আগের কোডের মতো)
+        const detailsEndpoint = `/dashboard/finance/ajax/get-student-details/?student_id=${studentDatabaseID}`;
+
+        fetch(detailsEndpoint)
+            .then(res => res.json())
+            .then(data => {
+                if (data.exists) {
+                    if (studentNameBox) studentNameBox.value = data.name || '';
+                    if (studentPhoneBox) studentPhoneBox.value = data.phone || '';
+                    if (studentCourseBox) studentCourseBox.value = data.course_name || '';
+
+                    // প্রথম ফিক্স: পেজ রিলোড ছাড়া আইডি চেঞ্জ করলে কোর্স ফি আপডেট হবে
+                    if (courseFee) {
+                        courseFee.value = parseFloat(data.course_fee || 0).toFixed(2);
+                    }
+
+                    // পূর্বের পরিশোধিত মোট টাকা ডেটাবেজ থেকে এসে এখানে সেট হবে
+                    previousPaidAmount = parseFloat(data.total_paid || 0);
+                    if (prevPaidBox) prevPaidBox.value = previousPaidAmount.toFixed(2);
+
+                    // গণিত ইঞ্জিন চালু করা
+                    calculateMath();
+                }
+            })
+            .catch(err => console.error("Ledger Profile Fetch Engine Error: ", err));
+    }
+
+    // 4. MATHEMATICAL CALCULATION CORE ENGINE
+    const dynamicInputs = [courseFee, certFee, idCardFee, admitFee, otherFee, discount, newPaidAmount];
+    dynamicInputs.forEach(elem => {
+        if (elem) elem.addEventListener('input', calculateMath);
+    });
+
+function calculateMath() {
         let course = courseFee ? (parseFloat(courseFee.value) || 0) : 0;
         let cert = certFee ? (parseFloat(certFee.value) || 0) : 0;
         let idCard = idCardFee ? (parseFloat(idCardFee.value) || 0) : 0;
         let admit = admitFee ? (parseFloat(admitFee.value) || 0) : 0;
         let other = otherFee ? (parseFloat(otherFee.value) || 0) : 0;
         let disc = discount ? (parseFloat(discount.value) || 0) : 0;
+
+        // এই নির্দিষ্ট নতুন ইনভয়েসে যে টাকাটা দেওয়া হচ্ছে
         let newPaid = newPaidAmount ? (parseFloat(newPaidAmount.value) || 0) : 0;
 
         let totalGross = course + cert + idCard + admit + other;
-        let currentTotalPaid = previousPaidAmount + newPaid;
         let netPayable = totalGross - disc;
-        let due = netPayable - currentTotalPaid;
 
-        if(totalGrossBox) totalGrossBox.value = totalGross.toFixed(2);
-        if(totalPaidBox) totalPaidBox.value = currentTotalPaid.toFixed(2);
-        if(dueBox) dueBox.value = due.toFixed(2);
+        // বর্তমান মোট পেইড = আগের সব ইনভয়েসের যোগফল + এই নতুন ইনভয়েসের টাকা
+        let currentTotalPaid = previousPaidAmount + newPaid;
+
+        // বর্তমান আসল ডিউ (বকেয়া)
+        let currentDue = netPayable - currentTotalPaid;
+
+        if (totalGrossBox) totalGrossBox.value = totalGross.toFixed(2);
+        if (netPayableBox) netPayableBox.value = netPayable.toFixed(2);
+        if (prevPaidBox) prevPaidBox.value = previousPaidAmount.toFixed(2);
+        if (currentDueBox) currentDueBox.value = currentDue.toFixed(2);
     }
-
-    document.getElementById('paymentForm').addEventListener('reset', function() {
-        setTimeout(() => {
-            if(searchInput) searchInput.value = '';
-            if(customDropdown) customDropdown.classList.add('d-none');
-            calculateMath();
-        }, 10);
-    });
 });
 </script>
+
+<style>
+#custom_dropdown_list::-webkit-scrollbar {
+    width: 6px;
+}
+#custom_dropdown_list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+#custom_dropdown_list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+#custom_dropdown_list::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
+}
+
+div#custom_dropdown_list {
+    padding: 12px;
+}
+.dropdown-item:hover {
+    background-color: #f8f9fa !important;
+    color: #0d6efd !important;
+}
+</style>
 {% endblock %}

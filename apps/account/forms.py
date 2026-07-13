@@ -30,3 +30,36 @@ class AccountCreationForm(UserCreationForm):
                 new_class = f"{existing_classes} form-control".strip()
 
             field.widget.attrs['class'] = new_class
+
+
+
+
+from django.core.exceptions import ValidationError
+
+class OTPRegistrationForm(forms.Form):
+    full_name = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'আপনার পূর্ণ নাম'})
+    )
+    phone_number = forms.CharField(
+        max_length=15,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '০১XXXXXXXXX'})
+    )
+    # 🟢 নতুন পাসওয়ার্ড ফিল্ড
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'পাসওয়ার্ড দিন'})
+    )
+    # 🟢 নতুন কনফার্ম পাসওয়ার্ড ফিল্ড
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'আবার পাসওয়ার্ড দিন'})
+    )
+
+    # দুটি পাসওয়ার্ড টাইপ করার সময় মিলল কিনা তা চেক করার ব্যাক-এন্ড ভ্যালিডেশন
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password and confirm_password and password != confirm_password:
+            raise ValidationError({"confirm_password": "পাসওয়ার্ড দুটি ম্যাচ করেনি!"})
+        return cleaned_data
