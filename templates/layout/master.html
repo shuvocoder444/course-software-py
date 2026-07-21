@@ -12,9 +12,11 @@
     <meta name="keywords" content="{% get_theme_variables 'template_keyword' %}" />
     <!-- Canonical SEO -->
     <link rel="canonical" href="{% get_theme_variables 'product_page' %}">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'cus/icon.png' %}" />
-    <!-- Tabler Icons CDN -->
+{% if global_settings.favicon %}
+    <link rel="icon" type="image/x-icon" href="{{ global_settings.favicon.url }}" />
+{% else %}
+   n/a <link rel="icon" type="image/x-icon" href="{{ settings.MEDIA_URL }}site_settings/logo_fav/favicon_default.png" />
+{% endif %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <!-- Include the styles partial -->
     {% include is_front|yesno:"./partials/styles_front.html,./partials/styles.html" %}

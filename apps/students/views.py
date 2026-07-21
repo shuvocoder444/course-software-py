@@ -217,6 +217,8 @@ class StudentApproveView(LoginRequiredMixin, AdminRoleRequiredMixin, View):
 
 #         messages.success(self.request, f"Student {student.name} created successfully! ID: {student.student_id}. User account created with Phone Number.")
 #         return redirect(self.success_url)
+
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -320,8 +322,43 @@ class StudentEditView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLa
     success_url = reverse_lazy('student_list')
 
     def form_valid(self, form):
-        messages.success(self.request, "Student profile updated successfully!")
-        return super().form_valid(form)
+        student = form.save(commit=False)
+
+        # ১. ডাটাবেজ থেকে আগের student_id রিকভার করা (যাতে আইডি নষ্ট না হয়)
+        original_student = Student.objects.get(pk=self.object.pk)
+        student.student_id = original_student.student_id
+
+        student_phone = form.cleaned_data.get('phone')
+        student_name = form.cleaned_data.get('name')
+        student_email = form.cleaned_data.get('email')
+
+        # ২. ইউজার অ্যাকাউন্টের ইউজারনেম ইউনিকনেস এবং আপডেট চেক
+        if student.account:
+            user_account = student.account
+
+            if student_phone:
+                # 🛑 চেক করুন: এই ফোন নাম্বারটি অন্য কোনো ইউজারের আছে কিনা (নিজের আইডি বাদ দিয়ে)
+                duplicate_user = User.objects.filter(username=student_phone).exclude(pk=user_account.pk).exists()
+
+                if duplicate_user:
+                    form.add_error('phone', "এই মোবাইল নাম্বারটি অলরেডি অন্য একটি ইউজার অ্যাকাউন্টে ব্যবহৃত হচ্ছে!")
+                    return self.form_invalid(form)
+
+                # যদি ইউনিক হয়, তবেই ইউজারনেম আপডেট হবে
+                user_account.username = student_phone
+
+            if student_name:
+                user_account.first_name = student_name
+            if student_email:
+                user_account.email = student_email if student_email else ''
+
+            user_account.save()
+
+        # ৩. ফাইনাল সেভ
+        student.save()
+
+        messages.success(self.request, f"স্টুডেন্ট {student.name}-এর প্রোফাইল সফলভাবে আপডেট করা হয়েছে!")
+        return redirect(self.success_url)
 
 
 # ==============================================================================

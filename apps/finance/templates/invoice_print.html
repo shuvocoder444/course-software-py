@@ -63,7 +63,7 @@
             width: 100%;
             height: auto;
             display: block;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
 
         /* Content Wrapper with 20px padding */
@@ -78,8 +78,8 @@
         }
 
         .info-table th, .info-table td {
-            font-size: 14px;
-            padding: 8px 12px !important;
+            font-size: 12px;
+            padding: 5px 12px !important;
             border: 1px solid #000000 !important;
         }
 
@@ -96,7 +96,7 @@
         .receipt-table th {
             color: #000000 !important;
             text-align: center;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             padding: 10px !important;
             border: 1px solid #212529 !important;
@@ -104,15 +104,16 @@
 
         .receipt-table td {
             text-align: center;
-            font-size: 15px;
+            font-size: 13x;
             font-weight: 600;
-            padding: 10px !important;
+            padding: 5px !important;
             border: 1px solid #000000 !important;
         }
 
         /* Authority Signature Block */
         .signature-wrapper {
             margin-top: 70px;
+            margin-bottom: 30px;
             display: flex;
             justify-content: flex-end;
             padding-right: 20px;
@@ -129,7 +130,7 @@
 
         /* Footer Alignment */
         .footer-copy {
-            position: absolute;
+            padding-top:10px;
             bottom: 15mm;
             left: 20px;
             right: 20px;
@@ -156,6 +157,11 @@
                 height: 100%;
             }
         }
+
+
+        .h5, h5 {
+    font-size: 18px;
+}
     </style>
 </head>
 <body>
@@ -181,25 +187,25 @@
             <tbody>
                 <tr>
                     <td class="info-label">Program Name:</td>
-                    <td style="width: 28%;">{{ invoice.student.course.name|default:"Office applications" }}</td>
+                    <td style="width: 28%;">{{ invoice.student.course.name|default:"N/A" }}</td>
                     <td class="info-label">Mobile No (Std):</td>
-                    <td style="width: 28%;">{{ invoice.student.mobile|default:"01770785946" }}</td>
+                    <td style="width: 28%;">{{ invoice.student.phone|default:"N/A" }}</td>
                 </tr>
                 <tr>
                     <td class="info-label">Student ID:</td>
-                    <td>{{ invoice.student.student_id|default:"779" }}</td>
+                    <td>{{ invoice.student.student_id|default:"N/A" }}</td>
                     <td class="info-label">Mobile No (Grd):</td>
                     <td>{{ invoice.student.father_phone|default:"N/A" }}</td>
                 </tr>
                 <tr>
                     <td class="info-label">Student Name:</td>
-                    <td>{{ invoice.student.name|default:"Ariana Boyd" }}</td>
+                    <td>{{ invoice.student.name|default:"N/A" }}</td>
                     <td class="info-label">Reference:</td>
                     <td>{{ invoice.reference|default:"N/A" }}</td>
                 </tr>
                 <tr>
                     <td class="info-label">Fathers Name:</td>
-                    <td>{{ invoice.student.father_name|default:"Genevieve Bullock" }}</td>
+                    <td>{{ invoice.student.father_name|default:"N/A" }}</td>
                     <td class="info-label">Institute Name:</td>
                     <td>{{ invoice.student.education_institute_name|default:"N/A" }}</td>
                 </tr>
@@ -219,10 +225,10 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="text-dark">৳ {{ invoice.student.course.default_fee|default:"2000.00" }}</td>
-                    <td class="text-success">৳ {{ invoice.paid_amount|default:"200.00" }}</td>
-                    <td class="text-danger">৳ {{ invoice.due_amount|default:"1650.00" }}</td>
-                    <td>{{ invoice.date|date:"d-M-Y"|default:"11-Jul-2026" }}</td>
+                    <td class="text-dark">৳ {{ invoice.student.course.default_fee|default:"N/A" }}</td>
+                    <td class="text-success">৳ {{ invoice.paid_amount|default:"N/A" }}</td>
+                    <td class="text-danger">৳ {{ invoice.due_amount|default:"N/A" }}</td>
+                    <td>{{ invoice.date|date:"d-M-Y"|default:"N/A" }}</td>
                 </tr>
             </tbody>
         </table>
@@ -234,7 +240,7 @@
         </div>
 
         <div class="footer-copy">
-            This is software generated copy. Design Developed by JBD IT
+            This is software generated. Design Developed by JBD IT
         </div>
 
     </div>

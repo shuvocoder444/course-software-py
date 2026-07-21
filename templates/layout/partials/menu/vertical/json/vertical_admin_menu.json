@@ -49,6 +49,13 @@
           "slug": "batch_list"
         },
         {
+          "url": "admin_enrollment_dashboard",
+          "icon": "menu-icon tf-icons ti ti-users-group",
+          "name": "Approve Enrollment",
+          "slug": "admin_enrollment_dashboard"
+        },
+
+        {
           "url": "certificate",
           "icon": "menu-icon tf-icons ti ti-award",
           "name": "Student Certificate",
@@ -138,10 +145,10 @@
       "slug": "settings",
       "submenu": [
         {
-          "url": "ins",
+          "url": "update_site_settings",
           "icon": "menu-icon tf-icons ti ti-info-circle",
           "name": "Institute Info",
-          "slug": "institute"
+          "slug": "update_site_settings"
         },
         {
           "url": "institute_settings",
@@ -157,10 +164,10 @@
       "slug": "website",
       "submenu": [
         {
-          "url": "slider",
+          "url": "slider_list",
           "icon": "menu-icon tf-icons ti ti-slideshow",
           "name": "Web Slider",
-          "slug": "slider"
+          "slug": "slider_list"
         },
         {
           "url": "header",
@@ -169,10 +176,10 @@
           "slug": "header"
         },
         {
-          "url": "about",
+          "url": "about_manage",
           "icon": "menu-icon tf-icons ti ti-info-circle",
           "name": "About US",
-          "slug": "about"
+          "slug": "about_manage"
         },
         {
           "url": "photo",
@@ -193,13 +200,27 @@
           "slug": "tutorial"
         },
         {
-          "url": "students",
-          "icon": "menu-icon tf-icons ti ti-users",
-          "name": "Our Students",
-          "slug": "students"
+          "icon": "menu-icon tf-icons ti ti-playlist",
+          "name": "Blog Manage",
+          "slug": "blog_list_manage",
+          "submenu": [
+            {
+              "url": "blog_list_manage",
+              "icon": "menu-icon tf-icons ti ti-article",
+              "name": "All Post",
+              "slug": "blog_list_manage"
+            },
+            {
+              "url": "category_manage",
+              "icon": "menu-icon tf-icons ti ti-category",
+              "name": "Post Category",
+              "slug": "category_manage"
+            }
+          ]
         }
       ]
     },
+
     {
       "name": "User Management",
       "icon": "menu-icon tf-icons ti ti-shield-lock",

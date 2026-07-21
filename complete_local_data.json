@@ -1,0 +1,2142 @@
+[
+{
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+        "action_time": "2026-07-09T06:00:16.050Z",
+        "user": 16,
+        "content_type": 7,
+        "object_id": "14",
+        "object_repr": "Md Najerul islam",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Student id\"]}}]"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+        "name": "Can add log entry",
+        "content_type": 1,
+        "codename": "add_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+        "name": "Can change log entry",
+        "content_type": 1,
+        "codename": "change_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+        "name": "Can delete log entry",
+        "content_type": 1,
+        "codename": "delete_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+        "name": "Can view log entry",
+        "content_type": 1,
+        "codename": "view_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+        "name": "Can add permission",
+        "content_type": 2,
+        "codename": "add_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+        "name": "Can change permission",
+        "content_type": 2,
+        "codename": "change_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+        "name": "Can delete permission",
+        "content_type": 2,
+        "codename": "delete_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+        "name": "Can view permission",
+        "content_type": 2,
+        "codename": "view_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+        "name": "Can add group",
+        "content_type": 3,
+        "codename": "add_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+        "name": "Can change group",
+        "content_type": 3,
+        "codename": "change_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+        "name": "Can delete group",
+        "content_type": 3,
+        "codename": "delete_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+        "name": "Can view group",
+        "content_type": 3,
+        "codename": "view_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+        "name": "Can add content type",
+        "content_type": 4,
+        "codename": "add_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+        "name": "Can change content type",
+        "content_type": 4,
+        "codename": "change_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+        "name": "Can delete content type",
+        "content_type": 4,
+        "codename": "delete_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+        "name": "Can view content type",
+        "content_type": 4,
+        "codename": "view_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+        "name": "Can add session",
+        "content_type": 5,
+        "codename": "add_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+        "name": "Can change session",
+        "content_type": 5,
+        "codename": "change_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+        "name": "Can delete session",
+        "content_type": 5,
+        "codename": "delete_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+        "name": "Can view session",
+        "content_type": 5,
+        "codename": "view_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+        "name": "Can add user",
+        "content_type": 6,
+        "codename": "add_account"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+        "name": "Can change user",
+        "content_type": 6,
+        "codename": "change_account"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+        "name": "Can delete user",
+        "content_type": 6,
+        "codename": "delete_account"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+        "name": "Can view user",
+        "content_type": 6,
+        "codename": "view_account"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+        "name": "Can add student",
+        "content_type": 7,
+        "codename": "add_student"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+        "name": "Can change student",
+        "content_type": 7,
+        "codename": "change_student"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+        "name": "Can delete student",
+        "content_type": 7,
+        "codename": "delete_student"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+        "name": "Can view student",
+        "content_type": 7,
+        "codename": "view_student"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+        "name": "Can add batch",
+        "content_type": 8,
+        "codename": "add_batch"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+        "name": "Can change batch",
+        "content_type": 8,
+        "codename": "change_batch"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+        "name": "Can delete batch",
+        "content_type": 8,
+        "codename": "delete_batch"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+        "name": "Can view batch",
+        "content_type": 8,
+        "codename": "view_batch"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+        "name": "Can add course",
+        "content_type": 9,
+        "codename": "add_course"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+        "name": "Can change course",
+        "content_type": 9,
+        "codename": "change_course"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+        "name": "Can delete course",
+        "content_type": 9,
+        "codename": "delete_course"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+        "name": "Can view course",
+        "content_type": 9,
+        "codename": "view_course"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+        "name": "Can add invoice",
+        "content_type": 10,
+        "codename": "add_invoice"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+        "name": "Can change invoice",
+        "content_type": 10,
+        "codename": "change_invoice"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+        "name": "Can delete invoice",
+        "content_type": 10,
+        "codename": "delete_invoice"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 40,
+    "fields": {
+        "name": "Can view invoice",
+        "content_type": 10,
+        "codename": "view_invoice"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 41,
+    "fields": {
+        "name": "Can add student ledger",
+        "content_type": 11,
+        "codename": "add_studentledger"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 42,
+    "fields": {
+        "name": "Can change student ledger",
+        "content_type": 11,
+        "codename": "change_studentledger"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 43,
+    "fields": {
+        "name": "Can delete student ledger",
+        "content_type": 11,
+        "codename": "delete_studentledger"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 44,
+    "fields": {
+        "name": "Can view student ledger",
+        "content_type": 11,
+        "codename": "view_studentledger"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 45,
+    "fields": {
+        "name": "Can add company deposit",
+        "content_type": 12,
+        "codename": "add_companydeposit"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 46,
+    "fields": {
+        "name": "Can change company deposit",
+        "content_type": 12,
+        "codename": "change_companydeposit"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 47,
+    "fields": {
+        "name": "Can delete company deposit",
+        "content_type": 12,
+        "codename": "delete_companydeposit"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 48,
+    "fields": {
+        "name": "Can view company deposit",
+        "content_type": 12,
+        "codename": "view_companydeposit"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 49,
+    "fields": {
+        "name": "Can add expense category",
+        "content_type": 13,
+        "codename": "add_expensecategory"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 50,
+    "fields": {
+        "name": "Can change expense category",
+        "content_type": 13,
+        "codename": "change_expensecategory"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 51,
+    "fields": {
+        "name": "Can delete expense category",
+        "content_type": 13,
+        "codename": "delete_expensecategory"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 52,
+    "fields": {
+        "name": "Can view expense category",
+        "content_type": 13,
+        "codename": "view_expensecategory"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 53,
+    "fields": {
+        "name": "Can add expense",
+        "content_type": 14,
+        "codename": "add_expense"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 54,
+    "fields": {
+        "name": "Can change expense",
+        "content_type": 14,
+        "codename": "change_expense"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 55,
+    "fields": {
+        "name": "Can delete expense",
+        "content_type": 14,
+        "codename": "delete_expense"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 56,
+    "fields": {
+        "name": "Can view expense",
+        "content_type": 14,
+        "codename": "view_expense"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 57,
+    "fields": {
+        "name": "Can add institute setting",
+        "content_type": 15,
+        "codename": "add_institutesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 58,
+    "fields": {
+        "name": "Can change institute setting",
+        "content_type": 15,
+        "codename": "change_institutesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 59,
+    "fields": {
+        "name": "Can delete institute setting",
+        "content_type": 15,
+        "codename": "delete_institutesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 60,
+    "fields": {
+        "name": "Can view institute setting",
+        "content_type": 15,
+        "codename": "view_institutesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 61,
+    "fields": {
+        "name": "Can add attendence setting",
+        "content_type": 15,
+        "codename": "add_attendencesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 62,
+    "fields": {
+        "name": "Can change attendence setting",
+        "content_type": 15,
+        "codename": "change_attendencesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 63,
+    "fields": {
+        "name": "Can delete attendence setting",
+        "content_type": 15,
+        "codename": "delete_attendencesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 64,
+    "fields": {
+        "name": "Can view attendence setting",
+        "content_type": 15,
+        "codename": "view_attendencesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 65,
+    "fields": {
+        "name": "Can add visitor category",
+        "content_type": 16,
+        "codename": "add_visitorcategory"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 66,
+    "fields": {
+        "name": "Can change visitor category",
+        "content_type": 16,
+        "codename": "change_visitorcategory"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 67,
+    "fields": {
+        "name": "Can delete visitor category",
+        "content_type": 16,
+        "codename": "delete_visitorcategory"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 68,
+    "fields": {
+        "name": "Can view visitor category",
+        "content_type": 16,
+        "codename": "view_visitorcategory"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 69,
+    "fields": {
+        "name": "Can add visitor",
+        "content_type": 17,
+        "codename": "add_visitor"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 70,
+    "fields": {
+        "name": "Can change visitor",
+        "content_type": 17,
+        "codename": "change_visitor"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 71,
+    "fields": {
+        "name": "Can delete visitor",
+        "content_type": 17,
+        "codename": "delete_visitor"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 72,
+    "fields": {
+        "name": "Can view visitor",
+        "content_type": 17,
+        "codename": "view_visitor"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 73,
+    "fields": {
+        "name": "Can add sms log",
+        "content_type": 18,
+        "codename": "add_smslog"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 74,
+    "fields": {
+        "name": "Can change sms log",
+        "content_type": 18,
+        "codename": "change_smslog"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 75,
+    "fields": {
+        "name": "Can delete sms log",
+        "content_type": 18,
+        "codename": "delete_smslog"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 76,
+    "fields": {
+        "name": "Can view sms log",
+        "content_type": 18,
+        "codename": "view_smslog"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 77,
+    "fields": {
+        "name": "Can add SMS ভেরিফিকেশন",
+        "content_type": 19,
+        "codename": "add_smsverification"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 78,
+    "fields": {
+        "name": "Can change SMS ভেরিফিকেশন",
+        "content_type": 19,
+        "codename": "change_smsverification"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 79,
+    "fields": {
+        "name": "Can delete SMS ভেরিফিকেশন",
+        "content_type": 19,
+        "codename": "delete_smsverification"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 80,
+    "fields": {
+        "name": "Can view SMS ভেরিফিকেশন",
+        "content_type": 19,
+        "codename": "view_smsverification"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 81,
+    "fields": {
+        "name": "Can add Site Setting",
+        "content_type": 20,
+        "codename": "add_sitesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 82,
+    "fields": {
+        "name": "Can change Site Setting",
+        "content_type": 20,
+        "codename": "change_sitesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 83,
+    "fields": {
+        "name": "Can delete Site Setting",
+        "content_type": 20,
+        "codename": "delete_sitesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 84,
+    "fields": {
+        "name": "Can view Site Setting",
+        "content_type": 20,
+        "codename": "view_sitesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 85,
+    "fields": {
+        "name": "Can add Slider",
+        "content_type": 21,
+        "codename": "add_slider"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 86,
+    "fields": {
+        "name": "Can change Slider",
+        "content_type": 21,
+        "codename": "change_slider"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 87,
+    "fields": {
+        "name": "Can delete Slider",
+        "content_type": 21,
+        "codename": "delete_slider"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 88,
+    "fields": {
+        "name": "Can view Slider",
+        "content_type": 21,
+        "codename": "view_slider"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 89,
+    "fields": {
+        "name": "Can add About Content",
+        "content_type": 22,
+        "codename": "add_aboutcontent"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 90,
+    "fields": {
+        "name": "Can change About Content",
+        "content_type": 22,
+        "codename": "change_aboutcontent"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 91,
+    "fields": {
+        "name": "Can delete About Content",
+        "content_type": 22,
+        "codename": "delete_aboutcontent"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 92,
+    "fields": {
+        "name": "Can view About Content",
+        "content_type": 22,
+        "codename": "view_aboutcontent"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 93,
+    "fields": {
+        "name": "Can add institute setting",
+        "content_type": 23,
+        "codename": "add_institutesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 94,
+    "fields": {
+        "name": "Can change institute setting",
+        "content_type": 23,
+        "codename": "change_institutesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 95,
+    "fields": {
+        "name": "Can delete institute setting",
+        "content_type": 23,
+        "codename": "delete_institutesetting"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 96,
+    "fields": {
+        "name": "Can view institute setting",
+        "content_type": 23,
+        "codename": "view_institutesetting"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+        "app_label": "admin",
+        "model": "logentry"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+        "app_label": "auth",
+        "model": "permission"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+        "app_label": "auth",
+        "model": "group"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+        "app_label": "contenttypes",
+        "model": "contenttype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+        "app_label": "sessions",
+        "model": "session"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+        "app_label": "account",
+        "model": "account"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+        "app_label": "students",
+        "model": "student"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+        "app_label": "courses",
+        "model": "batch"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+        "app_label": "courses",
+        "model": "course"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {
+        "app_label": "finance",
+        "model": "invoice"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {
+        "app_label": "finance",
+        "model": "studentledger"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 12,
+    "fields": {
+        "app_label": "finance",
+        "model": "companydeposit"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 13,
+    "fields": {
+        "app_label": "finance",
+        "model": "expensecategory"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 14,
+    "fields": {
+        "app_label": "finance",
+        "model": "expense"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 15,
+    "fields": {
+        "app_label": "setting",
+        "model": "attendencesetting"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 16,
+    "fields": {
+        "app_label": "marketing",
+        "model": "visitorcategory"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 17,
+    "fields": {
+        "app_label": "marketing",
+        "model": "visitor"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 18,
+    "fields": {
+        "app_label": "setting",
+        "model": "smslog"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 19,
+    "fields": {
+        "app_label": "account",
+        "model": "smsverification"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 20,
+    "fields": {
+        "app_label": "setting",
+        "model": "sitesetting"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 21,
+    "fields": {
+        "app_label": "front_pages",
+        "model": "slider"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 22,
+    "fields": {
+        "app_label": "front_pages",
+        "model": "aboutcontent"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 23,
+    "fields": {
+        "app_label": "setting",
+        "model": "institutesetting"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "2fc0v8ys910c84wpc3uzl4jqbo63z35i",
+    "fields": {
+        "session_data": ".eJxVjEEOwiAQRe_C2hCmBaa4dN8zkCkMUjWQlHZlvLtt0oVu33v_v4Wnbc1-a7z4OYqrQHH5ZROFJ5dDxAeVe5WhlnWZJ3kk8rRNjjXy63a2fweZWt7XA6igXdA2Jusik-7YIhjUyYbEDo1hxf1OGRSActCphL3RxDgY2zvx-QLXvzb6:1we3vu:6CoBY__vYyKi5paRQ1BZay1Jg2hJH7kYLwrSY-yYBus",
+        "expire_date": "2026-07-13T04:49:22.948Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "3i2x2wma5upptuiu6fwatvmgo9l819a9",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1wjB2q:ESksWQRyjbXMtO87MIwnmfVPFao5uNzW3VUTqCJEZv0",
+        "expire_date": "2026-07-27T07:25:40.208Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "4grqh22v7s8ionl3ezf10hrjbdxwbqv5",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1wfBcm:Y7khH9UFRmEfWkzCSuOboY9Jlt90RQ7158HNx3g512s",
+        "expire_date": "2026-07-16T07:14:16.796Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "67rhgelnkpwgxqggta0b0nw7vkx2z0tx",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1weX7Z:D0c1PZ7PoS417Vm1dAwyjw-lXWn5DvhS76CDSyzuy3k",
+        "expire_date": "2026-07-14T11:59:21.774Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "6868inwkyq4dueznf4iaio7siuumr1xl",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1wl28N:UfohVTNwdd3qXkGr1NspY_PC84BxEm4w2EkMgX17APw",
+        "expire_date": "2026-08-01T10:19:03.890Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "6t1v3hoiscdbe57fbpwg9ctd7ft4bym4",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1wfumk:S8elOf8cUSfx0mtEmXgxwA7FXFONnJYgOAqCHW07ZcA",
+        "expire_date": "2026-07-18T07:27:34.433Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "8l92vxcktc0ybf3gdbfn85ftlhb2tzui",
+    "fields": {
+        "session_data": ".eJxVjEEOwiAQRe_C2hCmBaa4dN8zkCkMUjWQlHZlvLtt0oVu33v_v4Wnbc1-a7z4OYqrQHH5ZROFJ5dDxAeVe5WhlnWZJ3kk8rRNjjXy63a2fweZWt7XA6igXdA2Jusik-7YIhjUyYbEDo1hxf1OGRSActCphL3RxDgY2zvx-QLXvzb6:1wdNJx:7Ly8NMGGlItjpSwC6qtTEaDHtuSAZMXcdJXvqY7WgkM",
+        "expire_date": "2026-07-11T07:19:21.234Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "8ruf1xo2rwu67jwl6h188xjeu54vt2hl",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1wdO8W:5I3higD_zjZhvBdOeFalAL6Hq-xmxOGt1vs-Vu0mWUM",
+        "expire_date": "2026-07-11T08:11:36.329Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "amzt68it2h0g0q4eb1l7cnekxsf68qnh",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1we3vI:8V699jQpQYm4P1_ZA70nXUXxlboGOHKEfrIkKN5_OjM",
+        "expire_date": "2026-07-13T04:48:44.092Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "cp6gknwu6k3iedtp8lg8aq71nmq0q6ui",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1whMLm:t90BLJpss3TVNr3BvQHD4JqQAGw82qGAeBQ4oTgJ74Q",
+        "expire_date": "2026-07-22T07:05:42.507Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "d08bnxgr5plf267aqvkariqdi7j9qa4j",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1wdMIt:_4BcDkzLH8j6wb1NQXd54OBftkR6DLz2lJ-XTe80vlo",
+        "expire_date": "2026-07-11T06:14:11.549Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "ht6hpwiebuscl21wvis5f90mwl1zbe28",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1wipmo:M7eoFFnO8VdlhQNs40z8flAcLQAjsBA-ZNRpedpDdbQ",
+        "expire_date": "2026-07-26T08:43:42.204Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "i9csou1d7zp2b2xweq841muf7fvengw8",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1whMOD:CQJ5E3CP02xm_boN7-g2ERpqNNGiWIorbzWHIuG3A9k",
+        "expire_date": "2026-07-22T07:08:13.501Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "ijdkmrt0x01db8ztk1y6mjs5wh411e1x",
+    "fields": {
+        "session_data": "e30:1wcb4F:ZbBD7c0yLbhZ0ISSBDfWCT6rDPDFrf6cZA2xQdMg5DA",
+        "expire_date": "2026-07-09T03:47:55.776Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "krjl3dl0vdl97my3c9qxsu5xn4b9hiup",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1whMNM:gukBLcyl0MBjY0FXZdSRHyAa9cXPkXV9bjLsN3ERi3Q",
+        "expire_date": "2026-07-22T07:07:20.637Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "l3t7g8btmkaxu1d9rzo2lngdheyys2aj",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1weqIe:AXUKyTHZhj7ZhUQFLd4nJf4GXqfYN85Y3ygUWJvOKgA",
+        "expire_date": "2026-07-15T08:28:04.147Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "la1r4r1n5jhf3sx77fmsvg5bcfqjeidm",
+    "fields": {
+        "session_data": ".eJxVjEEOwiAQRe_C2hCmBaa4dN8zkCkMUjWQlHZlvLtt0oVu33v_v4Wnbc1-a7z4OYqrQHH5ZROFJ5dDxAeVe5WhlnWZJ3kk8rRNjjXy63a2fweZWt7XA6igXdA2Jusik-7YIhjUyYbEDo1hxf1OGRSActCphL3RxDgY2zvx-QLXvzb6:1we4tt:pFqjlu969PKq0Ab5NPNaVvYk7MWGrMwZr6BInoFz_Bc",
+        "expire_date": "2026-07-13T05:51:21.969Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "lo6beep1eg6ginaimpeftdtsn1zunr9f",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1whOz6:z8PxBQGKd-GbN0gNXxOOfU-58D-471AYXMmKpoh1Ku0",
+        "expire_date": "2026-07-22T09:54:28.989Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "mb1sym0ho2vy3eow7uhllvsd3e8y9d16",
+    "fields": {
+        "session_data": ".eJxVjEEOwiAQRe_C2hCmBaa4dN8zkCkMUjWQlHZlvLtt0oVu33v_v4Wnbc1-a7z4OYqrQHH5ZROFJ5dDxAeVe5WhlnWZJ3kk8rRNjjXy63a2fweZWt7XA6igXdA2Jusik-7YIhjUyYbEDo1hxf1OGRSActCphL3RxDgY2zvx-QLXvzb6:1wdOG6:MyFb_cMrl7MTKlJjtwO7ExF-RewAp2vOqF2-jSW9dVw",
+        "expire_date": "2026-07-11T08:19:26.255Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "rsyw6nct1bancjtvnlfn7oanxgecf0lj",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1whPko:l9FUg3abaIhXSDjESGLu39WF1L8B5JWNV44LiqESPP0",
+        "expire_date": "2026-07-22T10:43:46.226Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "t4q92r8urdbupup1q2dhpu2ehdb3a4d5",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1wiqwQ:3yTTKOn7ADAhhJyzevVC7yvZBRpWfsXwwwoTZDlI0l8",
+        "expire_date": "2026-07-26T09:57:42.207Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "wl03xy6rikzjv142g6pzg3vxnctjbm85",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1whOHr:RLaeFzihwiqeVyOlVjRDxKGHjhitQpCMxrNE3gji710",
+        "expire_date": "2026-07-22T09:09:47.655Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "y4v3l3oatf80m9fi9jvt8tbf189smtw9",
+    "fields": {
+        "session_data": ".eJxVjMsOwiAQRf-FtSGlPAZcuvcbCJ0ZpGogKe3K-O_apAvd3nPOfYmYtrXErfMSZxJnMYrT7zYlfHDdAd1TvTWJra7LPMldkQft8tqIn5fD_TsoqZdvbQkMqeAyac2UPGhtVfBsggomh4EJFUL2FjIaM4zOOI_IABPYjInE-wPZmTf8:1weRPs:yH4TaiXzYzA61h_aEaxD5n22T32_zCuEWKE7cK0my5A",
+        "expire_date": "2026-07-14T05:53:52.773Z"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": 2,
+    "fields": {
+        "name": "Office Application (Basic)",
+        "code": "101",
+        "default_fee": "3500.00",
+        "description": "* 3 month * 35 Class",
+        "created_at": "2026-07-01T10:05:40.741Z"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": 3,
+    "fields": {
+        "name": "Office Application (Advance)",
+        "code": "102",
+        "default_fee": "6000.00",
+        "description": "* 6 Month * 70 Class",
+        "created_at": "2026-07-01T10:58:35.651Z"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": 4,
+    "fields": {
+        "name": "Graphics Design With AI",
+        "code": "103",
+        "default_fee": "4000.00",
+        "description": "* 2 Month * 25 Class",
+        "created_at": "2026-07-01T11:00:18.715Z"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": 5,
+    "fields": {
+        "name": "Professional Graphics Design",
+        "code": "104",
+        "default_fee": "9000.00",
+        "description": "* 4 month * 50 Class",
+        "created_at": "2026-07-01T11:03:56.234Z"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": 6,
+    "fields": {
+        "name": "Digital Marketing",
+        "code": "105",
+        "default_fee": "5000.00",
+        "description": "Adobe Express, Canva Design, SMM Marketing, AI Animation Cartoon, Mobile Video Editing\r\n* 3 Month * 35 Class",
+        "created_at": "2026-07-02T10:26:45.725Z"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": 8,
+    "fields": {
+        "name": "Advance Digital Marketing",
+        "code": "106",
+        "default_fee": "10000.00",
+        "description": "* 5 Month * 60 Class",
+        "created_at": "2026-07-02T10:34:47.489Z"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": 9,
+    "fields": {
+        "name": "Video Editing",
+        "code": "107",
+        "default_fee": "6000.00",
+        "description": "* 2 Month * 25 Class",
+        "created_at": "2026-07-02T10:36:14.426Z"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": 10,
+    "fields": {
+        "name": "Premium Video Editing",
+        "code": "108",
+        "default_fee": "12000.00",
+        "description": "* 4 Month * 50 Class",
+        "created_at": "2026-07-02T10:38:05.599Z"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": 11,
+    "fields": {
+        "name": "Wordpress Devdevelopment",
+        "code": "109",
+        "default_fee": "12000.00",
+        "description": "* 4 Month * 50 Class",
+        "created_at": "2026-07-02T10:39:42.935Z"
+    }
+},
+{
+    "model": "courses.batch",
+    "pk": 4,
+    "fields": {
+        "course": 11,
+        "batch_number": "2026-WD",
+        "start_date": "2026-01-01",
+        "is_active": true
+    }
+},
+{
+    "model": "courses.batch",
+    "pk": 5,
+    "fields": {
+        "course": 3,
+        "batch_number": "July-Dec-2026",
+        "start_date": "2026-07-01",
+        "is_active": true
+    }
+},
+{
+    "model": "courses.batch",
+    "pk": 6,
+    "fields": {
+        "course": 3,
+        "batch_number": "Jan-Jun-2026",
+        "start_date": "2026-01-01",
+        "is_active": true
+    }
+},
+{
+    "model": "account.account",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$720000$UzBw0y2xtX4bbsrho0m0S2$Oks2C233BFUAA5UIN2q2//5rynk97gVgLrC7VqFtx+s=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "shuvo",
+        "first_name": "",
+        "last_name": "",
+        "email": "admin@mail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-06-24T10:49:33.812Z",
+        "role": "ADMIN",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "account.account",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$720000$LaIbJuZtcUUgfWQ7hVUzDp$amNDgleFumEsiwnCDUrm3zB0qMULwckwLw73naVV8co=",
+        "last_login": "2026-07-18T10:19:03.867Z",
+        "is_superuser": false,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "admin@mail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-06-24T11:04:25.666Z",
+        "role": "ADMIN",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "account.account",
+    "pk": 13,
+    "fields": {
+        "password": "pbkdf2_sha256$720000$piyTZiNjqBBayOwAmX2zO6$ERAWd9IxeIPG3JSLdVgQ7/GZhYW2PNkYQeyfw1Ecj74=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "01719897575",
+        "first_name": "Ruponti Das",
+        "last_name": "",
+        "email": "test@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-07-08T10:59:33.102Z",
+        "role": "STUDENT",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "account.account",
+    "pk": 14,
+    "fields": {
+        "password": "pbkdf2_sha256$720000$NTuWuArkDp6lfMdUwsjwnN$TL635ZPqTaeEdLzPsMQibUkMGpzqRSUa6pAkzk+wptY=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "01715122864",
+        "first_name": "Md Najerul islam",
+        "last_name": "",
+        "email": "najirulislam2706@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-07-08T11:08:47.020Z",
+        "role": "STUDENT",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "account.account",
+    "pk": 15,
+    "fields": {
+        "password": "pbkdf2_sha256$720000$HPSgZ9FBZDuPxjthxFlHTd$QWSARPDUKZliZmgzYmC+d1iYtWj5aPMPYrq5gQdkgic=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "01790830250",
+        "first_name": "Kobir Ahammed",
+        "last_name": "",
+        "email": "boguzomim@mailinator.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-07-09T04:40:12.501Z",
+        "role": "STUDENT",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "account.account",
+    "pk": 16,
+    "fields": {
+        "password": "pbkdf2_sha256$720000$PTAqrlC8FtFy9k3XnUrZkV$R5ajfV8lkvs61qW7QAIsW+WplKfAYwElKuC5+fTRN+4=",
+        "last_login": "2026-07-09T06:01:29.313Z",
+        "is_superuser": true,
+        "username": "jbdit",
+        "first_name": "",
+        "last_name": "",
+        "email": "jbdit@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2026-07-09T05:49:31.421Z",
+        "role": "STUDENT",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "account.account",
+    "pk": 17,
+    "fields": {
+        "password": "pbkdf2_sha256$720000$4QkTSsE7oXnzS8wDiNHjZ4$Hi3G6hy+h71r6SqfpZ5t2YcKO2p4B9rfb2HpMePzIxg=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "01316274236",
+        "first_name": "Md Sohail Hosain",
+        "last_name": "",
+        "email": "mdsohailhossain2008@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-07-12T07:48:44.985Z",
+        "role": "STUDENT",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "account.account",
+    "pk": 18,
+    "fields": {
+        "password": "pbkdf2_sha256$720000$j2hcLvZU90ybokSlIZROLm$RfRFmn4jwEDZtsQRV8K2pwCUyG4NNWUF3NMO5DO2I4k=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "01766492053",
+        "first_name": "Moumita Ghosh",
+        "last_name": "",
+        "email": "moumitanatore01@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-07-12T08:49:56.725Z",
+        "role": "STUDENT",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "students.student",
+    "pk": 13,
+    "fields": {
+        "account": 13,
+        "course": 3,
+        "batch": 5,
+        "student_id": "780",
+        "name": "Ruponti Das",
+        "phone": "01719897575",
+        "email": "test@gmail.com",
+        "village_house_area": "Rajpara",
+        "thana_upazila": "Rajpara",
+        "district_city": "Rajshahi",
+        "post_code": null,
+        "date_of_birth": "2011-04-30",
+        "marital_status": "single",
+        "birth_certificate_no": "20118196605100459",
+        "national_id_no": null,
+        "religion": "hindu",
+        "blood_group": "B+",
+        "photo": "students/photos/ruponti.jpeg",
+        "father_name": "Chondon kumar Das",
+        "father_phone": "01799103146",
+        "father_occupation": "Business",
+        "mother_name": "Kushi Rani Das",
+        "guardian_name": null,
+        "guardian_phone": null,
+        "education_institute_name": "Rajshahi Govt. Girls High School",
+        "last_educational_qualification": "SSC",
+        "passing_year": 2026,
+        "examination": null,
+        "board_name": null,
+        "roll": 401047,
+        "registration_number": "2312604114",
+        "gender": "female",
+        "admission_date": "2026-07-06",
+        "student_signature": "",
+        "authority_signature": "",
+        "authority_comments": "",
+        "has_admission_form": true,
+        "has_passport_photo": true,
+        "has_nid_photocopy": false,
+        "has_birth_certificate": true,
+        "has_marksheet_photocopy": true,
+        "session": "2026-2027",
+        "submitted_at": "2026-07-08T10:59:33.946Z",
+        "status": "approved"
+    }
+},
+{
+    "model": "students.student",
+    "pk": 14,
+    "fields": {
+        "account": 14,
+        "course": 11,
+        "batch": 4,
+        "student_id": "781",
+        "name": "Md Najerul islam",
+        "phone": "01703388784",
+        "email": "najirulislam2706@gmail.com",
+        "village_house_area": "New Islampur",
+        "thana_upazila": "Chapainawabganj",
+        "district_city": "Chapainawabganj",
+        "post_code": null,
+        "date_of_birth": "2006-06-27",
+        "marital_status": "single",
+        "birth_certificate_no": null,
+        "national_id_no": "8696319295",
+        "religion": "islam",
+        "blood_group": "B+",
+        "photo": "students/photos/najerul.jpeg",
+        "father_name": "Md Mostofa Sweet",
+        "father_phone": "01715122864",
+        "father_occupation": "Business",
+        "mother_name": "Umme Kulsum",
+        "guardian_name": null,
+        "guardian_phone": "01715122864",
+        "education_institute_name": null,
+        "last_educational_qualification": null,
+        "passing_year": 2023,
+        "examination": null,
+        "board_name": null,
+        "roll": 118889,
+        "registration_number": "2012654361",
+        "gender": "male",
+        "admission_date": "2026-07-06",
+        "student_signature": "",
+        "authority_signature": "",
+        "authority_comments": "",
+        "has_admission_form": true,
+        "has_passport_photo": true,
+        "has_nid_photocopy": true,
+        "has_birth_certificate": false,
+        "has_marksheet_photocopy": true,
+        "session": "2026-2027",
+        "submitted_at": "2026-07-08T11:08:47.737Z",
+        "status": "approved"
+    }
+},
+{
+    "model": "students.student",
+    "pk": 16,
+    "fields": {
+        "account": 17,
+        "course": 11,
+        "batch": 4,
+        "student_id": "782",
+        "name": "Md Sohail Hosain",
+        "phone": "01316274236",
+        "email": "mdsohailhossain2008@gmail.com",
+        "village_house_area": "Bagachara",
+        "thana_upazila": "Mohadebpur",
+        "district_city": "Naogaon",
+        "post_code": null,
+        "date_of_birth": "2008-02-20",
+        "marital_status": "single",
+        "birth_certificate_no": "20086415015019208",
+        "national_id_no": null,
+        "religion": "islam",
+        "blood_group": "O+",
+        "photo": "",
+        "father_name": "Md Mosarrof Hoshain",
+        "father_phone": "01774070993",
+        "father_occupation": "Teacher",
+        "mother_name": "Mst Aysa",
+        "guardian_name": null,
+        "guardian_phone": null,
+        "education_institute_name": null,
+        "last_educational_qualification": null,
+        "passing_year": 2023,
+        "examination": null,
+        "board_name": null,
+        "roll": 126297,
+        "registration_number": "2012684934",
+        "gender": "male",
+        "admission_date": "2026-07-12",
+        "student_signature": "",
+        "authority_signature": "",
+        "authority_comments": "",
+        "has_admission_form": true,
+        "has_passport_photo": true,
+        "has_nid_photocopy": false,
+        "has_birth_certificate": true,
+        "has_marksheet_photocopy": true,
+        "session": "2026-2027",
+        "submitted_at": "2026-07-12T07:48:45.741Z",
+        "status": "approved"
+    }
+},
+{
+    "model": "students.student",
+    "pk": 17,
+    "fields": {
+        "account": 18,
+        "course": 3,
+        "batch": 5,
+        "student_id": "783",
+        "name": "Moumita Ghosh",
+        "phone": "01766492053",
+        "email": "moumitanatore01@gmail.com",
+        "village_house_area": "Khanaikhali",
+        "thana_upazila": "Natore",
+        "district_city": "Natore",
+        "post_code": "6400",
+        "date_of_birth": "1993-12-31",
+        "marital_status": "married",
+        "birth_certificate_no": null,
+        "national_id_no": null,
+        "religion": "hindu",
+        "blood_group": "O+",
+        "photo": "students/photos/DSC_0074.JPG",
+        "father_name": "Dhiraj Chandro Ghosh",
+        "father_phone": "01712274774",
+        "father_occupation": "Business",
+        "mother_name": "Swapna Rani Ghosh",
+        "guardian_name": null,
+        "guardian_phone": null,
+        "education_institute_name": null,
+        "last_educational_qualification": null,
+        "passing_year": null,
+        "examination": null,
+        "board_name": null,
+        "roll": null,
+        "registration_number": null,
+        "gender": "female",
+        "admission_date": "2026-07-12",
+        "student_signature": "",
+        "authority_signature": "",
+        "authority_comments": "",
+        "has_admission_form": true,
+        "has_passport_photo": true,
+        "has_nid_photocopy": false,
+        "has_birth_certificate": false,
+        "has_marksheet_photocopy": false,
+        "session": "2026-2027",
+        "submitted_at": "2026-07-12T08:49:57.490Z",
+        "status": "approved"
+    }
+},
+{
+    "model": "finance.invoice",
+    "pk": 1,
+    "fields": {
+        "student": 13,
+        "invoice_no": "INV-20260709-071836",
+        "date": "2026-07-09",
+        "course_fee": "6000.00",
+        "certificate_fee": "0.00",
+        "id_card_fee": "0.00",
+        "admit_card_fee": "0.00",
+        "other_fee": "0.00",
+        "total_gross": "6000.00",
+        "discount": "0.00",
+        "net_payable": "6000.00",
+        "paid_amount": "2500.00",
+        "due_amount": "3500.00",
+        "status": "Partially Paid",
+        "additional_notes": ""
+    }
+},
+{
+    "model": "finance.invoice",
+    "pk": 2,
+    "fields": {
+        "student": 14,
+        "invoice_no": "INV-20260709-114624",
+        "date": "2026-07-09",
+        "course_fee": "12000.00",
+        "certificate_fee": "0.00",
+        "id_card_fee": "0.00",
+        "admit_card_fee": "0.00",
+        "other_fee": "0.00",
+        "total_gross": "12000.00",
+        "discount": "0.00",
+        "net_payable": "12000.00",
+        "paid_amount": "5050.00",
+        "due_amount": "6950.00",
+        "status": "Partially Paid",
+        "additional_notes": "id card"
+    }
+},
+{
+    "model": "finance.invoice",
+    "pk": 4,
+    "fields": {
+        "student": 16,
+        "invoice_no": "INV-20260712-080722",
+        "date": "2026-07-06",
+        "course_fee": "12000.00",
+        "certificate_fee": "0.00",
+        "id_card_fee": "0.00",
+        "admit_card_fee": "0.00",
+        "other_fee": "0.00",
+        "total_gross": "12000.00",
+        "discount": "0.00",
+        "net_payable": "12000.00",
+        "paid_amount": "6050.00",
+        "due_amount": "5950.00",
+        "status": "Partially Paid",
+        "additional_notes": ""
+    }
+},
+{
+    "model": "finance.invoice",
+    "pk": 5,
+    "fields": {
+        "student": 17,
+        "invoice_no": "INV-20260712-085522",
+        "date": "2026-07-12",
+        "course_fee": "6000.00",
+        "certificate_fee": "100.00",
+        "id_card_fee": "100.00",
+        "admit_card_fee": "0.00",
+        "other_fee": "0.00",
+        "total_gross": "6200.00",
+        "discount": "500.00",
+        "net_payable": "5700.00",
+        "paid_amount": "2500.00",
+        "due_amount": "3200.00",
+        "status": "Partially Paid",
+        "additional_notes": ""
+    }
+},
+{
+    "model": "finance.invoice",
+    "pk": 6,
+    "fields": {
+        "student": 17,
+        "invoice_no": "INV-20260714-090043",
+        "date": "2026-07-14",
+        "course_fee": "6000.00",
+        "certificate_fee": "0.00",
+        "id_card_fee": "0.00",
+        "admit_card_fee": "0.00",
+        "other_fee": "0.00",
+        "total_gross": "6000.00",
+        "discount": "0.00",
+        "net_payable": "6000.00",
+        "paid_amount": "10.00",
+        "due_amount": "5990.00",
+        "status": "Partially Paid",
+        "additional_notes": ""
+    }
+},
+{
+    "model": "finance.invoice",
+    "pk": 7,
+    "fields": {
+        "student": 17,
+        "invoice_no": "INV-20260714-090819",
+        "date": "2026-07-14",
+        "course_fee": "6000.00",
+        "certificate_fee": "0.00",
+        "id_card_fee": "0.00",
+        "admit_card_fee": "0.00",
+        "other_fee": "0.00",
+        "total_gross": "6000.00",
+        "discount": "0.00",
+        "net_payable": "6000.00",
+        "paid_amount": "1.00",
+        "due_amount": "5999.00",
+        "status": "Partially Paid",
+        "additional_notes": ""
+    }
+},
+{
+    "model": "finance.studentledger",
+    "pk": 1,
+    "fields": {
+        "student": 13,
+        "date": "2026-07-09",
+        "description": "Fees Charged & Initial Payment Received (INV-20260709-071836)",
+        "invoice": 1,
+        "debit": "5500.00",
+        "credit": "2500.00",
+        "balance": "3000.00"
+    }
+},
+{
+    "model": "finance.studentledger",
+    "pk": 2,
+    "fields": {
+        "student": 14,
+        "date": "2026-07-09",
+        "description": "Fees Charged & Initial Payment Received (INV-20260709-114624)",
+        "invoice": 2,
+        "debit": "0.00",
+        "credit": "0.00",
+        "balance": "0.00"
+    }
+},
+{
+    "model": "finance.studentledger",
+    "pk": 3,
+    "fields": {
+        "student": 14,
+        "date": "2026-07-09",
+        "description": "Additional Payment Received (INV-20260709-114624)",
+        "invoice": 2,
+        "debit": "0.00",
+        "credit": "0.00",
+        "balance": "0.00"
+    }
+},
+{
+    "model": "finance.studentledger",
+    "pk": 4,
+    "fields": {
+        "student": 14,
+        "date": "2026-07-09",
+        "description": "Additional Payment Received (INV-20260709-114624)",
+        "invoice": 2,
+        "debit": "0.00",
+        "credit": "5000.00",
+        "balance": "-5000.00"
+    }
+},
+{
+    "model": "finance.studentledger",
+    "pk": 5,
+    "fields": {
+        "student": 13,
+        "date": "2026-07-09",
+        "description": "Additional Payment Received (INV-20260709-071836)",
+        "invoice": 1,
+        "debit": "0.00",
+        "credit": "0.00",
+        "balance": "3000.00"
+    }
+},
+{
+    "model": "finance.studentledger",
+    "pk": 7,
+    "fields": {
+        "student": 16,
+        "date": "2026-07-06",
+        "description": "Fees Charged & Initial Payment Received (INV-20260712-080722)",
+        "invoice": 4,
+        "debit": "11000.00",
+        "credit": "6000.00",
+        "balance": "5000.00"
+    }
+},
+{
+    "model": "finance.studentledger",
+    "pk": 8,
+    "fields": {
+        "student": 13,
+        "date": "2026-07-09",
+        "description": "Additional Payment Received (INV-20260709-071836)",
+        "invoice": 1,
+        "debit": "0.00",
+        "credit": "0.00",
+        "balance": "3000.00"
+    }
+},
+{
+    "model": "finance.studentledger",
+    "pk": 9,
+    "fields": {
+        "student": 16,
+        "date": "2026-07-06",
+        "description": "Additional Payment Received (INV-20260712-080722)",
+        "invoice": 4,
+        "debit": "0.00",
+        "credit": "50.00",
+        "balance": "4950.00"
+    }
+},
+{
+    "model": "finance.studentledger",
+    "pk": 10,
+    "fields": {
+        "student": 14,
+        "date": "2026-07-09",
+        "description": "Additional Payment Received (INV-20260709-114624)",
+        "invoice": 2,
+        "debit": "0.00",
+        "credit": "50.00",
+        "balance": "-5050.00"
+    }
+},
+{
+    "model": "finance.studentledger",
+    "pk": 11,
+    "fields": {
+        "student": 17,
+        "date": "2026-07-12",
+        "description": "Fees Charged & Initial Payment Received (INV-20260712-085522)",
+        "invoice": 5,
+        "debit": "5700.00",
+        "credit": "2500.00",
+        "balance": "3200.00"
+    }
+},
+{
+    "model": "finance.studentledger",
+    "pk": 12,
+    "fields": {
+        "student": 17,
+        "date": "2026-07-14",
+        "description": "Payment Received (INV-20260714-090043)",
+        "invoice": 6,
+        "debit": "6000.00",
+        "credit": "10.00",
+        "balance": "9190.00"
+    }
+},
+{
+    "model": "finance.studentledger",
+    "pk": 13,
+    "fields": {
+        "student": 17,
+        "date": "2026-07-14",
+        "description": "Payment Received (INV-20260714-090819)",
+        "invoice": 7,
+        "debit": "6000.00",
+        "credit": "1.00",
+        "balance": "15189.00"
+    }
+},
+{
+    "model": "finance.companydeposit",
+    "pk": 4,
+    "fields": {
+        "date": "2026-07-01",
+        "title": "Cash In Hand",
+        "category": "Deposit",
+        "amount": "4000.00",
+        "file": "",
+        "description": ""
+    }
+},
+{
+    "model": "finance.expensecategory",
+    "pk": 1,
+    "fields": {
+        "name": "Office Rent",
+        "created_at": "2026-07-01T06:18:03.376Z"
+    }
+},
+{
+    "model": "finance.expensecategory",
+    "pk": 2,
+    "fields": {
+        "name": "Electric Bill",
+        "created_at": "2026-07-01T09:59:01.047Z"
+    }
+},
+{
+    "model": "finance.expensecategory",
+    "pk": 3,
+    "fields": {
+        "name": "Internet Bill",
+        "created_at": "2026-07-01T09:59:20.081Z"
+    }
+},
+{
+    "model": "finance.expensecategory",
+    "pk": 4,
+    "fields": {
+        "name": "Buy Product- J SHOP",
+        "created_at": "2026-07-01T10:00:03.580Z"
+    }
+},
+{
+    "model": "finance.expensecategory",
+    "pk": 5,
+    "fields": {
+        "name": "Salary",
+        "created_at": "2026-07-01T10:01:59.693Z"
+    }
+},
+{
+    "model": "finance.expensecategory",
+    "pk": 6,
+    "fields": {
+        "name": "boost",
+        "created_at": "2026-07-08T08:30:42.465Z"
+    }
+},
+{
+    "model": "finance.expense",
+    "pk": 1,
+    "fields": {
+        "exp_category": 2,
+        "exp_name": "Electric Bill July",
+        "date": "2026-07-09",
+        "amount": 1500,
+        "note": "<p>bkash Payment Marcent</p><p>3348-8983-1328-9192-8332</p>",
+        "created_at": "2026-07-09T06:43:59.232Z"
+    }
+},
+{
+    "model": "finance.expense",
+    "pk": 2,
+    "fields": {
+        "exp_category": 3,
+        "exp_name": "Internet Talephone Bill",
+        "date": "2026-07-09",
+        "amount": 623,
+        "note": "<p>Payment of Tk 623.00 to Bangladesh Telecommunications </p><p>Company Limited-Btcl-1-RM44955 is successful. </p><p>Balance Tk 102.65. TrxID DG977I51ZL at 09/07/2026 12:46</p>",
+        "created_at": "2026-07-09T06:49:09.092Z"
+    }
+},
+{
+    "model": "finance.expense",
+    "pk": 3,
+    "fields": {
+        "exp_category": 4,
+        "exp_name": "ID Card",
+        "date": "2026-07-08",
+        "amount": 100,
+        "note": "<p>3 Pic Id Card+ One Fita</p>",
+        "created_at": "2026-07-09T06:59:05.808Z"
+    }
+},
+{
+    "model": "finance.expense",
+    "pk": 4,
+    "fields": {
+        "exp_category": 6,
+        "exp_name": "Facebook Boost",
+        "date": "2026-07-09",
+        "amount": 1777,
+        "note": "<p>Facebook Boost July 2026</p>",
+        "created_at": "2026-07-09T07:00:23.270Z"
+    }
+},
+{
+    "model": "finance.expense",
+    "pk": 5,
+    "fields": {
+        "exp_category": 1,
+        "exp_name": "Room Rent",
+        "date": "2026-07-12",
+        "amount": 6600,
+        "note": "<p>Jun 2026</p>",
+        "created_at": "2026-07-12T07:52:29.816Z"
+    }
+},
+{
+    "model": "finance.expense",
+    "pk": 6,
+    "fields": {
+        "exp_category": 5,
+        "exp_name": "Moumita Salery",
+        "date": "2026-07-11",
+        "amount": 6000,
+        "note": "<p><br></p>",
+        "created_at": "2026-07-12T08:11:45.636Z"
+    }
+}
+]

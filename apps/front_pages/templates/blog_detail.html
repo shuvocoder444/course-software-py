@@ -1,0 +1,191 @@
+{% extends layout_path %}
+
+{% block title %}{{ post.meta_title|default:post.title }}{% endblock %}
+
+{% block content %}
+<main class="jbd-blog-detail py-5" id="blog-detail-page">
+    <div class="jbd-wrap container">
+
+        <!-- ব্রেডক্রাম্ব বা ব্যাক লিংক -->
+<!-- ব্রেডক্রাম্ব বা ব্যাক লিংক (Modernized Style) -->
+<!-- ব্রেডক্রাম্ব বা ব্যাক লিংক (Modernized Style) -->
+<!-- ব্রেডক্রাম্ব বা ব্যাক লিংক (Modernized Style) -->
+<div class="mb-4">
+    <a href="/" class="btn jbd-back-btn rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2 fw-semibold shadow-sm">
+        <!-- SVG ব্যাক অ্যারো আইকন (বক্সআইকন ছাড়াই কাজ করবে) -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Home
+    </a>
+</div>
+        <!-- আর্টিকেল হেডার সেকশন -->
+        <header class="jbd-blog-detail__header mb-4">
+            {% if post.category %}
+                <span class="badge bg-light-primary text-primary jbd-mono mb-2 text-uppercase px-3 py-2">
+                    {{ post.category.name }}
+                </span>
+            {% endif %}
+
+
+
+            <div class="d-flex align-items-center text-muted small jbd-mono gap-3 flex-wrap">
+
+                <span class="d-flex align-items-center">
+                    <i class="bx bx-calendar me-1"></i> {{ post.published_at|date:"M d, Y"|upper }}
+                </span>
+                <span class="d-flex align-items-center">
+                    <i class="bx bx-time-five me-1"></i> {{ post.read_time_minutes }} MINS READ
+                </span>
+                {% if post.author %}
+                    <span class="d-flex align-items-center">
+                        <i class="bx bx-user me-1"></i> BY {{ post.author.get_full_name|default:post.author.username|upper }}
+                    </span>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- মেইন লেআউট গ্রিড: বামে পোস্ট কন্টেন্ট ও ফুল ইমেজ, ডানে সাইডবার -->
+        <div class="row g-4">
+
+            <!-- বাম পাশ: মেইন পোস্ট এরিয়া (8 Columns) -->
+            <div class="col-lg-8">
+<h1 class="display-5 fw-bold text-dark mt-2 mb-3">{{ post.title }}</h1>
+                <!-- ফুল ফিচারড ইমেজ সেকশন -->
+                {% if post.featured_image %}
+                    <div class="jbd-blog-detail__thumb mb-4 rounded-3 shadow-sm overflow-hidden text-center bg-light">
+                        <img src="{{ post.featured_image.url }}"
+                             alt="{{ post.image_alt_text|default:post.title }}"
+                             class="img-fluid w-100 h-auto d-block">
+                    </div>
+                {% endif %}
+
+                <!-- আর্টিকেল কন্টেন্ট -->
+                <article class="jbd-blog-detail__content entry-content text-secondary lh-lg fs-5">
+                    {{ post.content|safe }}
+                </article>
+
+                <!-- ট্যাগ সেকশন -->
+                {% if post.tags.all %}
+                    <div class="jbd-blog-detail__tags mt-5 pt-4 border-top">
+                        <h6 class="text-dark fw-bold mb-3"><i class="bx bx-tag-alt me-1"></i> Tags:</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for tag in post.tags.all %}
+                                <span class="badge bg-secondary text-white jbd-mono px-2 py-2 small">#{{ tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- ডান পাশ: সাইডবার (4 Columns) -->
+            <div class="col-lg-4">
+                <aside class="jbd-sidebar sticky-top" style="top: 2rem; z-index: 10;">
+
+                    <!-- রিসেন্ট পোস্ট কার্ড -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                        <h5 class="card-title fw-bold text-dark border-bottom pb-3 mb-3 d-flex align-items-center">
+                            <i class="bx bx-captions me-2 text-primary fs-4"></i> Recent Posts
+                        </h5>
+
+                        <div class="d-flex flex-column gap-3">
+                            {% for recent_post in recent_posts %}
+                                <div class="d-flex align-items-center gap-3 pb-3 border-bottom border-light-subtle recent-post-item">
+
+                                    <!-- রিসেন্ট পোস্ট থাম্বনেইল -->
+                                    {% if recent_post.featured_image %}
+                                        <a href="{{ recent_post.get_absolute_url }}" class="flex-shrink-0 overflow-hidden rounded-3 shadow-sm border">
+                                            <img src="{{ recent_post.featured_image.url }}"
+                                                 alt="{{ recent_post.title }}"
+                                                 class="recent-thumb-img"
+                                                 style="width: 80px; height: 80px; object-fit: cover; transition: transform 0.3s ease;">
+                                        </a>
+                                    {% else %}
+                                        <!-- ইমেজ না থাকলে প্লেসহোল্ডার (সংশোধিত) -->
+                                        <div class="flex-shrink-0 rounded-3 bg-light d-flex align-items-center justify-content-center text-muted border" style="width: 80px; height: 80px;">
+                                            <i class="bx bx-image fs-3"></i>
+                                        </div>
+                                    {% endif %}
+
+                                    <!-- রিসেন্ট পোস্ট ইনফো -->
+                                    <div class="flex-grow-1">
+                                        <span class="text-muted small jbd-mono d-flex align-items-center mb-1" style="font-size: 0.75rem;">
+                                            <i class="bx bx-calendar me-1"></i> {{ recent_post.published_at|date:"M d, Y" }}
+                                        </span>
+                                        <h6 class="mb-0 fw-bold lh-base">
+                                            <a href="{{ recent_post.get_absolute_url }}" class="text-dark text-decoration-none text-hover-primary line-clamp-2">
+                                                {{ recent_post.title }}
+                                            </a>
+                                        </h6>
+                                    </div>
+
+                                </div>
+                            {% empty %}
+                                <div class="text-center py-4 text-muted">
+                                    <i class="bx bx-folder-open display-6 d-block mb-2 text-light-primary"></i>
+                                    <p class="small mb-0">No recent posts available.</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </aside>
+            </div>
+
+        </div>
+    </div>
+</main>
+<style scoped>
+
+    /* কাস্টম ব্যাক বাটন স্টাইল */
+    .jbd-back-btn {
+        background-color: rgba(20, 168, 0, 0.09) !important; /* হালকা সবুজ ব্যাকগ্রাউন্ড */
+        color: #14a800 !important; /* টেক্সট এবং আইকন কালার সরাসরি ব্র্যান্ড গ্রিন */
+        border: 1px solid rgba(20, 168, 0, 0.25) !important;
+        display: inline-flex !-webkit-box;
+        display: inline-flex !important;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.25s ease-in-out;
+    }
+
+    .jbd-back-btn:hover {
+        background-color: #14a800 !important; /* হোভার করলে সলিড ব্র্যান্ড গ্রিন */
+        color: #ffffff !important; /* হোভার টেক্সট এবং আইকন সম্পূর্ণ সাদা */
+        transform: translateX(-5px); /* হালকা বামে সরবে */
+        box-shadow: 0 4px 12px rgba(20, 168, 0, 0.3) !important;
+    }
+
+    /* গ্রাফিক ডিজাইন বা ক্যাটাগরি টেক্সট কালার সরাসরি পরিবর্তনের জন্য */
+    .jbd-blog-detail__header .badge {
+        background-color: rgba(20, 168, 0, 0.1) !important;
+        color: #14a800 !important; /* টেক্সট কালার ব্র্যান্ড গ্রিন */
+        font-weight: 600;
+    }
+
+    /* আগের অন্যান্য অপরিবর্তিত স্টাইলসমূহ */
+    .recent-post-item:last-child {
+        border-bottom: 0 !important;
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+    }
+    .text-hover-primary:hover {
+        color: #14a800 !important; /* রিসেন্ট পোস্ট লিংকের হোভার কালার */
+        transition: color 0.2s ease-in-out;
+    }
+    .recent-post-item:hover .recent-thumb-img {
+        transform: scale(1.08);
+    }
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    h1.display-5.fw-bold.text-dark.mt-2.mb-3 {
+    font-size: 30px;
+}
+</style>
+
+{% endblock %}

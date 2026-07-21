@@ -21,8 +21,9 @@ $open-btn-border-radius: 0.375rem;
 $open-customizer-primary-color: var(--bs-primary);
 
 #template-customizer {
-  font-family: 'Public Sans', BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol' !important;
+  font-family:
+    'Public Sans', BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol' !important;
   font-size: $customizer-font-size !important;
   position: fixed;
   top: 0;

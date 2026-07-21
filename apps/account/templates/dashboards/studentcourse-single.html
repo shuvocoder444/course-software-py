@@ -1,0 +1,183 @@
+{% extends layout_path %}
+{% load static %}
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <!-- মেসেজ বা নোটিফিকেশন দেখানোর জন্য -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+        <!-- বাম পাশের কলাম: কোর্সের বিবরণ এবং রিভিউ -->
+        <div class="col-lg-8 mb-4">
+            <div class="card p-4 mb-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <span class="badge bg-label-warning px-3 py-2 rounded-pill">{{ course.level }}</span>
+                    <span class="text-muted small">Code: {{ course.code }}</span>
+                </div>
+                <h2 class="fw-bold text-dark mb-3">{{ course.name }}</h2>
+                <hr>
+                <h5 class="fw-bold mt-4">Course Description</h5>
+                <p class="text-muted" style="line-height: 1.7;">
+                    {{ course.description|default:"No description available for this course." }}
+                </p>
+            </div>
+
+            <!-- রিভিউ সেকশন -->
+            <div class="card p-4">
+                <h5 class="fw-bold mb-4"><i class="bx bx-star text-warning me-2"></i> Reviews ({{ reviews.count }})</h5>
+
+                <!-- যদি স্টুডেন্ট অলরেডি কোর্সটি কিনে থাকে এবং একটিভ থাকে তবেই সে রিভিউ ফর্ম দেখতে পাবে -->
+                {% if has_enrolled and course_enrollment_status_is_active %}
+                    <form action="{% url 'add_review' course.id %}" method="POST" class="mb-5 p-3 bg-light rounded">
+                        {% csrf_token %}
+                        <h6 class="fw-bold mb-2">Write a Review</h6>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Select Rating</label>
+                            <select name="rating" class="form-select form-select-sm" style="width: 150px;">
+                                <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
+                                <option value="4">⭐⭐⭐⭐ (4/5)</option>
+                                <option value="3">⭐⭐⭐ (3/5)</option>
+                                <option value="2">⭐⭐ (2/5)</option>
+                                <option value="1">⭐ (1/5)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <textarea name="comment" class="form-control" rows="3" placeholder="আপনার কোর্সের অভিজ্ঞতা শেয়ার করুন..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary">Submit Review</button>
+                    </form>
+                {% elif has_enrolled and not course_enrollment_status_is_active %}
+                    <div class="alert alert-warning py-2 small mb-4">
+                        <i class="bx bx-time-five me-1"></i> আপনার কোর্স এপ্রুভাল পেন্ডিং রয়েছে। এপ্রুভ হওয়ার পর রিভিউ দিতে পারবেন।
+                    </div>
+                {% else %}
+                    <div class="alert alert-info py-2 small mb-4">
+                        <i class="bx bx-info-circle me-1"></i> এই কোর্সে রিভিউ দিতে প্রথমে কোর্সটি ক্রয় করুন।
+                    </div>
+                {% endif %}
+
+                <!-- সমস্ত ইউজার রিভিউ লিস্ট -->
+                <div class="review-list">
+                    {% for review in reviews %}
+                        <div class="border-bottom pb-3 mb-3">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <h6 class="fw-bold mb-0 text-dark">{{ review.user.get_full_name|default:review.user.username }}</h6>
+                                    <span class="text-warning small">
+                                        {% if review.rating == 5 %}⭐⭐⭐⭐⭐{% elif review.rating == 4 %}⭐⭐⭐⭐{% elif review.rating == 3 %}⭐⭐⭐{% elif review.rating == 2 %}⭐⭐{% else %}⭐{% endif %}
+                                    </span>
+                                </div>
+                                <small class="text-muted">{{ review.created_at|date:"d M Y" }}</small>
+                            </div>
+
+                            <p class="text-muted small mb-2">{{ review.comment }}</p>
+
+                            <!-- যদি লগইন করা ইউজার এই রিভিউর মালিক হয়, তবেই অ্যাকশন বাটন দেখাবে -->
+                            {% if review.user == request.user %}
+                                <div class="d-flex gap-2">
+                                    <!-- এডিট বাটন (বুটস্ট্র্যাপ মডাল ট্রিগার করবে) -->
+                                    <button type="button" class="btn btn-xs btn-outline-primary d-flex align-items-center gap-1 py-1 px-2" data-bs-toggle="modal" data-bs-target="#editReviewModal{{ review.id }}">
+                                        <i class="bx bx-edit-alt" style="font-size: 12px;"></i> Edit
+                                    </button>
+
+                                    <!-- ডিলিট বাটন -->
+                                    <a href="{% url 'delete_review' review.id %}" class="btn btn-xs btn-outline-danger d-flex align-items-center gap-1 py-1 px-2" onclick="return confirm('আপনি কি নিশ্চিত যে এই রিভিউটি ডিলিট করতে চান?');">
+                                        <i class="bx bx-trash" style="font-size: 12px;"></i> Delete
+                                    </a>
+                                </div>
+
+                                <!-- প্রতিটি রিভিউর জন্য ডায়নামিক বুটস্ট্র্যাপ এডিট মডাল -->
+                                <div class="modal fade" id="editReviewModal{{ review.id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title fw-bold">Update Your Review</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form action="{% url 'edit_review' review.id %}" method="POST">
+                                                {% csrf_token %}
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label class="form-label small fw-bold">Select Rating</label>
+                                                        <select name="rating" class="form-select">
+                                                            <option value="5" {% if review.rating == 5 %}selected{% endif %}>⭐⭐⭐⭐⭐ (5/5)</option>
+                                                            <option value="4" {% if review.rating == 4 %}selected{% endif %}>⭐⭐⭐⭐ (4/5)</option>
+                                                            <option value="3" {% if review.rating == 3 %}selected{% endif %}>⭐⭐⭐ (3/5)</option>
+                                                            <option value="2" {% if review.rating == 2 %}selected{% endif %}>⭐⭐ (2/5)</option>
+                                                            <option value="1" {% if review.rating == 1 %}selected{% endif %}>⭐ (1/5)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label small fw-bold">Your Comment</label>
+                                                        <textarea name="comment" class="form-control" rows="3" required>{{ review.comment }}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-sm btn-primary">Save Changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% empty %}
+                        <p class="text-muted small mb-0 py-2">এই কোর্সে এখনও কোনো রিভিউ দেওয়া হয়নি।</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- ড্যাশবোর্ডে ফিরে যাওয়ার বাটন -->
+            <div class="mt-4">
+                <a href="{% url 'student_dashboard' %}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2">
+                    <i class="bx bx-arrow-back"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- ডান পাশের কলাম: অ্যাকশন ও প্রাইসিং কার্ড -->
+        <div class="col-lg-4 mb-4">
+            <div class="card sticky-top" style="top: 20px;">
+                <div class="card-body p-4 text-center">
+                    <div class="bg-label-primary p-4 rounded mb-4" style="font-size: 2rem; color: #ea5455;">
+                        <i class="bx bx-book-open display-4 text-danger"></i>
+                    </div>
+
+                    <h3 class="fw-bold text-dark mb-2">৳ {{ course.default_fee|floatformat:0 }}</h3>
+
+                    <ul class="list-unstyled text-start my-4 py-2 border-top border-bottom small">
+                        <li class="mb-2"><i class="bx bx-time me-2 text-primary"></i> <strong>Duration:</strong> {{ course.duration_months }} Months</li>
+                        <li class="mb-2"><i class="bx bx-video me-2 text-success"></i> <strong>Total Classes:</strong> {{ course.total_classes }} Classes</li>
+                        <li class="mb-0"><i class="bx bx-bar-chart-alt me-2 text-info"></i> <strong>Level:</strong> {{ course.level }}</li>
+                    </ul>
+
+                    <!-- বাই অথবা এনরোলড স্ট্যাটাস বাটন লজিক -->
+                    {% if has_enrolled %}
+                        {% if course_enrollment_status_is_active %}
+                            <button class="btn btn-success w-100 py-2 fw-bold mb-2" disabled>
+                                <i class="bx bx-check-circle me-1"></i> Already Enrolled
+                            </button>
+                        {% else %}
+                            <button class="btn btn-warning w-100 py-2 fw-bold mb-2" disabled>
+                                <i class="bx bx-time-five me-1"></i> Pending Admin Approval
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'buy_course' course.id %}" class="btn btn-danger w-100 py-2 fw-bold btn-buy" style="background-color: #ea5455; border-color: #ea5455;">
+                            <i class="bx bx-cart me-1"></i> Buy This Course
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

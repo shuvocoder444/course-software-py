@@ -1,0 +1,114 @@
+{% extends layout_path %}
+{% load static %}
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold py-3 mb-0"><span class="text-muted fw-light">Courses /</span> Enrollment Management</h4>
+    </div>
+
+    <!-- মেসেজ এলার্ট -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- ১. পেন্ডিং এনরোলমেন্ট রিকোয়েস্ট টেবিল -->
+    <div class="card mb-4 border-0 shadow-sm">
+        <h5 class="card-header bg-label-warning text-warning fw-bold d-flex align-items-center">
+            <i class="bx bx-time-five me-2"></i> Pending Approvals ({{ pending_enrollments|length }})
+        </h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Course</th>
+                        <th>Request Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    {% for enrollment in pending_enrollments %}
+                        <tr>
+                            <td>
+                                <!-- সরাসরি enrollment.student ব্যবহার করা হলো, যা Student মডেলের __str__ মেথড অনুযায়ী নাম দেখাবে -->
+                                <strong>{{ enrollment.student }}</strong>
+                                <br><small class="text-muted">ID: {{ enrollment.student.id }}</small>
+                            </td>
+                            <td><span class="badge bg-label-primary">{{ enrollment.course.name }}</span></td>
+                            <td>{{ enrollment.enrolled_at|date:"d M Y, h:i A" }}</td>
+                            <td><span class="badge bg-warning">Pending</span></td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'admin_approve_enrollment' enrollment.id %}" class="btn btn-sm btn-success d-flex align-items-center gap-1">
+                                        <i class="bx bx-check"></i> Approve
+                                    </a>
+                                    <a href="{% url 'admin_reject_enrollment' enrollment.id %}" class="btn btn-sm btn-outline-danger d-flex align-items-center" onclick="return confirm('আপনি কি নিশ্চিত যে এই অনুরোধটি বাতিল করতে চান?');">
+                                        <i class="bx bx-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted small">
+                                <i class="bx bx-info-circle me-1"></i> কোনো পেন্ডিং এপ্রuভাল রিকোয়েস্ট নেই।
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ২. একটিভ/এপ্রুভড এনরোলমেন্ট টেবিল -->
+    <div class="card border-0 shadow-sm">
+        <h5 class="card-header bg-label-success text-success fw-bold d-flex align-items-center">
+            <i class="bx bx-check-shield me-2"></i> Active Students ({{ active_enrollments|length }})
+        </h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Course</th>
+                        <th>Approval Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    {% for enrollment in active_enrollments %}
+                        <tr>
+                            <td>
+                                <strong>{{ enrollment.student }}</strong>
+                            </td>
+                            <td><span class="badge bg-label-secondary">{{ enrollment.course.name }}</span></td>
+                            <td>{{ enrollment.enrolled_at|date:"d M Y" }}</td>
+                            <td><span class="badge bg-success">Active</span></td>
+                            <td>
+                                <a href="{% url 'admin_reject_enrollment' enrollment.id %}" class="btn btn-xs btn-label-danger" onclick="return confirm('সদস্যপদ বাতিল করতে চান?');">
+                                    Cancel Access
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted small">
+                                <i class="bx bx-info-circle me-1"></i> কোনো একটিভ এনরোলমেন্ট পাওয়া যায়নি।
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

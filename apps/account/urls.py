@@ -24,4 +24,11 @@ urlpatterns = [
     path('users/create/', views.UserCreateView.as_view(), name='user_create'),
     path('users/<int:pk>/edit/', views.UserEditView.as_view(), name='user_edit'),
     path('users/<int:pk>/delete/', views.UserDeleteView.as_view(), name='user_delete'),
+
+    # course review
+    path('course/<slug:slug>/', views.student_course_single, name='student_course_single'),
+    path('course/buy/<int:course_id>/', views.buy_course, name='buy_course'),
+    path('course/review/<int:course_id>/', views.add_review, name='add_review'),
+    path('course/review/edit/<int:review_id>/', views.edit_review, name='edit_review'),
+    path('course/review/delete/<int:review_id>/', views.delete_review, name='delete_review'),
 ]

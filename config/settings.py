@@ -94,6 +94,7 @@ TEMPLATES = [
                 # Custom Context Processors
                 "config.context_processors.language_code",
                 "config.context_processors.my_setting",
+                "config.context_processors.site_global_settings",
                 "config.context_processors.get_cookie",
                 "config.context_processors.environment",
             ],
@@ -108,16 +109,50 @@ TEMPLATES = [
     },
 ]
 
+
+
+
+
+
+
+
+
+
+
+
 WSGI_APPLICATION = "config.wsgi.application"
+
+
 
 
 # Database Configuration
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite33",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+
+
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "course",
+#         "USER": "course",
+#         "PASSWORD": "7awJVxSRZdrn6kFiU1BR",
+#         "HOST": "localhost",
+#         "PORT": "3306",
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',
+#             'init_command': "SET time_zone = '+06:00'",
+#         },
+#     }
+# }
+
+
+
 
 
 # Password Validation

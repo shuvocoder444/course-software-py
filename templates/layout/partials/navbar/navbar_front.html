@@ -103,15 +103,20 @@ body {
 
 /* ===== LOGIN BUTTON ===== */
 .btn-login {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  background: transparent;
-  color: var(--mid); /* আপনার থিমের টেক্সট কালার */
-  font-weight: 600; font-size: .84rem;
-  padding: 8px 20px;
-  border: 1px solid rgba(0, 0, 0, 0.15); /* হালকা বর্ডার */
-  border-radius: 50px;
-  text-decoration: none;
-  transition: all .2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: transparent;
+    color: var(--mid);
+    font-weight: 600;
+    font-size: .84rem;
+    padding: 8px 20px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 50px;
+    margin-left: 10px;
+    text-decoration: none;
+    transition: all .2s ease;
 }
 
 .btn-login:hover {
@@ -128,6 +133,11 @@ body {
     padding: 10px 18px;
   }
 }
+
+
+
+
+
 
 
 /* ===== HERO (LIGHT) ===== */
@@ -190,6 +200,11 @@ body {
   0%,100% { transform: translateY(0) rotate(0deg); }
   50%      { transform: translateY(-14px) rotate(8deg); }
 }
+
+
+
+
+
 
 /* ===== HERO ENTRANCE ANIMATIONS ===== */
 @keyframes fadeInUp {
@@ -259,7 +274,7 @@ body {
 .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
 .btn-primary-brand {
-  background: var(--red); color: #fff;
+  background: var(--red); color: #fff !important;
   font-weight: 700; font-size: .9rem;
   padding: 13px 26px; border-radius: var(--r);
   text-decoration: none; border: none;
@@ -488,6 +503,9 @@ body {
 }
 .feat-card p { font-size: .83rem; color: var(--muted); font-family:'Noto Sans Bengali',sans-serif; line-height:1.65; }
 
+
+
+
 /* ===== COURSE SLIDER ===== */
 .courses-section { background: var(--white); }
 
@@ -565,7 +583,7 @@ body {
 .cc-price small { font-size: .72rem; font-weight:500; color: var(--muted); display:block; line-height:1; }
 
 .btn-enroll {
-  background: var(--green); color: #fff;
+  background: var(--green); color: #fff !important;
   font-weight: 600; font-size: .82rem;
   padding: 9px 18px; border-radius: var(--r);
   text-decoration: none;
@@ -583,6 +601,128 @@ body {
   border-radius: 0 0 8px 8px; letter-spacing: .5px;
   font-family: 'Public Sans', sans-serif;
 }
+
+
+
+/* ===== COURSE SLIDER ===== */
+.courses-section { background: var(--white); }
+
+.slider-wrapper { position: relative; overflow: hidden; }
+.slider-track {
+  display: flex; gap: 20px;
+  transition: transform .5s cubic-bezier(.4,0,.2,1);
+  will-change: transform;
+}
+
+/* ৪টি করে কোর্স দেখানোর রেসপনসিভ কলাম */
+.slider-slide {
+  flex: 0 0 calc(25% - 15px);
+  min-width: calc(25% - 15px);
+}
+
+@media(max-width:1200px){ .slider-slide { flex: 0 0 calc(33.333% - 14px); min-width: calc(33.333% - 14px); } }
+@media(max-width:991px){ .slider-slide { flex: 0 0 calc(50% - 10px); min-width: calc(50% - 10px); } }
+@media(max-width:640px){ .slider-slide { flex: 0 0 100%; min-width: 100%; } }
+
+/* slider arrows */
+.slider-arrow {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--white); border: 1.5px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; color: var(--mid);
+  cursor: pointer; transition: all .2s;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+.slider-arrow:hover { background: var(--red); color: #fff; border-color: var(--red); box-shadow: 0 4px 16px rgba(230,29,35,.3); }
+.slider-arrow.disabled { opacity: .35; pointer-events: none; }
+
+/* dots */
+.slider-dots { display: flex; gap: 6px; align-items: center; }
+.s-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--line); cursor: pointer;
+  transition: background .25s, width .25s;
+}
+.s-dot.active { background: var(--red); width: 22px; border-radius: 50px; }
+
+/* course card */
+.course-card {
+  background: var(--white); border: 1.5px solid var(--line);
+  border-radius: var(--r2); overflow: hidden;
+  transition: transform .25s, box-shadow .25s, border-color .25s;
+  height: 100%; display: flex; flex-direction: column;
+}
+.course-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(0,0,0,.1); border-color: var(--green); }
+
+/* ইমেজ রেসপনসিভ ও ক্রপ স্টাইল */
+.cc-image {
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+.cc-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .3s ease;
+}
+.course-card:hover .cc-image img {
+  transform: scale(1.05);
+}
+
+/* কার্ড বডি ও টেক্সট */
+.cc-body {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.cc-body h4 {
+  font-size: 1.05rem; font-weight: 700; color: var(--dark);
+  margin-bottom: 10px; line-height: 1.4;
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+.cc-body h4 span { color: var(--red); font-size: 0.9rem; }
+
+.cc-description {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+  font-family: 'Noto Sans Bengali', sans-serif;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.cc-footer {
+  padding: 14px 20px 18px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--canvas); border-top: 1px solid var(--line);
+}
+.cc-price { font-size: 1.35rem; font-weight: 800; color: var(--dark); }
+
+.btn-enroll {
+  background: var(--green); color: #fff;
+  font-weight: 600; font-size: .82rem;
+  padding: 9px 18px; border-radius: var(--r);
+  text-decoration: none;
+  font-family: 'Noto Sans Bengali', sans-serif;
+  transition: background .2s, transform .15s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-enroll:hover { background: var(--green-d); color:#fff; transform: translateY(-1px); }
+
+/* featured course badge */
+.cc-featured-ribbon {
+  position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+  background: var(--red); color: #fff;
+  font-size: .65rem; font-weight: 700; padding: 3px 14px;
+  border-radius: 0 0 8px 8px; letter-spacing: .5px;
+  font-family: 'Public Sans', sans-serif;
+  z-index: 2;
+}
+
+
 
 /* ===== STATS ===== */
 .stats-section {
@@ -714,6 +854,35 @@ textarea.form-ctrl { resize:none; }
 .custom-accordion .accordion-button:not(.collapsed) { color:var(--red);background:var(--red-s);box-shadow:none; }
 .custom-accordion .accordion-body { font-family:'Noto Sans Bengali',sans-serif;color:var(--muted);font-size:.86rem;line-height:1.8;padding:14px 20px 18px; }
 
+
+
+
+
+/* ===== DROPDOWN ON HOVER (DESKTOP ONLY) ===== */
+@media (min-width: 992px) {
+  .site-nav .nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0; /* স্পেসিং ঠিক রাখার জন্য */
+    opacity: 1;
+    visibility: visible;
+    animation: fadeIn 0.2s ease-in-out;
+  }
+
+  /* সাবমেনু থেকে মাউস সরে গেলে যেন হুট করে গায়েব না হয় */
+  .site-nav .dropdown-menu {
+    display: none;
+    position: absolute;
+  }
+}
+
+/* ড্রপডাউন অ্যানিমেশন (ঐচ্ছিক, দেখতে সুন্দর লাগবে) */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+
 /* ===== FOOTER ===== */
 .site-footer { background: var(--dark-2, #181B2E); }
 .footer-brand { font-size:1.25rem;font-weight:800; }
@@ -741,82 +910,154 @@ textarea.form-ctrl { resize:none; }
 .footer-bottom-links a { color:rgba(255,255,255,.3);font-size:.78rem;text-decoration:none;transition:color .2s;margin-left:18px; }
 .footer-bottom-links a:hover { color:#fff; }
 
+
+
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px){
   .hero { padding:60px 0 50px;min-height:auto; }
   .form-body,.form-sidebar { padding:28px 22px; }
 }
+
+ul {
+
+    margin-bottom:1px !important;
+    padding-left: 1px !important;
+}
+
 </style>
 </head>
 <body>
 
+
+
 <!-- ==================== NAVBAR ==================== -->
 <nav class="site-nav navbar navbar-expand-lg py-3" id="siteNav">
   <div class="container d-flex align-items-center justify-content-between">
-{% load static %}
+    {% load static %}
 
-<a href="/" class="nav-brand d-flex align-items-center gap-2">
-    <img src="{% static 'cus/logo.png' %}" alt="JBD IT Logo" height="35" class="d-inline-block align-top">
-</a>
+    <a href="{% url 'landing-page' %}" class="nav-brand d-flex align-items-center gap-2">
+      {% if global_settings.logo %}
+        <img src="{{ global_settings.logo.url }}" alt="{{ global_settings.institution_name }} Logo" style="max-height: 40px;">
+      {% else %}
+        <img src="{% static 'images/default-logo.png' %}" alt="Default Logo" style="max-height: 40px;">
+      {% endif %}
+    </a>
 
-    <button class="navbar-toggler border-0 bg-transparent d-lg-none" type="button"
-      data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- Navbar Toggler Button (data-bs-toggle সরিয়ে ফেলা হয়েছে যাতে কনফ্লিক্ট না হয়) -->
+    <button class="navbar-toggler border-0 bg-transparent d-lg-none" type="button" id="menuTogglerBtn" aria-label="Toggle navigation">
       <i class="ti ti-menu-2 fs-3" style="color: var(--mid);"></i>
     </button>
 
     <div class="collapse navbar-collapse" id="navMain">
-<ul class="navbar-nav mx-auto gap-1 mb-3 mb-lg-0">
+      <ul class="navbar-nav mx-auto gap-1 mb-3 mb-lg-0">
 
-  <li class="nav-item">
-    <a class="nav-link {% if active_url == '/' %}active{% endif %}" href="{% url 'landing-page' %}">হোম</a>
-  </li>
+        <!-- প্রথম পাতা -->
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'landing-page' %}active{% endif %}" href="{% url 'landing-page' %}">প্রথম পাতা</a>
+        </li>
 
-  <li class="nav-item">
-    <a class="nav-link {% if '/courses/' in active_url %}active{% endif %}" href="{% url 'courses' %}">আমাদের কোর্স</a>
-  </li>
+        <!-- কোর্স সমূহ -->
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'courses' %}active{% endif %}" href="{% url 'courses' %}">কোর্স সমূহ</a>
+        </li>
 
-  <li class="nav-item">
-    <a class="nav-link {% if '/about/' in active_url %}active{% endif %}" href="{% url 'about' %}">আমাদের সম্পর্কে</a>
-  </li>
+        <!-- প্রশিক্ষক -->
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'instructors' %}active{% endif %}" href="#">প্রশিক্ষক</a>
+        </li>
 
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle {% if '/photo-gallery/' in active_url or '/video-gallery/' in active_url %}active{% endif %}"
-       href="#" id="galleryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-      গ্যালারি
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="galleryDropdown">
-      <li>
-        <a class="dropdown-item {% if '/photo-gallery/' in active_url %}active{% endif %}" href="{% url 'photo-gallery' %}">ফটো গ্যালারি</a>
-      </li>
-      <li>
-        <a class="dropdown-item {% if '/video-gallery/' in active_url %}active{% endif %}" href="{% url 'video-gallery' %}">ভিডিও গ্যালারি</a>
-      </li>
-    </ul>
-  </li>
+        <!-- আমাদের সম্পর্কে -->
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">আমাদের সম্পর্কে</a>
+        </li>
 
-  <li class="nav-item">
-    <a class="nav-link {% if '/tutorials/' in active_url %}active{% endif %}" href="{% url 'tutorials' %}">টিউটোরিয়াল</a>
-  </li>
+        <!-- গ্যালারি ড্রপডাউন -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'photo-gallery' or request.resolver_match.url_name == 'video-gallery' %}active{% endif %}"
+             href="javascript:void(0);" id="galleryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            গ্যালারি
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="galleryDropdown">
+            <li>
+              <a class="dropdown-item {% if request.resolver_match.url_name == 'photo-gallery' %}active{% endif %}" href="{% url 'photo-gallery' %}">ফটো গ্যালারি</a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if request.resolver_match.url_name == 'video-gallery' %}active{% endif %}" href="{% url 'video-gallery' %}">ভিডিও গ্যালারি</a>
+            </li>
+          </ul>
+        </li>
 
-  <li class="nav-item">
-    <a class="nav-link {% if '/students/' in active_url %}active{% endif %}" href="{% url 'students' %}">আমাদের ছাত্র</a>
-  </li>
+        <!-- টিউটোরিয়াল -->
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'tutorials' %}active{% endif %}" href="{% url 'tutorials' %}">টিউটোরিয়াল</a>
+        </li>
 
-  <li class="nav-item">
-    <a class="nav-link {% if '/contact/' in active_url %}active{% endif %}" href="{% url 'contact' %}">যোগাযোগ</a>
-  </li>
+        <!-- ছাত্রছাত্রী -->
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'students' %}active{% endif %}" href="{% url 'students' %}">ছাত্রছাত্রী</a>
+        </li>
 
-</ul>
-<div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 ms-lg-3 mt-3 mt-lg-0">
-  <a href="{% url 'student_register' %}" class="btn-call">
-    <i class="ti ti-user-plus"></i> স্টুডেন্ট রেজিস্টার
-  </a>
-</div>
+        <!-- যোগাযোগ -->
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact' %}">যোগাযোগ</a>
+        </li>
 
-  <a href="{% url 'login' %}" class="btn-login">
-    <i class="ti ti-lock"></i> Login
-  </a>
-</div>
+        <!-- অন্যান্য ড্রপডাউন -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'notice' or request.resolver_match.url_name == 'blog' %}active{% endif %}"
+             href="javascript:void(0);" id="othersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            অন্যান্য
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="othersDropdown">
+            <li>
+              <a class="dropdown-item {% if request.resolver_match.url_name == 'notice' %}active{% endif %}" href="javascript:void(0);">নোটিশ বোর্ড</a>
+            </li>
+            <li>
+              <a class="dropdown-item {% if request.resolver_match.url_name == 'blog' %}active{% endif %}" href="javascript:void(0);">ব্লগ</a>
+            </li>
+          </ul>
+        </li>
+
+      </ul>
+
+      <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 ms-lg-3 mt-3 mt-lg-0">
+        <a href="{% url 'student_register' %}" class="btn-call">
+          <i class="ti ti-user-plus"></i> স্টুডেন্ট রেজিস্টার
+        </a>
+        <a href="{% url 'login' %}" class="btn-login">
+          <i class="ti ti-lock"></i> Login
+        </a>
+      </div>
     </div>
   </div>
 </nav>
+
+<!-- JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const toggler = document.getElementById('menuTogglerBtn');
+  const navCollapse = document.getElementById('navMain');
+
+  if (toggler && navCollapse) {
+    toggler.addEventListener('click', function (e) {
+      e.stopPropagation();
+      navCollapse.classList.toggle('show');
+    });
+
+    // মেনুর বাইরে কোথাও ক্লিক করলে মেনু অটো বন্ধ হবে
+    document.addEventListener('click', function (e) {
+      if (!navCollapse.contains(e.target) && !toggler.contains(e.target)) {
+        navCollapse.classList.remove('show');
+      }
+    });
+
+    // কোনো লিংকে ক্লিক করলেও মেনু বন্ধ হয়ে যাবে
+    const navLinks = navCollapse.querySelectorAll('.nav-link:not(.dropdown-toggle), .dropdown-item');
+    navLinks.forEach(function (link) {
+      link.addEventListener('click', function () {
+        navCollapse.classList.remove('show');
+      });
+    });
+  }
+});
+</script>

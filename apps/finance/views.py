@@ -211,10 +211,19 @@ from django.http import HttpResponseRedirect
 
 
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-
+# আপনার প্রজেক্টের সঠিক পাথ থেকে ইমপোর্টগুলো নিশ্চিত করে নিন
 from apps.finance.models import Invoice, StudentLedger
-# মিক্সিন এবং ফর্মের ইমপোর্ট নিশ্চিত করে নেবেন
+from apps.setting.models import AttendenceSetting
+from apps.setting.utils import send_sms
+from django.contrib.auth.mixins import LoginRequiredMixin
+from apps.setting.models import SMSLog
+# আপনার প্রজেক্টের সঠিক পাথ থেকে ইমপোর্টগুলো নিশ্চিত করে নিন
+from apps.finance.models import Invoice
+
+# 🎯 আপনার সঠিক পাথ থেকে SMSLog মডেলটি ইমপোর্ট করে নিন
+# from apps.your_app_name.models import SMSLog
 
 class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, CreateView):
     model = Invoice
@@ -237,12 +246,17 @@ class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
+        sms_sent = False
+        sms_error_reason = "Unknown Error"
+        active_invoice = None
+        custom_message = ""  # লগে সেভ করার জন্য মেসেজ ভেরিয়েবল আগে ডিক্লেয়ার করা হলো
+
+        # ১. ডাটাবেজ অপারেশনগুলো ট্রানজেকশনের ভেতরে সম্পন্ন করা হচ্ছে
         with transaction.atomic():
             invoice_instance = form.save(commit=False)
             student = invoice_instance.student
 
-            # 💡 ফিক্স: আগের ইনভয়েস খোঁজার বা আপডেট করার কোনো লজিক থাকবে না।
-            # প্রতিবার পেমেন্টে সরাসরি একদম নতুন ইনভয়েস তৈরি হবে।
+            # প্রতিবার পেমেন্টে সরাসরি একদম নতুন ইনভয়েস তৈরি হবে
             current_time = datetime.now()
             invoice_instance.invoice_no = f"INV-{current_time.strftime('%Y%m%d-%H%M%S')}"
 
@@ -251,19 +265,17 @@ class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
             if custom_pm:
                 invoice_instance.payment_method = custom_pm
 
-            # নতুন ইনভয়েস ডেটাবেজে সেভ করা হলো
+            # নতুন ইনভয়েস ডেটাবেজে সেভ করা হলো
             invoice_instance.save()
             active_invoice = invoice_instance
 
             # ডিসক্রিপশন টেক্সট
             description_text = f"Payment Received ({active_invoice.invoice_no})"
 
-            # 🎯 স্টুডেন্টের লেজার ব্যালেন্স ক্যালকুলেশন (১০০% আপনার লজিক অনুযায়ী)
-            # আগের সর্বশেষ লেজার রেকর্ড খুঁজে বের করা
+            # স্টুডেন্টের লেজার ব্যালেন্স ক্যালকুলেশন
             last_ledger = StudentLedger.objects.filter(student=student).last()
             previous_balance = last_ledger.balance if last_ledger else Decimal('0.00')
 
-            # প্রতিটা নতুন ইনভয়েসের জন্য ডেবিট, ক্রেডিট এবং কারেন্ট ব্যালেন্স হিসাব
             debit_amount = active_invoice.net_payable if hasattr(active_invoice, 'net_payable') else Decimal('0.00')
             credit_amount = active_invoice.paid_amount or Decimal('0.00')
 
@@ -281,13 +293,96 @@ class InvoiceCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
                 balance=current_balance
             )
 
-            messages.success(self.request, f"Payment process successfully completed for {active_invoice.invoice_no}!")
+        # ২. ট্রানজেকশন সফলভাবে শেষ হওয়ার পর SMS পাঠানো ও SMSLog রাখার প্রসেস
+        if active_invoice and active_invoice.student:
+            student = active_invoice.student
+            student_phone = student.phone  # স্টুডেন্টের ফোন নম্বর ফিল্ড
 
-            # NoneType এরর ফিক্স করার মেইন পার্ট
-            self.object = active_invoice
-            return HttpResponseRedirect(self.get_success_url())
+            try:
+                settings_instance = AttendenceSetting.objects.first()
+                if settings_instance and hasattr(settings_instance, 'payment_sms') and settings_instance.payment_sms:
+                    custom_message = settings_instance.payment_sms
 
+                    # ডাইনামিক প্লেসহোল্ডারগুলো রিপ্লেস করা হচ্ছে
+                    custom_message = custom_message.replace("[name]", student.name)
+                    custom_message = custom_message.replace("[amount]", str(active_invoice.paid_amount))
+                    custom_message = custom_message.replace("[invoice]", active_invoice.invoice_no)
+                else:
+                    custom_message = f"Payment Confirmation: {active_invoice.paid_amount} received."
+            except Exception:
+                custom_message = f"Payment Confirmation: {active_invoice.paid_amount} received."
 
+            # ফোন নাম্বার চেকিং এবং এপিআই ট্রিগার
+            if student_phone:
+                try:
+                    # SMS এপিআই কল করা হলো
+                    is_success, api_message = send_sms(student_phone, custom_message)
+                    if is_success:
+                        sms_sent = True
+
+                        # 🎯 সফলভাবে মেসেজ গেলে ডাটাবেজে লগ সেভ
+                        SMSLog.objects.create(
+                            student_name=student.name,
+                            phone=student_phone,
+                            message=custom_message,
+                            sms_type='payment',  # পেমেন্টের জন্য কাস্টম টাইপ
+                            status='success'
+                        )
+                    else:
+                        sms_error_reason = api_message
+
+                        # 🎯 এপিআই ফেইল্ড হলে ফেইল্ড স্ট্যাটাস ও কারণসহ লগ সেভ
+                        SMSLog.objects.create(
+                            student_name=student.name,
+                            phone=student_phone,
+                            message=custom_message,
+                            sms_type='payment',
+                            status='failed',
+                            error_message=api_message
+                        )
+                except Exception as e:
+                    sms_error_reason = str(e)
+                    # যেকোনো কন্টিনজেন্ট এক্সেপশনের জন্য ফেইল্ড লগ সেভ
+                    SMSLog.objects.create(
+                        student_name=student.name,
+                        phone=student_phone,
+                        message=custom_message,
+                        sms_type='payment',
+                        status='failed',
+                        error_message=sms_error_reason
+                    )
+            else:
+                sms_error_reason = "স্টুডেন্টের মোবাইল নাম্বার পাওয়া যায়নি।"
+
+                # 🎯 মোবাইল নাম্বার না থাকলেও ট্র্যাকিংয়ের জন্য ফেইল্ড লগ সেভ
+                SMSLog.objects.create(
+                    student_name=student.name,
+                    phone="N/A",
+                    message=custom_message,
+                    sms_type='payment',
+                    status='failed',
+                    error_message=sms_error_reason
+                )
+
+        # ৩. ডাইনামিক স্ক্রিন মেসেজ ও রিডাইরেকশন
+        if sms_sent:
+            messages.success(
+                self.request,
+                f"Payment process successfully completed for {active_invoice.invoice_no}! এবং নিশ্চিতকরণ এসএমএস পাঠানো হয়েছে।"
+            )
+        else:
+            messages.success(
+                self.request,
+                f"Payment process successfully completed for {active_invoice.invoice_no}!"
+            )
+            messages.warning(
+                self.request,
+                f"⚠️ পেমেন্ট কনফার্মেশন এসএমএস পাঠানো যায়নি। কারণ: {sms_error_reason}"
+            )
+
+        # NoneType এরর ফিক্স এবং রিডাইরেকশন
+        self.object = active_invoice
+        return HttpResponseRedirect(self.get_success_url())
 
 
 # ৩. STUDENT LEDGER / STATEMENT VIEW
@@ -318,7 +413,6 @@ class StudentLedgerView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVertical
 
 
 from django.views.generic import DeleteView, DetailView, UpdateView
-
 from .models import Invoice, StudentLedger
 
 

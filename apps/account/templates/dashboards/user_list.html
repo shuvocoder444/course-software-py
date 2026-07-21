@@ -44,7 +44,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{% url 'user_edit' u.pk %}" class="btn btn-sm btn-warning">✏️ Edit</a>
+                    {% comment %} <a href="{% url 'user_edit' u.pk %}" class="btn btn-sm btn-warning">✏️ Edit</a> {% endcomment %}
                     <a href="{% url 'user_delete' u.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">🗑️ Delete</a>
                 </td>
             </tr>

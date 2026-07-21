@@ -1,12 +1,22 @@
 
+
+<style>
+
+</style>
 <!-- ==================== FOOTER ==================== -->
 <footer class="site-footer py-5" style="background:#181B2E;">
   <div class="container">
     <div class="row g-5">
       <div class="col-md-5">
         <div class="footer-brand d-flex align-items-center gap-2 mb-1">
-          <i class="ti ti-device-laptop" style="color:var(--green);font-size:1.3rem;"></i>
-          <span><span class="r">JBD</span><span class="g"> IT</span></span>
+
+         <a href="/" class="nav-brand d-flex align-items-center gap-2">
+              {% if global_settings.logo %}
+                  <img src="{{ global_settings.logo.url }}" alt="{{ global_settings.institution_name }} Logo" style="max-height: 40px;">
+              {% else %}
+                  <img src="" alt="Default Logo" style="max-height: 40px;">
+              {% endif %}
+          </a>
         </div>
         <p class="footer-desc"></p>
         <div class="footer-socials">

@@ -95,10 +95,6 @@ class AdminRoleRequiredMixin:
 
 from django.contrib.auth.views import LoginView, LogoutView
 
-# আপনার প্রজেক্টের নির্দিষ্ট হেল্পার ক্লাসগুলো ইমপোর্ট করুন (প্রয়োজন অনুযায়ী পাথ ঠিক করে নিবেন)
-# from .helpers import TemplateLayout, TemplateHelper
-
-
 # ==============================================================================
 # ২. ফ্রন্টএন্ড/গেস্ট লগইন এবং লগআউট কন্ট্রোলার (CBV)
 # ==============================================================================
@@ -285,7 +281,7 @@ class UserDeleteView(LoginRequiredMixin, AdminRoleRequiredMixin, View):
 
 
 
-
+# ==========================================  admin_dashboard  ================================
 
 
 from django.contrib.auth import get_user_model
@@ -318,19 +314,23 @@ def admin_dashboard(request):
     return render(request, 'dashboards/admin.html', context)
 
 
+# ==========================================   student_dashboard   ================================
+
 
 
 @login_required
 @role_required(allowed_roles=['STUDENT'])
 def student_dashboard(request):
     """
-    লগইন করা স্টুডেন্টের প্রোফাইল, রানিং ব্যাচ, কোর্স
-    এবং অন্যান্য উপলব্ধ (Explore) কোর্সগুলো ডাইনামিকালি লোড করার ভিউ।
+    লগইন করা স্টুডেন্টের প্রোফাইল, রানিং ব্যাচ, এনরোল করা সমস্ত কোর্স,
+    স্টুডেন্টের দেওয়া রিভিউ এবং অন্যান্য উপলব্ধ কোর্সগুলো ডাইনামিকালি লোড করার ভিউ।
     """
     student = None
     batch = None
-    enrolled_course = None
-    other_courses = Course.objects.all() # ডিফল্টভাবে সব কোর্স
+    enrolled_courses = []
+    enrolled_course_ids = []
+    my_reviews = []
+    other_courses = Course.objects.all()
 
     try:
         # ১. লগইন করা ইউজারের সাথে যুক্ত স্টুডেন্ট প্রোফাইল খোঁজা
@@ -340,46 +340,193 @@ def student_dashboard(request):
             # ২. স্টুডেন্টের ব্যাচ খোঁজা
             batch = getattr(student, 'batch', None)
 
-            # ৩. ব্যাচ থেকে সরাসরি মূল কোর্সটি বের করা
-            if batch and hasattr(batch, 'course'):
-                enrolled_course = batch.course
-                # ৪. (ডাইনামিক ফিক্স) স্টুডেন্ট যে কোর্সে অলরেডি আছে, সেটি বাদে বাকি কোর্সগুলো আনা হচ্ছে
-                other_courses = Course.objects.exclude(id=enrolled_course.id)
+            # ৩. Enrollment মডেল থেকে স্টুডেন্টের সচল (active) কোর্সগুলো বের করা
+            active_enrollments = student.enrollments.filter(is_active=True).select_related('course')
+            enrolled_courses = [enrollment.course for enrollment in active_enrollments]
+
+            # ৪. এনরোল করা কোর্সের আইডিগুলো আলাদা করা (Other Courses ফিল্টার করার জন্য)
+            enrolled_course_ids = [course.id for course in enrolled_courses]
+
+            # ৫. স্টুডেন্ট যে কোর্সগুলোতে অলরেডি আছে, সেগুলো বাদে বাকি কোর্সগুলো আনা হচ্ছে
+            other_courses = Course.objects.exclude(id__in=enrolled_course_ids)
+
+            # ৬. এই স্টুডেন্টের দেওয়া সমস্ত কোর্স রিভিউ নিয়ে আসা
+            my_reviews = CourseReview.objects.filter(user=request.user).select_related('course')
 
     except (Student.DoesNotExist, AttributeError):
         student = None
 
-    # ৫. এক্সট্রা কনটেক্সটে 'other_courses' পাস করা হলো (সর্বোচ্চ ৪টি দেখানোর জন্য [:4] ব্যবহার করতে পারেন)
+    # কনটেক্সটে নতুন ডেটাগুলো পাস করা হলো
     extra_context = {
         "student": student,
         "batch": batch,
-        "enrolled_course": enrolled_course,
-        "other_courses": other_courses[:4], # ড্যাশবোর্ডে সুন্দর দেখানোর জন্য ৪টি লিমিট করা হলো
+        "enrolled_courses": enrolled_courses, # এখন একাধিক কোর্স সাপোর্ট করবে
+        "my_reviews": my_reviews,             # স্টুডেন্টের নিজস্ব রিভিউসমূহ
+        "other_courses": other_courses[:4],   # ড্যাশবোর্ডে দেখানোর জন্য ৪টি লিমিট
         "title": "Student Dashboard"
     }
 
-    # ৬. Vuxy লেআউট ও মেনুসহ কনটেক্সট জেনারেট করা
+    # Vuxy লেআউট ও মেনুসহ কনটেক্সট জেনারেট করা
     context = get_vuxy_context(request, extra_context=extra_context)
 
     return render(request, "dashboards/student.html", context)
 
 
 
+from django.contrib.auth.decorators import login_required
+from apps.courses.models import Enrollment, CourseReview  # আপনার প্রজেক্টের সঠিক পাথ অনুযায়ী মডেল ইমপোর্ট করুন
+# প্রজেক্টের ভেক্সাটাইল লেআউট কনটেক্সট ফাংশন ইমপোর্ট
+# from আপনার_অ্যপ.utils import get_vuxy_context (আপনার সঠিক পাথ অনুযায়ী রাখুন)
+
+@login_required
+def student_course_single(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+
+    has_enrolled = False
+    is_enrollment_active = False
+
+    try:
+        student = request.user.student_profile
+        # ডেটাবেস থেকে স্পেসিফিক এনরোলমেন্ট রেকর্ড চেক করা
+        enrollment = Enrollment.objects.filter(student=student, course=course).first()
+
+        if enrollment:
+            has_enrolled = True
+            is_enrollment_active = enrollment.is_active
+
+        # যদি ব্যাচের মাধ্যমে সরাসরি এনরোলড থাকে
+        if not has_enrolled and getattr(student, 'batch', None):
+            if student.batch.course == course:
+                has_enrolled = True
+                is_enrollment_active = True  # ব্যাচ এসাইন থাকলে সেটি সরাসরি একটিভ
+
+    except AttributeError:
+        pass
+
+    # কোর্সের সব রিভিউ নিয়ে আসা
+    reviews = course.reviews.all().order_by('-created_at')
+
+    # এক্সট্রা কনটেক্সট তৈরি
+    extra_context = {
+        'course': course,
+        'has_enrolled': has_enrolled,
+        'course_enrollment_status_is_active': is_enrollment_active,  # এই ভ্যারিয়েবলটি HTML কন্ডিশনে কাজ করবে
+        'reviews': reviews,
+        'title': course.name
+    }
+
+    # Vuxy লেআউট ও মেনুসহ মেইন কনটেক্সট জেনারেট করা
+    context = get_vuxy_context(request, extra_context=extra_context)
+    return render(request, "dashboards/studentcourse-single.html", context)
+
+
+@login_required
+def buy_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    try:
+        student = request.user.student_profile
+
+        # ইতিমধ্যে রিকোয়েস্ট করা আছে কিনা চেক
+        existing_enrollment = Enrollment.objects.filter(student=student, course=course).first()
+
+        if existing_enrollment:
+            if existing_enrollment.is_active:
+                messages.warning(request, "আপনি ইতিমধ্যে এই কোর্সটি কিনেছেন এবং এটি একটিভ আছে।")
+            else:
+                messages.info(request, "এই কোর্সের জন্য আপনার অনুরোধটি ইতিমধ্যে অ্যাডমিন এপ্রুভালের জন্য পেন্ডিং আছে।")
+        else:
+            # ডিফল্টভাবে is_active=False দেওয়া হলো (অর্থাৎ অ্যাডমিন এপ্রুভ করার আগে পেন্ডিং থাকবে)
+            Enrollment.objects.create(student=student, course=course, is_active=False)
+            messages.success(request, f"সফলভাবে {course.name} কোর্সের জন্য অনুরোধ পাঠানো হয়েছে। অ্যাডমিন এপ্রুভ করলে ড্যাশবোর্ডে দেখতে পাবেন।")
+
+    except AttributeError:
+        messages.error(request, "আপনার কোনো স্টুডেন্ট প্রোফাইল পাওয়া যায়নি।")
+
+    return redirect('student_course_single', slug=course.slug)
+
+
+@login_required
+def add_review(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+
+        # ডাটাবেসে রিভিউ সেভ করা
+        CourseReview.objects.create(
+            user=request.user,
+            course=course,
+            rating=rating,
+            comment=comment
+        )
+
+        messages.success(request, "আপনার রিভিউটি সফলভাবে যুক্ত করা হয়েছে।")
+        return redirect('student_course_single', slug=course.slug)
+
+    return redirect('student_course_single', slug=course.slug)
 
 
 
 
-import random
-from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def edit_review(request, review_id):
+    """
+    স্টুডেন্ট নিজের দেওয়া রিভিউ এডিট করার ভিউ
+    """
+    review = get_object_or_404(CourseReview, id=review_id, user=request.user)
+
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+
+        if rating and comment:
+            review.rating = rating
+            review.comment = comment
+            review.save()
+            messages.success(request, "আপনার রিভিউটি সফলভাবে আপডেট করা হয়েছে।")
+        else:
+            messages.error(request, "সবগুলো ফিল্ড সঠিকভাবে পূরণ করুন।")
+
+        return redirect('student_course_single', slug=review.course.slug)
+
+    return redirect('student_course_single', slug=review.course.slug)
+
+
+@login_required
+def delete_review(request, review_id):
+    """
+    স্টুডেন্ট নিজের দেওয়া রিভিউ ডিলিট করার ভিউ
+    """
+    review = get_object_or_404(CourseReview, id=review_id, user=request.user)
+    course_slug = review.course.slug
+
+    review.delete()
+    messages.success(request, "আপনার রিভিউটি সফলভাবে ডিলিট করা হয়েছে।")
+
+    return redirect('student_course_single', slug=course_slug)
+
+
+
+# ==========================================   student_dashboard  End  ================================
+
+
+
+
+from django.contrib.auth import login, authenticate
 from django.http import JsonResponse
-from django.contrib.auth import login
-
-# থিম লেআউট কনফিগারেশন
-
-# অ্যাপ কম্পোনেন্ট ইম্পোর্টস
-from .forms import OTPRegistrationForm
+from django.views.generic import TemplateView
+from django.db import transaction
 from .models import Account, SMSVerification
+from .forms import OTPRegistrationForm
+from .models import Account
 from apps.setting.utils import send_sms
+from datetime import datetime  # 🎯
+from .models import Account
+
+
 
 
 class StudentAjaxRegisterView(TemplateView):
@@ -387,113 +534,168 @@ class StudentAjaxRegisterView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = TemplateLayout.init(self, super().get_context_data(**kwargs))
-        context.update({
-            "title": "Student Registration",
-            "form": OTPRegistrationForm(),
-            "layout": "front",
-            "layout_path": TemplateHelper.set_layout("layout_front.html", context),
-            "active_url": self.request.path,
-        })
+        context.update(
+            {
+                "layout": "front",
+                "layout_path": TemplateHelper.set_layout("layout_front.html", context),
+                "active_url": self.request.path,
+                "form": OTPRegistrationForm(),
+            }
+        )
         TemplateHelper.map_context(context)
         return context
 
     def post(self, request, *args, **kwargs):
         action = request.POST.get('action')
 
-        # ---------------------------------------------------------------------
-        # অ্যাকশন ১: ওটিপি জেনারেট ও সেশনে পাসওয়ার্ডসহ ডেটা রাখা
-        # ---------------------------------------------------------------------
+        # ---------------- STEP 1: SEND OTP ----------------
         if action == 'send_otp':
             form = OTPRegistrationForm(request.POST)
             if form.is_valid():
-                try:
-                    full_name = form.cleaned_data.get('full_name')
-                    phone_number = form.cleaned_data.get('phone_number')
-                    password = form.cleaned_data.get('password')  # 🟢 ফরম থেকে পাসওয়ার্ড রিড
+                phone_number = form.cleaned_data['phone_number']
 
-                    # ওটিপি তৈরি ও সেশন অ্যাসাইনমেন্ট
-                    otp_code = str(random.randint(1000, 9999))
-                    request.session['reg_full_name'] = full_name
-                    request.session['reg_phone_number'] = phone_number
-                    request.session['reg_password'] = password  # 🟢 পাসওয়ার্ড সাময়িকভাবে সেশনে সেভ
+                if Account.objects.filter(username=phone_number).exists():
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': 'এই ফোন নম্বরটি দিয়ে ইতিমধ্যে নিবন্ধন করা হয়েছে।'
+                    })
 
-                    # ওটিপি ডাটাবেজে ট্র্যাক রাখা
-                    SMSVerification.objects.create(phone_number=phone_number, otp_code=otp_code)
+                # Session dynamic storage
+                request.session['reg_full_name'] = form.cleaned_data['full_name']
+                request.session['reg_phone_number'] = phone_number
+                request.session['reg_password'] = form.cleaned_data['password']
 
-                    # গেটওয়ে দিয়ে ওটিপি টেক্সট ফায়ার করা
-                    sms_sent = False
-                    sms_error_reason = "Unknown Gateway Issue"
-                    message_text = f"আপনার ওটিপি কোড হলো: {otp_code}। এটি ৫ মিনিটের জন্য প্রযোজ্য।"
+                # OTP creation (Testing-এর জন্য "1234")
+                otp_code = "1234"
+                otp_message = f"Your JBD IT Registration OTP is: {otp_code}. Do not share this with anyone."
 
-                    is_success, api_message = send_sms(phone_number, message_text)
-                    if is_success:
-                        sms_sent = True
-                    else:
-                        sms_error_reason = api_message
+                SMSVerification.objects.create(
+                    phone_number=phone_number,
+                    otp_code=otp_code,
+                    is_used=False
+                )
 
-                    if sms_sent:
-                        return JsonResponse({'status': 'success', 'message': 'ওটিপি সফলভাবে পাঠানো হয়েছে।'})
-                    else:
-                        return JsonResponse({'status': 'error', 'message': f'⚠️ এসএমএস গেটওয়ে ব্যর্থ: {sms_error_reason}'})
+                is_sent, sms_response_msg = send_sms(phone_number, otp_message)
 
-                except Exception as system_err:
-                    return JsonResponse({'status': 'error', 'message': f'সিস্টেম ক্র্যাশ এড়ানো হয়েছে: {str(system_err)}'})
+                if is_sent:
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'আপনার ফোনে একটি ওটিপি (OTP) পাঠানো হয়েছে।'
+                    })
+                else:
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': f'ওটিপি পাঠানো যায়নি। API Error: {sms_response_msg}'
+                    })
             else:
-                return JsonResponse({'status': 'error', 'errors': form.errors.get_json_data()})
+                errors_dict = {}
+                for field, error_list in form.errors.items():
+                    errors_dict[field] = [{'message': error_list[0]}]
 
-        # ---------------------------------------------------------------------
-        # অ্যাকশন ২: ওটিপি ম্যাচিং এবং অ্যাকাউন্ট প্রোফাইলে পাসওয়ার্ড রাইট করা
-        # ---------------------------------------------------------------------
+                return JsonResponse({
+                    'status': 'error',
+                    'errors': errors_dict
+                })
+
+        # ---------------- STEP 2: VERIFY OTP & CREATE USER ----------------
         elif action == 'verify_otp':
-            try:
-                otp_code = request.POST.get('otp_code')
-                phone_number = request.session.get('reg_phone_number')
-                full_name = request.session.get('reg_full_name')
-                password = request.session.get('reg_password')
+            otp_code = request.POST.get('otp_code')
+            phone_number = request.session.get('reg_phone_number')
+            full_name = request.session.get('reg_full_name', '')
+            password = request.session.get('reg_password')
 
-                if not phone_number or not otp_code or not password:
-                    return JsonResponse({'status': 'error', 'message': 'রেজিস্ট্রেশন সেশনের মেয়াদ শেষ। পুনরায় চেষ্টা করুন।'})
+            if not phone_number or not password:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'নিবন্ধন সেশন শেষ হয়ে গেছে। অনুগ্রহ করে আবার চেষ্টা করুন।'
+                })
 
-                otp_record = SMSVerification.objects.filter(phone_number=phone_number, otp_code=otp_code).last()
+            verification = SMSVerification.objects.filter(
+                phone_number=phone_number,
+                otp_code=otp_code,
+                is_used=False
+            ).first()
 
-                if otp_record and otp_record.is_valid():
-                    otp_record.is_used = True
-                    otp_record.save()
+            if verification:
+                try:
+                    # সার্কুলার ডিপেন্ডেন্সি এড়াতে এখানে লোকাল ইমপোর্ট করা হলো
+                    from apps.students.models import Student
 
-                    username = f"std_{phone_number}"
-                    name_parts = full_name.split(' ', 1)
-                    first_name = name_parts[0]
-                    last_name = name_parts[1] if len(name_parts) > 1 else ""
+                    with transaction.atomic():
+                        verification.is_used = True
+                        verification.save()
 
-                    # 🎯 আপনার আগের পেজগুলোর ডেকোরেটরের সাথে হুবহু ম্যাচ করানোর জন্য রোল এখানে 'STUDENT' রাখা হলো
-                    user, created = Account.objects.get_or_create(
-                        username=username,
-                        defaults={
-                            'first_name': first_name,
-                            'last_name': last_name,
-                            'role': 'STUDENT',  # আপনার @role_required(allowed_roles=['STUDENT']) এর সাথে ম্যাচিং
-                            'is_active': True
-                        }
-                    )
+                        # নাম split করা
+                        name_parts = full_name.split(' ', 1)
+                        first_name = name_parts[0]
+                        last_name = name_parts[1] if len(name_parts) > 1 else ''
 
-                    # পাসওয়ার্ড হ্যাস করে সেভ করা
-                    user.set_password(password)
-                    user.save()
+                        # অ্যাকাউন্ট তৈরি
+                        user, created = Account.objects.get_or_create(
+                            username=phone_number,
+                            defaults={
+                                'first_name': first_name,
+                                'last_name': last_name,
+                                'role': 'STUDENT',
+                                'is_active': True
+                            }
+                        )
 
-                    # সেশন লগইন চালু করা
-                    login(request, user)
+                        if created:
+                            user.set_password(password)
+                            user.save()
 
-                    # সেশন ক্লিয়ারেন্স
+                            # 🎯 স্বয়ংক্রিয়ভাবে স্টুডেন্ট আইডি (Student ID) তৈরি করার লজিক (780 থেকে শুরু)
+                            last_student = Student.objects.all().order_by('id').last()
+                            if last_student and last_student.student_id:
+                                try:
+                                    next_id = str(int(last_student.student_id) + 1)
+                                except ValueError:
+                                    next_id = "780"
+                            else:
+                                next_id = "780"
+
+                            # 🎯 বর্তমান বছরের উপর ভিত্তি করে সেশন তৈরি (যেমন: 2026-2027)
+                            current_year = datetime.now().year
+                            next_year = current_year + 1
+                            generated_session = f"{current_year}-{next_year}"
+
+                            # স্টুডেন্ট প্রোফাইল তৈরি
+                            Student.objects.get_or_create(
+                                account=user,
+                                defaults={
+                                    'student_id': next_id,       # 🎯 ডাইনামিক সিরিয়াল আইডি
+                                    'name': full_name,
+                                    'phone': phone_number,
+                                    'session': generated_session,# 🎯 ডাইনামিক সেশন বছর
+                                    'status': 'pending'
+                                }
+                            )
+
+                    # অটো লগইন
+                    authenticated_user = authenticate(username=phone_number, password=password)
+                    if authenticated_user is not None:
+                        login(request, authenticated_user)
+
+                    # সেশন ডাটা রিমুভ
                     request.session.pop('reg_full_name', None)
                     request.session.pop('reg_phone_number', None)
                     request.session.pop('reg_password', None)
 
                     messages.success(request, "নিবন্ধন সফল হয়েছে!")
-                    return JsonResponse({'status': 'verified', 'redirect_url': '/dashboard/students/'})
-                else:
-                    return JsonResponse({'status': 'error', 'message': 'ভুল অথবা মেয়াদোত্তীর্ণ ওটিপি কোড।'})
-
-            except Exception as verify_err:
-                return JsonResponse({'status': 'error', 'message': f'ভেরিফিকেশন প্রসেস ত্রুটি: {str(verify_err)}'})
+                    return JsonResponse({
+                        'status': 'verified',
+                        'redirect_url': '/dashboard/account/student/'
+                    })
+                except Exception as e:
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': f'রেজিস্ট্রেশন প্রсеসিং ব্যর্থ হয়েছে: {str(e)}'
+                    })
+            else:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'ভুল অথবা মেয়াদোত্তীর্ণ ওটিপি কোড।'
+                })
 
         return JsonResponse({'status': 'error', 'message': 'Invalid Action Submissions'})

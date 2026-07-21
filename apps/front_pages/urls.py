@@ -1,45 +1,39 @@
 from django.urls import path
 
-from .views import FrontPagesView
+# আলাদা আলাদা ভিউ ইমপোর্ট না করে সরাসরি পুরো views মডিউলটি ইমপোর্ট করা হলো
+from . import views
 
 urlpatterns = [
-    path(
-        "",
-        FrontPagesView.as_view(template_name="landing_page.html"),
-        name="landing-page",
-    ),
-    path(
-        "front/pricing/",
-        FrontPagesView.as_view(template_name="pricing_page.html"),
-        name="pricing-page",
-    ),
-    path(
-        "front/payment/",
-        FrontPagesView.as_view(template_name="payment_page.html"),
-        name="payment-page",
-    ),
-    path(
-        "front/checkout/",
-        FrontPagesView.as_view(template_name="checkout_page.html"),
-        name="checkout-page",
-    ),
-    path(
-        "front/help_center/",
-        FrontPagesView.as_view(template_name="help_center_landing.html"),
-        name="help-center-landing",
-    ),
-    path(
-        "front/help_center/article/",
-        FrontPagesView.as_view(template_name="help_center_article.html"),
-        name="help-center-article",
-    ),
+    # ফ্রন্টপেজ ভিউসমূহ
+    path("", views.FrontPagesView.as_view(template_name="landing_page.html"), name="landing-page"),
+    path("about/", views.FrontPagesView.as_view(template_name="about.html"), name="about"),
+    path("contact/", views.FrontPagesView.as_view(template_name="contact.html"), name="contact"),
+    path("courses/", views.FrontPagesView.as_view(template_name="courses.html"), name="courses"),
+    path("photo-gallery/", views.FrontPagesView.as_view(template_name="photo_gallery.html"), name="photo-gallery"),
+    path("students/", views.FrontPagesView.as_view(template_name="students.html"), name="students"),
+    path("tutorials/", views.FrontPagesView.as_view(template_name="tutorials.html"), name="tutorials"),
+    path("video-gallery/", views.FrontPagesView.as_view(template_name="video_gallery.html"), name="video-gallery"),
+
+    # কোর্স ডিটেইলস
+    path('course/<slug:slug>/', views.CourseDetailView.as_view(), name='course_detail'),
+    # ব্যাকএন্ড ক্রুড (CRUD) ভিউস
+    path('backend/blog/list/', views.BlogPostListView.as_view(), name='blog_list_manage'),
+    path('blog/<str:slug>/', views.BlogDetailView.as_view(), name='blog_detail'),
+    path('backend/about/manage/', views.AboutContentManageView.as_view(), name='about_manage'),
+    path('backend/blog/create/', views.BlogPostCreateView.as_view(), name='blog_create'),
+    path('backend/blog/edit/<int:pk>/', views.BlogPostUpdateView.as_view(), name='blog_manage'),
+    path('backend/blog/delete/<int:pk>/', views.BlogPostDeleteView.as_view(), name='blog_delete'),
+    path('backend/blog/category/', views.CategoryManageView.as_view(), name='category_manage'),
+    path('backend/blog/category/quick-create/', views.quick_category_create, name='quick_category_create'),
+    path('backend/blog/category/update/<int:pk>/', views.category_update, name='category_update'),
+    path('backend/blog/category/delete/<int:pk>/', views.category_delete, name='category_delete'),
 
 
-    path("about/", FrontPagesView.as_view(template_name="about.html"), name="about"),
-    path("contact/", FrontPagesView.as_view(template_name="contact.html"), name="contact"),
-    path("courses/", FrontPagesView.as_view(template_name="courses.html"), name="courses"),
-    path("photo-gallery/", FrontPagesView.as_view(template_name="photo_gallery.html"), name="photo-gallery"),
-    path("students/", FrontPagesView.as_view(template_name="students.html"), name="students"),
-    path("tutorials/", FrontPagesView.as_view(template_name="tutorials.html"), name="tutorials"),
-    path("video-gallery/", FrontPagesView.as_view(template_name="video_gallery.html"), name="video-gallery"),
+    # স্লাইডার ম্যানেজমেন্ট (ব্যাকএন্ড)
+    path('backend/slider/list/', views.SliderListView.as_view(), name='slider_list'),
+    path('backend/slider/create/', views.SliderCreateView.as_view(), name='slider_create'),
+    path('backend/slider/edit/<int:pk>/', views.SliderUpdateView.as_view(), name='slider_edit'),
+    path('backend/slider/delete/<int:pk>/', views.SliderDeleteView.as_view(), name='slider_delete'),
+
+
 ]

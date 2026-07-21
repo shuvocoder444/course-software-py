@@ -1,0 +1,229 @@
+{% extends layout_path %}
+
+{% block title %}{% if object %} Edit Blog Post {% else %} Create New Blog Post {% endif %}{% endblock %}
+
+{% block content %}
+<!-- আইকন এবং Quill Editor-এর সিডিএন লিঙ্ক -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+
+<div class="container-fluid py-4">
+    {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+    <div class="mb-4">
+        <a href="{% url 'blog_list_manage' %}" class="btn btn-link p-0 text-decoration-none">
+            <i class="bx bx-arrow-back"></i> Back to List
+        </a>
+        <h2 class="h4 mt-2">{% if object %} Edit Blog Post {% else %} Create New Blog Post {% endif %}</h2>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data" novalidate id="blogPostForm">
+                {% csrf_token %}
+
+                <!-- ফর্মের গ্লোবাল এরর ব্লক -->
+                {% if form.errors %}
+                    <div class="alert alert-danger p-3 mb-4 rounded shadow-sm">
+                        <h6 class="fw-bold mb-2"><i class="bx bx-error-circle me-1"></i> Please correct the following errors:</h6>
+                        <ul class="mb-0 small ps-3">
+                            {% for field, errors in form.errors.items %}
+                                <li><strong>{{ field|title }}:</strong> {{ errors.0 }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <div class="row g-3">
+                    <!-- Title -->
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Post Title</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}<div class="text-danger small mt-1">{{ form.title.errors.0 }}</div>{% endif %}
+                    </div>
+
+                    <!-- Category & Read Time -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Category</label>
+                        <div class="input-group">
+                            {{ form.category }}
+                            <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#quickCategoryModal">
+                                <i class="bx bx-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Read Time (Minutes)</label>
+                        {{ form.read_time_minutes }}
+                    </div>
+
+                    <!-- Content (Quill Editor Integrated) -->
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Content</label>
+                        <!-- জ্যাঙ্গোর ডিফল্ট textarea লুকিয়ে রাখা হলো ডাটা সাবমিট করার জন্য -->
+                        <div style="display:none;">
+                            {{ form.content }}
+                        </div>
+                        <!-- এই ডিভটিতে Quill Editor লোড হবে -->
+                        <div id="editor-container" style="height: 350px; background: #fff; border-radius: 0 0 4px 4px;"></div>
+                        {% if form.content.errors %}<div class="text-danger small mt-1">{{ form.content.errors.0 }}</div>{% endif %}
+                    </div>
+
+                    <!-- Image & Alt Text -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Featured Image</label>
+                        {{ form.featured_image }}
+                        {% if object and object.featured_image %}
+                            <div class="mt-2 small text-muted">Current: <a href="{{ object.featured_image.url }}" target="_blank">{{ object.featured_image.name }}</a></div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Image Alt Text (SEO)</label>
+                        {{ form.image_alt_text }}
+                    </div>
+
+                    <!-- SEO Section -->
+                    <div class="col-md-12 my-4">
+                        <hr class="text-muted">
+                        <h5 class="text-primary mb-3"><i class="bx bx-search-alt-2"></i> SEO Optimization</h5>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Meta Title</label>
+                        {{ form.meta_title }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Focus Keyword</label>
+                        {{ form.focus_keyword }}
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Meta Description</label>
+                        {{ form.meta_description }}
+                    </div>
+
+                    <!-- Visibility -->
+                    <div class="col-md-12 mt-3">
+                        <div class="form-check form-switch">
+                            {{ form.is_published }}
+                            <label class="form-check-label fw-bold" for="{{ form.is_published.id_for_label }}">Publish instantly</label>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="col-md-12 mt-4">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="bx bx-save me-1"></i> {% if object %} Update Post {% else %} Save Post {% endif %}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- AJAX ভিত্তিক কুইক ক্যাটাগরি পপআপ মডাল -->
+<div class="modal fade" id="quickCategoryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header py-2">
+                <h5 class="modal-title h6 mb-0">New Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-2">
+                <input type="text" id="quickCategoryName" class="form-control form-control-sm" placeholder="Category name...">
+                <div id="modalError" class="text-danger small mt-1" style="display:none;"></div>
+            </div>
+            <div class="modal-footer py-2">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="saveQuickCategory" class="btn btn-sm btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- জাভাস্ক্রিপ্ট প্রসেসিং -->
+<script>
+// ১. Quill Editor ইনিশিয়ালাইজেশন এবং কনফিগারেশন
+const quill = new Quill('#editor-container', {
+    theme: 'snow',
+    modules: {
+        toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],        // টেক্সট ফরম্যাট
+            [{ 'align': [] }],                               // বাম, ডান, মাঝের অ্যালাইনমেন্ট
+            [{ 'header': [1, 2, 3, 4, false] }],             // হেডিং অপশন
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],     // লিস্ট
+            ['link', 'blockquote', 'code-block'],             // লিংক ও কোড ব্লক
+            ['clean']                                         // ফরম্যাটিং মোছার বাটন
+        ]
+    }
+});
+
+// জ্যাঙ্গোর আসল টেক্সট এরিয়া সিলেক্ট করা
+const djangoTextArea = document.querySelector('textarea[name="content"]') || document.getElementById('id_content');
+
+// ২. যদি আগে থেকে ডাটা থাকে (Edit Post-এর সময়), তা Quill এডিটরে লোড করা
+if (djangoTextArea && djangoTextArea.value) {
+    quill.root.innerHTML = djangoTextArea.value;
+}
+
+// ৩. ফর্ম সাবমিট করার ঠিক আগ মুহূর্তে Quill-এর ডাটা জ্যাঙ্গো ফর্মে পুশ করা
+const form = document.getElementById('blogPostForm');
+form.addEventListener('submit', function() {
+    djangoTextArea.value = quill.root.innerHTML;
+});
+
+// কুইক ক্যাটাগরি সেভ করার AJAX স্ক্রিপ্ট (আপনার আগের কোড)
+document.getElementById('saveQuickCategory').addEventListener('click', function() {
+    const nameInput = document.getElementById('quickCategoryName');
+    const name = nameInput.value.trim();
+    const errorDiv = document.getElementById('modalError');
+
+    if(!name) {
+        errorDiv.textContent = "Name cannot be empty.";
+        errorDiv.style.display = "block";
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+    fetch("{% url 'quick_category_create' %}", {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            const categorySelect = document.querySelector('select[name="category"]') || document.getElementById('id_category');
+
+            if (categorySelect) {
+                const option = new Option(data.name, data.id, true, true);
+                categorySelect.add(option);
+            }
+
+            nameInput.value = '';
+            errorDiv.style.display = "none";
+            const modalEl = document.getElementById('quickCategoryModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+        } else {
+            errorDiv.textContent = data.error || "Failed to save category.";
+            errorDiv.style.display = "block";
+        }
+    })
+    .catch(error => {
+        errorDiv.textContent = "Something went wrong.";
+        errorDiv.style.display = "block";
+    });
+});
+</script>
+{% endblock %}

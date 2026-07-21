@@ -1,0 +1,168 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %} {% translate "Site Settings" %} {% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">{% translate "Update Institution & Site Settings" %}</h4>
+        </div>
+        <div class="card-body">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- ফাইল ও ইমেজ আপলোডের জন্য enctype="multipart/form-data" অবশ্যই লাগবে -->
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- ১. প্রতিষ্ঠানের সাধারণ তথ্য -->
+                <h5 class="text-secondary border-bottom pb-2">1. Institution Information</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.institution_name.label }}</label>
+                        {{ form.institution_name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.email.label }}</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">{{ form.post_office.label }}</label>
+                        {{ form.post_office }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">{{ form.upozila.label }}</label>
+                        {{ form.upozila }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">{{ form.district.label }}</label>
+                        {{ form.district }}
+                    </div>
+
+
+                    {% comment %} <div class="col-md-4">
+                        <label class="form-label">{{ form.eiin.label }}</label>
+                        {{ form.eiin }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">{{ form.school_code.label }}</label>
+                        {{ form.school_code }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">{{ form.established_at.label }}</label>
+                        {{ form.established_at }}
+                    </div> {% endcomment %}
+
+
+
+
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.phone_number.label }}</label>
+                        {{ form.phone_number }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.map_link.label }}</label>
+                        {{ form.map_link }}
+                    </div>
+                </div>
+
+                <!-- ২. সাপ্তাহিক ছুটি -->
+                <h5 class="text-secondary border-bottom pb-2">2. Weekly Holidays (Select Days)</h5>
+                <div class="mb-4 pt-2">
+                    <div class="form-check form-check-inline me-3">
+                        {{ form.friday }} <label class="form-check-label ms-1">{{ form.friday.label }}</label>
+                    </div>
+                    <div class="form-check form-check-inline me-3">
+                        {{ form.saturday }} <label class="form-check-label ms-1">{{ form.saturday.label }}</label>
+                    </div>
+                    <div class="form-check form-check-inline me-3">
+                        {{ form.sunday }} <label class="form-check-label ms-1">{{ form.sunday.label }}</label>
+                    </div>
+                    <div class="form-check form-check-inline me-3">
+                        {{ form.monday }} <label class="form-check-label ms-1">{{ form.monday.label }}</label>
+                    </div>
+                    <div class="form-check form-check-inline me-3">
+                        {{ form.tuesday }} <label class="form-check-label ms-1">{{ form.tuesday.label }}</label>
+                    </div>
+                    <div class="form-check form-check-inline me-3">
+                        {{ form.wednesday }} <label class="form-check-label ms-1">{{ form.wednesday.label }}</label>
+                    </div>
+                    <div class="form-check form-check-inline me-3">
+                        {{ form.thursday }} <label class="form-check-label ms-1">{{ form.thursday.label }}</label>
+                    </div>
+                </div>
+
+                <!-- ৩. পিডিএফ ব্যানারসমূহ (মডেল অনুযায়ী ফিল্ডের নাম ঠিক করা হয়েছে) -->
+                <h5 class="text-secondary border-bottom pb-2">3. Templates (PDF Banners)</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.student_admission_pdf_banner.label }}</label>
+                        {{ form.student_admission_pdf_banner }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">{{ form.invoice_pdf_banner.label }}</label>
+                        {{ form.invoice_pdf_banner }}
+                    </div>
+                </div>
+
+                <!-- ৪. মিডিয়া ও ব্র্যান্ডিং -->
+
+<h5 class="text-secondary border-bottom pb-2">4. Media & Branding</h5>
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <label class="form-label">{{ form.logo.label }}</label>
+        {{ form.logo }}
+        {% if form.instance.logo %}
+            <div class="mt-2">
+                <small class="text-muted">Current Logo:</small><br>
+                <img src="{{ form.instance.logo.url }}" alt="Current Logo" class="img-thumbnail" style="max-height: 60px;">
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">{{ form.favicon.label }}</label>
+        {{ form.favicon }}
+        {% if form.instance.favicon %}
+            <div class="mt-2">
+                <small class="text-muted">Current Favicon:</small><br>
+                <img src="{{ form.instance.favicon.url }}" alt="Current Favicon" class="img-thumbnail" style="max-height: 30px;">
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">{{ form.banner.label }}</label>
+        {{ form.banner }}
+        {% if form.instance.banner %}
+            <div class="mt-2">
+                <small class="text-muted">Current Banner:</small><br>
+                <img src="{{ form.instance.banner.url }}" alt="Current Banner" class="img-thumbnail" style="max-height: 60px;">
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+                <!-- সাবমিট বাটন -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-success btn-lg px-5">
+                        <i class="fas fa-save"></i> {% translate "Save Settings" %}
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

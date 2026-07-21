@@ -2,6 +2,14 @@
 
 {% block content %}
 <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center p-4 bg-light">
+    {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
     <div class="card shadow-lg border-0 rounded-4 overflow-hidden w-100" style="max-width: 950px;">
         <div class="row g-0">
 
@@ -112,13 +120,18 @@
 </div>
 
 <script>
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    // নিশ্চিত করুন csrfToken ঠিকমতো পাচ্ছে
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]') ? document.querySelector('[name=csrfmiddlewaretoken]').value : '';
 
     // ১ম ধাপ সাবমিট করা (ওটিপি পাঠানো)
     function submitRegistration() {
-        const formData = new FormData(document.getElementById('dynamic-reg-form'));
+        const formElement = document.getElementById('dynamic-reg-form');
+        if (!formElement) return;
+
+        const formData = new FormData(formElement);
         formData.append('action', 'send_otp');
 
+        // এরর মেসেজ পরিষ্কার করা
         document.querySelectorAll('.text-danger, #otp-error-msg').forEach(el => el.innerText = '');
 
         fetch(window.location.href, {
@@ -128,7 +141,7 @@
         })
         .then(res => {
             if (!res.ok) {
-                throw new Error("서버 Error 500");
+                throw new Error("সার্ভার Error 500");
             }
             return res.json();
         })
@@ -137,11 +150,10 @@
                 document.getElementById('credentials-section').classList.add('d-none');
                 document.getElementById('otp-section').classList.remove('d-none');
 
-                // ওটিপি বক্সগুলো রানটাইমে জেনারেট করা (থিম ক্র্যাশ প্রোটেকশন)
+                // ওটিপি বক্স রানটাইমে জেনারেট করা
                 renderOTPFields();
-            }  else if (data.status === 'error') {
+            } else if (data.status === 'error') {
                 if (data.errors) {
-                    // ফর্মে কোনো ফিল্ডে ভুল থাকলে বা পাসওয়ার্ড না মিললে নির্দিষ্ট জায়গায় লাল লেখা দেখাবে
                     if (data.errors.phone_number) document.querySelector('.id-error-phone_number').innerText = data.errors.phone_number[0].message;
                     if (data.errors.full_name) document.querySelector('.id-error-full_name').innerText = data.errors.full_name[0].message;
                     if (data.errors.password) document.querySelector('.id-error-password').innerText = data.errors.password[0].message;
@@ -153,13 +165,15 @@
         })
         .catch(err => {
             console.error(err);
-            document.querySelector('.id-error-phone_number').innerText = "সার্ভারে অভ্যন্তরীণ ত্রুটি (500) হয়েছে। আপনার টার্মিনাল লগ চেক করুন।";
+            const errDiv = document.querySelector('.id-error-phone_number');
+            if (errDiv) errDiv.innerText = "সার্ভারে অভ্যন্তরীণ ত্রুটি হয়েছে। আপনার পাইথন টার্মিনাল চেক করুন।";
         });
     }
 
     // ওটিপি ইনপুট এলিমেন্ট তৈরি ও অটো-ফোকাস সেটআপ
     function renderOTPFields() {
         const container = document.getElementById('otp-boxes-container');
+        if (!container) return;
         container.innerHTML = ''; // ক্লিন করা
 
         for (let i = 0; i < 4; i++) {
@@ -184,7 +198,7 @@
             });
         });
 
-        if(boxes[0]) boxes[0].focus();
+        if (boxes[0]) boxes[0].focus();
     }
 
     // ২য় ধাপ সাবমিট করা (ওটিপি ভেরিফিকেশন)
@@ -192,8 +206,10 @@
         let otpCode = "";
         document.querySelectorAll('.dynamic-otp-box').forEach(box => otpCode += box.value);
 
+        const errorMsgDiv = document.getElementById('otp-error-msg');
+
         if (otpCode.length < 4) {
-            document.getElementById('otp-error-msg').innerText = "সম্পূর্ণ ৪ ডিজিটের ওটিপি কোডটি লিখুন।";
+            if (errorMsgDiv) errorMsgDiv.innerText = "সম্পূর্ণ ৪ ডিজিটের ওটিপি কোডটি লিখুন।";
             return;
         }
 
@@ -211,8 +227,12 @@
             if (data.status === 'verified') {
                 window.location.href = data.redirect_url;
             } else {
-                document.getElementById('otp-error-msg').innerText = data.message;
+                if (errorMsgDiv) errorMsgDiv.innerText = data.message;
             }
+        })
+        .catch(err => {
+            console.error(err);
+            if (errorMsgDiv) errorMsgDiv.innerText = "ওটিপি ভেরিফাই করতে সমস্যা হয়েছে।";
         });
     }
 
@@ -221,26 +241,20 @@
         document.getElementById('credentials-section').classList.remove('d-none');
     }
 
+    // পাসওয়ার্ড দেখা এবং লুকানোর ডাইনামিক ফাংশন
+    function togglePasswordVisibility(fieldId, toggleIconSpan) {
+        const passwordField = document.getElementById(fieldId);
+        const icon = toggleIconSpan.querySelector('i');
 
-
-
-
-    // পাসওয়ার্ড দেখা এবং লুকানোর ডাইনামিক ফাংশন
-function togglePasswordVisibility(fieldId, toggleIconSpan) {
-    const passwordField = document.getElementById(fieldId);
-    const icon = toggleIconSpan.querySelector('i');
-
-    if (passwordField && icon) {
-        if (passwordField.type === 'password') {
-            // পাসওয়ার্ড দেখাবে
-            passwordField.type = 'text';
-            icon.className = 'ti ti-eye-off'; // চোখ বন্ধ আইকন
-        } else {
-            // পাসওয়ার্ড লুকাবে
-            passwordField.type = 'password';
-            icon.className = 'ti ti-eye'; // চোখ খোলা আইকন
+        if (passwordField && icon) {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                icon.className = 'ti ti-eye-off'; // চোখ বন্ধ আইকন
+            } else {
+                passwordField.type = 'password';
+                icon.className = 'ti ti-eye'; // চোখ খোলা আইকন
+            }
         }
     }
-}
 </script>
 {% endblock %}

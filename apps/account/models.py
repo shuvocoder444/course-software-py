@@ -26,18 +26,6 @@ from django.db import models
 from django.utils import timezone
 import datetime
 
-class SMSVerification(models.Model):
-    phone_number = models.CharField(max_length=15,  null=True,
-        blank=True,)
-    otp_code = models.CharField(max_length=6,  null=True,
-        blank=True,)
-    created_at = models.DateTimeField(auto_now_add=True, null=True,
-        blank=True, )
-    is_used = models.BooleanField( null=True,
-        blank=True, )
-
-    def is_valid(self):
-        return not self.is_used and (timezone.now() - self.created_at) < datetime.timedelta(minutes=5)
 
 
 from django.db import models

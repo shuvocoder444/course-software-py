@@ -3,153 +3,901 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}Homepage{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
-<!-- ==================== HERO (LIGHT GRADIENT) ==================== -->
-<section class="hero" id="home">
-  <div class="hero-blob-r"></div>
-  <div class="hero-blob-g"></div>
-  <div class="hero-shape hs-1"></div>
-  <div class="hero-shape hs-2"></div>
-  <div class="hero-shape hs-3"></div>
-  <div class="hero-shape hs-4"></div>
-  <div class="hero-shape hs-5"></div>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap');
 
-  <div class="container position-relative" style="z-index:1;">
-    <div class="row align-items-center g-5">
-      <div class="col-lg-7">
-        <div class="hero-eyebrow">
-          <span class="dot"></span>
-          Physical Lab Training — রাজশাহী ব্রাঞ্চ এ ভর্তি চলছে
-        </div>
+  .jbd-home{
+    --red: #E31E24;
+    --red-dark: #A8121A;
+    --navy: #0D1524;
+    --navy-soft: #131C31;
+    --green: #3FA13D;
+    --green-light: #8CC63F;
+    --amber: #FDB714;
+    --amber-light: #FFD966;
+    --ink: #131722;
+    --slate: #5B6472;
+    --slate-light: #8A93A3;
+    --paper: #F6F7FB;
+    --line: #E7E9F1;
+    --white: #FFFFFF;
+    --radius: 14px;
+    --shadow: 0 20px 45px -20px rgba(13,21,36,.22);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--ink);
+    background: var(--white);
+    overflow-x: hidden;
+  }
+  .jbd-home *{ box-sizing: border-box; }
+  .jbd-home h1, .jbd-home h2, .jbd-home h3{
+    font-family: 'Sora', 'Inter', sans-serif;
+    margin: 0;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .jbd-home p{ margin: 0; color: var(--slate); line-height: 1.7; }
+  .jbd-home ul{ margin:0; padding:0; list-style:none; }
+  .jbd-home a{ text-decoration:none; color:inherit; }
+  .jbd-home img{ display:block; max-width:100%; }
+  .jbd-mono{ font-family: 'JetBrains Mono', 'Courier New', monospace; }
 
-        <h1 class="hero-h1">
-          ল্যাবে এসে শিখুন —<br>
-          <span>প্রফেশনাল</span> হয়ে বেরিয়ে যান
-        </h1>
+  .jbd-wrap{
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .jbd-eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:.04em;
+    color: var(--red);
+    background: rgba(227,30,36,.08);
+    border:1px solid rgba(227,30,36,.18);
+    padding:6px 14px;
+    border-radius: 999px;
+  }
+  .jbd-eyebrow.is-light{
+    color: var(--amber-light);
+    background: rgba(253,183,20,.12);
+    border-color: rgba(253,183,20,.3);
+  }
+  .jbd-section-head{
+    max-width: 640px;
+    margin-bottom: 20px;
+  }
+  .jbd-section-head.is-center{ margin-left:auto; margin-right:auto; text-align:center; }
+  .jbd-section-head h2{
+    font-size: clamp(28px, 3.4vw, 40px);
+    margin: 16px 0 14px;
+  }
+  .jbd-section-head p{ font-size:16px; }
+  .jbd-section-head.is-light p{ color:#B7BECB; }
+  .jbd-section-head.is-light h2{ color:var(--white); }
 
-        <p class="hero-desc">
+  .jbd-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding: 15px 28px;
+    border-radius: 10px;
+    font-weight:600;
+    font-size:15px;
+    border: 1.5px solid transparent;
+    cursor:pointer;
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease, border-color .18s ease;
+    white-space: nowrap;
+  }
+  .jbd-btn--primary{
+    background: var(--red);
+    color: var(--white);
+    box-shadow: 0 14px 30px -12px rgba(227,30,36,.55);
+  }
+a.jbd-btn.jbd-btn--primary {
+    color: #ffffff;
+    padding: 6px 30px 6px 31px;
+}
+  .jbd-btn--primary:hover{ transform: translateY(-2px); box-shadow: 0 18px 34px -12px rgba(227,30,36,.65); }
+  .jbd-btn--ghost{
+    background: transparent;
+    color: var(--white) !important;
+    border-color: rgba(255,255,255,.35);
+  }
+  .jbd-btn--ghost:hover{ background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.6); }
+  .jbd-btn--outline{
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--line);
+    padding: 10px 20px;
+    font-size:14px;
+    margin-left: -5px;
+  }
+  .jbd-btn--outline:hover{ border-color: var(--red); color: var(--red); }
 
-        </p>
+/* ---------- 1. HERO MAIN SECTION ---------- */
+.jbd-hero {
+  position: relative;
+  background: #0A0F1C;
+  overflow: hidden;
+  min-height: 80vh; /* height এর বদলে min-height ব্যবহার করাই শ্রেয় */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0; /* উপর ও নিচে কিছু জায়গা রাখতে */
+}
 
-        <div class="hero-actions">
-          <a href="#admission-form" class="btn-primary-brand">
-            <i class="ti ti-clipboard-plus"></i> ভর্তি ফরম পূরণ করুন
-          </a>
-          <a href="#courses" class="btn-outline-brand">
-            <i class="ti ti-layout-grid"></i> ব্যাচ দেখুন
-          </a>
-        </div>
+/* গ্লো ইফেক্ট রিমুভড */
+.jbd-hero__bg {
+  display: none;
+}
 
-        <div class="hero-trust">
-          <div class="hero-trust-item"><i class="ti ti-shield-check"></i> ১০০% প্র্যাক্টিকাল</div>
-          <div class="hero-trust-item"><i class="ti ti-certificate"></i> ভেরিফাইড সার্টিফিকেট</div>
-          <div class="hero-trust-item"><i class="ti ti-headset"></i> লাইফটাইম সাপোর্ট</div>
+/* ---------- 2. SLIDER TRACK & SLIDES ---------- */
+.jbd-hero__track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.jbd-hero__slide {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.jbd-hero__slide.is-active {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: jbdFade .6s ease forwards;
+}
+
+/* ব্যাকগ্রাউন্ড ইমেজ রেসপন্সিভ ও কভার করার জন্য */
+.jbd-hero__slide-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover; /* 100% 100% তুলে কভার দেওয়া হয়েছে যাতে ইমেজ নষ্ট না হয় */
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+/* শ্যাডো ওভারলে */
+.jbd-hero__slide.has-text .jbd-hero__slide-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 15, 28, 0.75); /* লেখা পরিষ্কার দেখার জন্য একটু গাঢ় করা হলো */
+  z-index: 2;
+}
+
+/* ---------- 3. TEXT CONTENT & BUTTONS ---------- */
+.jbd-hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px; /* মোবাইলের জন্য সাইড প্যাডিং কমানো হলো */
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* ফ্লুইড রেসপন্সিভ ফন্ট সাইজ (মোবাইল থেকে ডেক্সটপ নিজে থেকেই অ্যাডজাস্ট হবে) */
+.jbd-hero__content h1 {
+  color: #ffffff;
+  font-size: clamp(20px, 4vw, 42px); /* ডাইনামিক ফন্ট সাইজ */
+  margin: 0 0 16px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.jbd-hero__content h1 span {
+  color: #14a800;
+  font-size: clamp(16px, 3.2vw, 28px);
+  display: block;
+  margin-top: 6px;
+}
+
+.jbd-hero__content p {
+  color: #ffffff;
+  font-size: clamp(13px, 2vw, 16px); /* টাইপ সাইজ অপটিমাইজড */
+  max-width: 800px;
+  margin: 0 auto 24px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.jbd-hero__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ---------- 4. CONTROLS (ARROWS & DOTS) ---------- */
+.jbd-hero__controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.jbd-hero__arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(0,0,0,0.3);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .18s ease, border-color .18s ease;
+}
+
+.jbd-hero__arrow:hover {
+  background: rgba(255,255,255,.2);
+  border-color: rgba(255,255,255,.5);
+}
+
+.jbd-hero__dots { display: flex; gap: 8px; }
+.jbd-hero__dots button {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,.3);
+  cursor: pointer;
+  padding: 0;
+  transition: all .2s ease;
+}
+
+.jbd-hero__dots button.is-active {
+  width: 22px;
+  border-radius: 6px;
+  background: #14a800;
+}
+
+/* ---------- 5. MEDIA QUERIES FOR SMALL MOBILE (370px & BELOW) ---------- */
+@media screen and (max-width: 480px) {
+  .jbd-hero {
+    min-height: 550px;
+    padding: 30px 0 60px; /* নিচের কন্ট্রোলসের জায়গা রাখার জন্য */
+  }
+
+  .jbd-hero__content {
+    padding: 0 12px;
+  }
+
+  .jbd-hero__content p {
+    line-height: 1.5;
+  }
+}
+
+  /* ---------- 2. ABOUT ---------- */
+  .jbd-about{
+    padding: 100px 0;
+    display:grid;
+    grid-template-columns: .85fr 1.15fr;
+    gap: 64px;
+    align-items:center;
+    max-width:1220px;
+    margin:0 auto;
+    padding-left:32px; padding-right:32px;
+  }
+  .jbd-about__media{ position:relative; }
+  .jbd-about__frame{
+    background: linear-gradient(160deg, #FFF7E4, #EFF9EA);
+    border-radius: 22px;
+    padding: 30px;
+    position:relative;
+    border: 1px solid var(--line);
+  }
+  .jbd-about__frame .jbd-mock{ background:#101a30; }
+  .jbd-about__badge{
+    position:absolute; left:-18px; bottom:-24px;
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 16px 20px;
+    display:flex; align-items:center; gap:12px;
+    border: 1px solid var(--line);
+  }
+  .jbd-about__badge .num{
+    font-family:'Sora',sans-serif; font-weight:800; font-size:22px; color:var(--red);
+  }
+  .jbd-about__badge .lbl{ font-size:12px; color:var(--slate); max-width:110px; line-height:1.3; }
+  .jbd-about__content p{ font-size:16px; margin-bottom:18px; }
+  .jbd-about__points{ margin: 22px 0 34px; display:flex; flex-direction:column; gap:12px; }
+  .jbd-about__points li{
+    display:flex; align-items:flex-start; gap:12px; font-size:15px; color: var(--ink);
+  }
+  .jbd-about__points .tick{
+    flex:none; width:22px; height:22px; border-radius:50%;
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; margin-top:2px;
+  }
+  .jbd-stats{
+    display:grid; grid-template-columns: repeat(4,1fr); gap:22px;
+    padding-top:28px; border-top:1px solid var(--line);
+  }
+  .jbd-stats .stat b{
+    display:block; font-family:'Sora',sans-serif; font-weight:800;
+    font-size: 26px; color: var(--ink);
+  }
+  .jbd-stats .stat span{ font-size:13px; color:var(--slate); }
+
+  /* ---------- 3. COURSES ---------- */
+  .jbd-courses{ background: var(--paper); padding: 100px 0; }
+  .jbd-courses__grid{
+    display:grid; grid-template-columns: repeat(3,1fr); gap:28px;
+  }
+  .jbd-course-card{
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    overflow:hidden;
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    display:flex; flex-direction:column;
+  }
+  .jbd-course-card:hover{ transform: translateY(-6px); box-shadow: var(--shadow); border-color: transparent; }
+  .jbd-course-card__thumb{
+    height: 150px;
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .jbd-course-card__thumb svg{ width:46px; height:46px; }
+  .jbd-course-card__level{
+    position:absolute; top:14px; right:14px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px; font-weight:700; letter-spacing:.03em;
+    background: rgba(255,255,255,.92); color: var(--ink);
+    padding: 5px 10px; border-radius: 999px;
+  }
+  .jbd-course-card__body{ padding: 22px 22px 24px; display:flex; flex-direction:column; gap:10px; flex:1; }
+  .jbd-course-card__body h3{ font-size:19px; }
+  .jbd-course-card__body p{ font-size:14.5px; }
+  .jbd-course-card__meta{
+    display:flex; gap:14px; margin: 6px 0 4px;
+    font-family:'JetBrains Mono',monospace; font-size:12px; color: var(--slate);
+  }
+  .jbd-course-card__meta span{ display:flex; align-items:center; gap:6px; }
+  .jbd-course-card__foot{
+    margin-top:auto; padding-top:14px; border-top:1px dashed var(--line);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .jbd-course-card__foot a{
+    font-weight:700; font-size:14px; color: var(--red);
+    display:flex; align-items:center; gap:6px;
+  }
+  .jbd-course-card__foot a:hover{ text-decoration: underline; }
+
+  .jbd-courses__more{ text-align:center; margin-top:44px; }
+
+
+
+
+
+  /* ৪ কলাম গ্রিড লেআউট */
+.jbd-courses__grid--4col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* এক লাইনে ৪টি কলাম */
+  gap: 24px; /* কার্ডগুলোর মাঝের দূরত্ব */
+  margin-bottom: 40px;
+}
+
+/* ট্যাবলেট বা মাঝারি স্ক্রিনের জন্য (প্রতি লাইনে ২টি) */
+@media (max-width: 1024px) {
+  .jbd-courses__grid--4col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* মোবাইল স্ক্রিনের জন্য (প্রতি লাইনে ১টি) */
+@media (max-width: 600px) {
+  .jbd-courses__grid--4col {
+    grid-template-columns: 1fr;
+  }
+}
+  /* ---------- 4. TESTIMONIALS ---------- */
+  .jbd-testimonials{
+    background: linear-gradient(165deg, var(--navy-soft), #0A0F1C 70%);
+    padding: 100px 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .jbd-testi-slider{ position:relative; }
+  .jbd-testi-pages{ overflow:hidden; }
+  .jbd-testi-track{ display:flex; transition: transform .55s ease; }
+  .jbd-testi-page{
+    display:grid;
+    grid-template-columns: repeat(4,1fr);
+    gap:20px;
+    flex: 0 0 100%;
+    min-width:100%;
+  }
+  .jbd-testi-card{
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: var(--radius);
+    padding: 26px 22px;
+    display:flex; flex-direction:column;
+    transition: transform .22s ease, border-color .22s ease, background .22s ease;
+  }
+  .jbd-testi-card:hover{ transform: translateY(-5px); border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.06); }
+  .jbd-testi-card .quote-mark{
+    font-family:'Sora',sans-serif; font-size:30px; font-weight:800;
+    background: linear-gradient(90deg, var(--amber), var(--green-light));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    line-height:1; margin-bottom:10px; display:block;
+  }
+  .jbd-testi-card p{ color:#D6DBE5; font-size:13.5px; line-height:1.7; margin-bottom:20px; flex:1; }
+  .jbd-testi-person{ display:flex; align-items:center; gap:12px; }
+  .jbd-avatar-img{
+    width:44px; height:44px; border-radius:50%; object-fit:cover; flex:none;
+    box-shadow: 0 0 0 2px rgba(255,255,255,.15);
+  }
+  .jbd-testi-person .who{ text-align:left; min-width:0; }
+  .jbd-testi-person .who b{ display:block; color:#fff; font-size:14px; }
+  .jbd-testi-person .who span{
+    font-size:11px; color: var(--amber-light); font-family:'JetBrains Mono',monospace;
+  }
+  .jbd-testi-dots{ display:flex; justify-content:center; gap:9px; margin-top:40px; }
+  .jbd-testi-dots button{
+    width:9px; height:9px; border-radius:50%; border:none; background: rgba(255,255,255,.22); cursor:pointer; padding:0; transition:all .2s ease;
+  }
+  .jbd-testi-dots button.is-active{ width:26px; border-radius:6px; background: linear-gradient(90deg, var(--amber), var(--green)); }
+
+
+
+#testimonials .jbd-testi-pages {
+  overflow: hidden;
+  width: 100%;
+}
+
+#testimonials .jbd-testi-track {
+  display: flex;
+  gap: 20px; /* কার্ডগুলোর মাঝের দূরত্ব */
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+}
+
+#testimonials .jbd-testi-card {
+  /* ডেক্সটপে একসাথে ৪টি দেখানোর জন্য (৪টি কার্ড + ৩টি গ্যাপের হিসাব) */
+  flex: 0 0 calc((100% - (20px * 3)) / 4);
+  box-sizing: border-box;
+}
+
+/* রেসপন্সিভ ব্রেকপয়েন্ট (অপশনাল কিন্তু জরুরি) */
+@media (max-width: 1024px) {
+  #testimonials .jbd-testi-card {
+    flex: 0 0 calc((100% - (20px * 1)) / 2); /* ট্যাবে একসাথে ২টি দেখাবে */
+  }
+}
+
+@media (max-width: 600px) {
+  #testimonials .jbd-testi-card {
+    flex: 0 0 100%; /* মোবাইলে ১টি করে দেখাবে */
+  }
+}
+
+
+/* ---------- 5. BLOG ---------- */
+.jbd-blog {
+  padding: 60px 0; /* টপ ও বটম গ্যাপ ১০০ থেকে কমিয়ে ৬০ করা হয়েছে */
+}
+
+.jbd-blog__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* ৩টি থেকে ৪টি কলাম করা হয়েছে */
+  gap: 20px; /* গ্যাপ ২৮ থেকে কমিয়ে ২০ করা হয়েছে */
+}
+
+.jbd-blog-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform .22s ease, box-shadow .22s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.jbd-blog-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow);
+}
+
+.jbd-blog-card__thumb {
+  height: 237px; /* ৪ কলামের সাথে সামঞ্জস্য রাখতে থাম্বনেইল হাইট ৩১০ থেকে ২২০ করা হয়েছে */
+  position: relative;
+}
+
+.jbd-blog-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.jbd-blog-card__cat {
+  position: absolute;
+  left: 14px;
+  bottom: 8px;
+  background: var(--red);
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.jbd-blog-card__body {
+  padding: 26px 22px 22px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.jbd-blog-card__date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--slate-light);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.jbd-blog-card__body h3 {
+  font-size: 16px; /* ৪ কলামের টেক্সট ফিট করার জন্য ফন্ট সাইজ সামান্য কমানো হয়েছে */
+  margin-bottom: 10px;
+}
+
+.jbd-blog-card__body p {
+  font-size: 14px;
+
+}
+
+.jbd-blog-card__body a {
+  font-weight: 700;
+  font-size: 15px;
+color: #14a800;
+}
+
+.jbd-blog-card__body a:hover {
+  text-decoration: underline;
+}
+
+
+
+
+/* পুরো কার্ডের এরিয়া জুড়ে লিংকটিকে ছড়িয়ে দেওয়ার জন্য */
+.jbd-stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
+}
+
+/* মাউস হোভার করলে কার্ডের লুক সুন্দর করার জন্য (ঐচ্ছিক) */
+.jbd-blog-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.jbd-blog-card:hover {
+    cursor: pointer;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+
+/* ---------- RESPONSIVE MEDIA QUERIES ---------- */
+@media (max-width: 1024px) {
+  .jbd-blog__grid {
+    grid-template-columns: repeat(2, 1fr); /* ট্যাব বা ছোট স্ক্রিনে ২টি কলাম দেখাবে */
+    gap: 20px;
+  }
+  .jbd-blog-card__thumb {
+    height: 100%px;
+  }
+}
+
+@media (max-width: 576px) {
+  .jbd-blog {
+    padding: 40px 0; /* মোবাইলে টপ-বটম স্পেস আরও কমানো হয়েছে */
+  }
+  .jbd-blog__grid {
+    grid-template-columns: 1fr; /* মোবাইল স্ক্রিনে ১টি করে কলাম দেখাবে */
+    gap: 24px;
+  }
+  .jbd-blog-card__thumb {
+    height: 100%;
+  }
+}
+
+
+
+/* ---------- 6. RECENT STUDENTS (Horizontal Box Marquee - Right to Left) ---------- */
+.jbd-students {
+  background: var(--paper);
+  padding: 50px 0 30px; /* ডানে-বামে প্যাডিং ০ করা হয়েছে যাতে স্লাইডার স্ক্রিন জুড়ে থাকে */
+  overflow: hidden;
+}
+
+.jbd-students-marquee {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
+  padding: 20px 0;
+  /* ডানে এবং বামে ফেড ইফেক্ট */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.jbd-students-track {
+  display: flex;
+  flex-direction: row; /* বক্সগুলোকে পাশাপাশি (ডানে-বামে) সাজানোর জন্য */
+  align-items: stretch;
+  gap: 24px; /* বক্সগুলোর পারস্পরিক দূরত্ব */
+  width: max-content;
+  animation: jbdHorizontalMarquee 25s linear infinite; /* অ্যানিমেশন স্পিড */
+}
+
+.jbd-students-marquee:hover .jbd-students-track {
+  animation-play-state: paused;
+}
+
+/* ডান থেকে বামে যাওয়ার অ্যানিমেশন */
+@keyframes jbdHorizontalMarquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* চারকোনা বক্স কার্ড */
+.jbd-mini-student {
+  display: flex;
+  flex-direction: column; /* ইমেজ উপরে এবং টেক্সট নিচে রাখার জন্য */
+  align-items: center;
+  text-align: center;
+  gap: 15px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 12px; /* চারকোনা বক্স শেপ */
+  padding: 24px 20px;
+  width: 200px; /* প্রতিটি বক্সের নির্দিষ্ট প্রস্থ */
+  flex: none;
+  white-space: normal; /* নাম বা কোর্স বড় হলে যাতে নিচে নেমে আসে */
+  box-shadow: 0 12px 26px -18px rgba(13,21,36,.25);
+}
+
+.jbd-mini-avatar {
+  position: relative;
+  flex: none;
+}
+
+.jbd-mini-avatar img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%; /* ছবি গোল থাকবে */
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 0 0 3px rgba(63,161,61,.12);
+}
+
+.jbd-mini-avatar .dot {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--green);
+  border: 2px solid var(--white);
+}
+
+.jbd-mini-student .info {
+  text-align: center;
+  width: 100%;
+}
+
+.jbd-mini-student .info h4 {
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  margin: 0 0 6px;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.jbd-mini-student .info span {
+  font-size: 12px;
+  color: var(--slate);
+  font-family: 'JetBrains Mono', monospace;
+  display: block;
+  word-break: break-word;
+}
+
+/* আরও দেখুন বাটন */
+.jbd-courses__more {
+  text-align: center;
+  margin-top: 30px;
+}
+
+
+
+
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 992px){
+    .jbd-about{ grid-template-columns:1fr; }
+    .jbd-about__media{ order:2; margin-top:20px; }
+    .jbd-courses__grid, .jbd-blog__grid{ grid-template-columns: repeat(2,1fr); }
+    .jbd-testi-page{ grid-template-columns: repeat(2,1fr); }
+    .jbd-hero__slide{ grid-template-columns:1fr; text-align:center; }
+    .jbd-hero__content p{ margin-left:auto; margin-right:auto; }
+    .jbd-hero__actions{ justify-content:center; }
+    .jbd-hero__art{ order:-1; }
+  }
+  @media (max-width: 640px){
+    .jbd-wrap, .jbd-about, .jbd-hero__slide{ padding-left:20px; padding-right:20px; }
+    .jbd-stats{ grid-template-columns: repeat(2,1fr); row-gap:22px; }
+    .jbd-courses__grid, .jbd-blog__grid{ grid-template-columns: 1fr; }
+    .jbd-testi-page{ grid-template-columns: 1fr; }
+    .jbd-about__badge{ position:static; margin-top:18px; }
+  }
+</style>
+
+<div class="jbd-home">
+
+<!-- ============ 1. HERO SLIDER ============ -->
+<section class="jbd-hero jbd-home">
+  <!-- ব্যাকগ্রাউন্ড ও গ্লো ইফেক্ট -->
+  <div class="jbd-hero__bg">
+    <svg class="p1" viewBox="0 0 400 400"><defs><radialGradient id="g1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#3FA13D" stop-opacity="0.35"/><stop offset="100%" stop-color="#3FA13D" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="200" fill="url(#g1)"/></svg>
+    <svg class="p2" viewBox="0 0 400 400"><defs><radialGradient id="g2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#FDB714" stop-opacity="0.3"/><stop offset="100%" stop-color="#FDB714" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="200" fill="url(#g2)"/></svg>
+  </div>
+
+  <!-- স্লাইডার ট্র্যাক -->
+<div class="jbd-hero__track" id="jbdHeroTrack">
+  {% if sliders %}
+    {% for slider in sliders %}
+      <!-- এখানে কন্ডিশন চেক করা হচ্ছে: টাইটেল বা ডেসক্রিপশন থাকলে 'has-text' ক্লাসটি যোগ হবে -->
+      <div class="jbd-hero__slide {% if forloop.first %}is-active{% endif %} {% if slider.title_white or slider.title_colored or slider.description %}has-text{% endif %}" data-slide="{{ forloop.counter0 }}">
+
+        <!-- ডাইনামিক ব্যাকগ্রাউন্ড ইমেজ -->
+        {% if slider.right_image %}
+          <div class="jbd-hero__slide-bg" style="background-image: url('{{ slider.right_image.url }}');"></div>
+        {% endif %}
+
+
+
+        <div class="jbd-hero__content">
+          <h1>
+            {% if slider.title_white %}{{ slider.title_white }}{% endif %}
+            <span>{% if slider.title_colored %}{{ slider.title_colored }}{% endif %}</span>
+          </h1>
+          {% if slider.description %}
+            <p>{{ slider.description }}</p>
+          {% endif %}
+
+          <div class="jbd-hero__actions">
+            {% if slider.btn1_text %}
+              <a href="{{ slider.btn1_url|default:'#' }}" class="jbd-btn jbd-btn--primary">{{ slider.btn1_text }}</a>
+            {% endif %}
+            {% if slider.btn2_text %}
+              <a href="{{ slider.btn2_url|default:'#' }}" class="jbd-btn jbd-btn--ghost">{{ slider.btn2_text }}</a>
+            {% endif %}
+          </div>
         </div>
       </div>
-
-      <div class="col-lg-5">
-        <div class="verify-card hero-card">
-          <h6><i class="ti ti-id"></i>স্টুডেন্ট আইডি ভেরিফাই</h6>
-          <p>আপনার অফিসিয়াল আইডি দিয়ে ভর্তির স্ট্যাটাস চেক করুন</p>
-          <div class="input-group mb-0">
-            <input type="text" class="form-control" placeholder="Student ID (e.g. JBD-2026-X)">
-            <button class="btn-verify" type="button"><i class="ti ti-search"></i></button>
-          </div>
-
-          <div class="verify-stats">
-            <div class="verify-stat">
-              <span class="verify-stat-num r">১২০০+</span>
-              <div class="verify-stat-label">গ্র্যাজুয়েট</div>
-            </div>
-            <div style="width:1px;background:var(--line);"></div>
-            <div class="verify-stat">
-              <span class="verify-stat-num g">৯৮%</span>
-              <div class="verify-stat-label">সন্তুষ্টির হার</div>
-            </div>
-            <div style="width:1px;background:var(--line);"></div>
-            <div class="verify-stat">
-              <span class="verify-stat-num r">৩টি</span>
-              <div class="verify-stat-label">চলতি ব্যাচ</div>
-            </div>
-          </div>
-
-          <div class="trust-pills mt-3">
-            <div class="trust-pill"><i class="ti ti-clock"></i> দ্রুত কনফার্মেশন</div>
-            <div class="trust-pill"><i class="ti ti-lock"></i> তথ্য সুরক্ষিত</div>
-            <div class="trust-pill"><i class="ti ti-credit-card"></i> কিস্তি সুবিধা</div>
-          </div>
+    {% endfor %}
+  {% else %}
+    <!-- ডিফল্ট স্লাইড (এখানে লেখা আছে তাই 'has-text' দেওয়া হলো) -->
+    <div class="jbd-hero__slide is-active has-text" data-slide="0">
+      <div class="jbd-hero__slide-bg" style="background-image: url('https://via.placeholder.com/1920x1080');"></div>
+      <div class="jbd-hero__content">
+        <h1>Build Real Projects <span>For Your Portfolio</span></h1>
+        <p>Every course ends with a live project you can show employers — not just certificates, but proof you can actually build.</p>
+        <div class="jbd-hero__actions">
+          <a href="#courses" class="jbd-btn jbd-btn--primary">See Curriculum</a>
         </div>
       </div>
     </div>
+  {% endif %}
+</div>
+
+  <!-- স্লাইডার কন্ট্রোল বোতামসমূহ -->
+  <div class="jbd-hero__controls">
+    <button class="jbd-hero__arrow" id="jbdHeroPrev" aria-label="Previous slide">‹</button>
+    <div class="jbd-hero__dots" id="jbdHeroDots"></div>
+    <button class="jbd-hero__arrow" id="jbdHeroNext" aria-label="Next slide">›</button>
   </div>
 </section>
 
+  <!-- ============ 2. ABOUT ============ -->
+<section class="jbd-about" id="about">
+  <div class="jbd-about__media">
+    <div class="jbd-about__frame">
+      <!-- যদি মডেলে ইমেজ আপলোড করা থাকে তবে তা দেখাবে, না থাকলে মকআপ (Mockup) এনিমেশনটি দেখাবে -->
+      {% if about_data.right_image %}
+        <img src="{{ about_data.right_image.url }}" alt="{{ about_data.title_white }}" class="jbd-about__img" style="width: 100%; height: auto; border-radius: 8px;">
+      {% else %}
+        <div class="jbd-mock">
+          <div class="jbd-mock__bar"><span></span><span></span><span></span></div>
+          <div class="jbd-mock__body">
+            <div class="jbd-mock__line accent-r"></div>
+            <div class="jbd-mock__line w1"></div>
+            <div class="jbd-mock__line w2"></div>
+            <div class="jbd-mock__line accent-g"></div>
+            <div class="jbd-mock__line w3"></div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
 
-<!-- ==================== PROCESS ==================== -->
-<section class="process-section py-5" id="process">
-  <div class="container">
-    <div class="text-center mb-5 reveal">
-      <span class="section-eyebrow eyebrow-green">Admission Process</span>
-      <h2 class="section-title mt-2">মাত্র ৪টি ধাপে ভর্তি সম্পন্ন করুন</h2>
-      <p class="section-sub">সহজ ও দ্রুত ভর্তি প্রক্রিয়া — অনলাইনে শুরু, অফলাইনে কনফার্ম</p>
+    <div class="jbd-about__badge">
+      <span class="num jbd-mono">98%</span>
+      <span class="lbl">Course completion rate</span>
     </div>
-    <div class="row g-4 text-center step-row">
-      <div class="col-6 col-md-3 reveal step-col">
-        <div class="step-card">
-          <div class="step-num-wrap r"><div class="step-num r">০১</div></div>
-          <h6>ফরম পূরণ করুন</h6>
-          <p>নিচের অনলাইন ফরমটি নির্ভুলভাবে পূরণ করুন</p>
-        </div>
+  </div>
+
+  <div class="jbd-about__content">
+    <!-- মডেলের সঠিক টাইটেল ফিল্ড -->
+    <h2>{{ about_data.title_white }}</h2>
+
+    <!-- মডেলের সঠিক ডেসক্রিপশন ফিল্ড -->
+    <p>{{ about_data.description|linebreaksbr }}</p>
+
+    <!-- ডাইনামিক বাটন (যদি টেক্সট এবং ইউআরএল দেওয়া থাকে) -->
+    {% if about_data.btn_text and about_data.btn_url %}
+      <div class="jbd-about__action" style="margin-top: 20px;">
+        <a href="{{ about_data.btn_url }}" class="btn btn-primary">{{ about_data.btn_text }}</a>
       </div>
-      <div class="col-6 col-md-3 reveal step-col">
-        <div class="step-card">
-          <div class="step-num-wrap g"><div class="step-num g">০২</div></div>
-          <h6>কনফার্মেশন পান</h6>
-          <p>অফিস থেকে ফোনে সিট নিশ্চিত করা হবে ২৪ ঘণ্টার মধ্যে</p>
-        </div>
-      </div>
-      <div class="col-6 col-md-3 reveal step-col">
-        <div class="step-card">
-          <div class="step-num-wrap r"><div class="step-num r">০৩</div></div>
-          <h6>ফি পরিশোধ করুন</h6>
-          <p>দুই কিস্তিতে বা সম্পূর্ণ ফি পরিশোধের সুবিধা পাবেন</p>
-        </div>
-      </div>
-      <div class="col-6 col-md-3 reveal step-col">
-        <div class="step-card">
-          <div class="step-num-wrap g"><div class="step-num g">০৪</div></div>
-          <h6>ল্যাবে যোগ দিন</h6>
-          <p>নির্ধারিত তারিখে মেইন ল্যাব ক্যাম্পাসে ক্লাস শুরু করুন</p>
-        </div>
-      </div>
-    </div>
+    {% endif %}
   </div>
 </section>
 
-
-<!-- ==================== WHY CHOOSE US ==================== -->
-<section class="why-section py-5" id="why-choose-us">
-  <div class="container">
-    <div class="text-center mb-5 reveal">
-      <span class="section-eyebrow eyebrow-red">JBD IT Advantages</span>
-      <h2 class="section-title mt-2">কেন আমাদের ল্যাব বেছে নিবেন?</h2>
-      <p class="section-sub">ইন্ডাস্ট্রি রেডি দক্ষতা অর্জনের জন্য সেরা পরিবেশ</p>
-    </div>
-    <div class="row g-4">
-      <div class="col-md-6 col-lg-4 reveal"><div class="feat-card"><div class="feat-icon g"><i class="ti ti-device-laptop"></i></div><h5>১:১ ডেডিকেটেড ল্যাব পিসি</h5><p>প্রতিটি শিক্ষার্থীর জন্য আলাদা হাই-কনফিগ কম্পিউটার — কোনো ভাগাভাগি নেই।</p></div></div>
-      <div class="col-md-6 col-lg-4 reveal"><div class="feat-card"><div class="feat-icon r"><i class="ti ti-certificate"></i></div><h5>ভেরিফাইড সার্টিফিকেট</h5><p>কোর্স শেষে QR-ভেরিফাইযোগ্য প্রফেশনাল সার্টিফিকেট প্রদান করা হয়।</p></div></div>
-      <div class="col-md-6 col-lg-4 reveal"><div class="feat-card"><div class="feat-icon g"><i class="ti ti-headset"></i></div><h5>লাইফটাইম সাপোর্ট</h5><p>ক্লাসের পরেও যেকোনো প্রজেক্টে ফোরাম ও অফলাইন ল্যাবে সরাসরি সহায়তা।</p></div></div>
-      <div class="col-md-6 col-lg-4 reveal"><div class="feat-card"><div class="feat-icon r"><i class="ti ti-brand-github"></i></div><h5>রিয়েল ওয়ার্ল্ড প্রজেক্ট</h5><p>প্রতিটি কোর্সে ন্যূনতম ২টি লাইভ ক্লায়েন্ট-লেভেল প্রজেক্ট পোর্টফোলিওতে যুক্ত।</p></div></div>
-      <div class="col-md-6 col-lg-4 reveal"><div class="feat-card"><div class="feat-icon g"><i class="ti ti-users-group"></i></div><h5>ছোট ব্যাচ সাইজ</h5><p>সর্বোচ্চ ২০-২৫ জনের ব্যাচ — ইন্সট্রাক্টর প্রতিজনকে আলাদা মনোযোগ দেন।</p></div></div>
-      <div class="col-md-6 col-lg-4 reveal"><div class="feat-card"><div class="feat-icon r"><i class="ti ti-briefcase"></i></div><h5>ক্যারিয়ার গাইডেন্স</h5><p>CV রিভিউ, Fiverr/Upwork প্রোফাইল সেটআপ ও ফ্রিল্যান্সিং গাইডেন্স সেশন।</p></div></div>
-    </div>
-  </div>
-</section>
+  <!-- ============ COURSES SLIDER============ -->
 
 
-<!-- ==================== COURSES SLIDER ==================== -->
+
+
+
+
 <section class="courses-section py-5" id="courses">
   <div class="container">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-end mb-4 gap-3 reveal">
@@ -169,22 +917,16 @@
 
         <!-- Slide 1 -->
         <div class="slider-slide">
-          <div class="course-card" style="position:relative;">
-            <div class="cc-header">
-              <span class="batch-badge g">Lab Batch A</span>
-              <span class="seat-chip low"><i class="ti ti-user-exclamation"></i> মাত্র ৫টি সিট</span>
+          <div class="course-card">
+            <div class="cc-image">
+              <img src="https://images.unsplash.com/photo-1468495244123-6c6c332eeece?auto=format&fit=crop&w=500&q=80" alt="Office Application">
             </div>
             <div class="cc-body">
-              <h4>Full-Stack App Engineering<br><span>Laravel & Vue.js Stack</span></h4>
-              <ul class="cc-meta">
-                <li><i class="ti ti-calendar-event"></i> শনি-সোম-বুধ, সকাল ১০:০০–১২:০০</li>
-                <li><i class="ti ti-device-laptop"></i> ল্যাব সিট: সর্বোচ্চ ২৫ জন</li>
-                <li><i class="ti ti-map-pin"></i> মেইন ল্যাব ক্যাম্পাস, রাজশাহী</li>
-                <li><i class="ti ti-clock"></i> কোর্স মেয়াদ: ৪ মাস</li>
-              </ul>
+              <h4>অফিস অ্যাপ্লিকেশন <br><span>(Office Application)</span></h4>
+              <p class="cc-description">এমএস ওয়ার্ড, এক্সেল, পাওয়ারপয়েন্ট এবং ইন্টারনেট ব্রাউজিংয়ের বেসিক থেকে অ্যাডভান্সড স্কিল।</p>
             </div>
             <div class="cc-footer">
-              <div class="cc-price">৳১২,০০০ <small>কিস্তিতে পরিশোধযোগ্য</small></div>
+              <div class="cc-price">৳১২,০০০</div>
               <a href="#admission-form" class="btn-enroll"><i class="ti ti-arrow-right"></i> ভর্তি</a>
             </div>
           </div>
@@ -193,21 +935,15 @@
         <!-- Slide 2 -->
         <div class="slider-slide">
           <div class="course-card">
-            <div class="cc-header">
-              <span class="batch-badge r">Lab Batch B</span>
-              <span class="seat-chip high"><i class="ti ti-user-check"></i> ১২টি সিট বাকি</span>
+            <div class="cc-image">
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=500&q=80" alt="Digital Marketing">
             </div>
             <div class="cc-body">
-              <h4>Python Django &<br><span>High Fidelity UI/UX</span></h4>
-              <ul class="cc-meta">
-                <li><i class="ti ti-calendar-event"></i> রবি-মঙ্গল-বৃহস্পতি, বিকাল ৪:০০–৬:০০</li>
-                <li><i class="ti ti-device-laptop"></i> ল্যাব সিট: সর্বোচ্চ ২০ জন</li>
-                <li><i class="ti ti-map-pin"></i> মেইন ল্যাব ক্যাম্পাস, রাজশাহী</li>
-                <li><i class="ti ti-clock"></i> কোর্স মেয়াদ: ৩.৫ মাস</li>
-              </ul>
+              <h4>ডিজিটাল মার্কেটিং<br><span>(Digital Marketing)</span></h4>
+              <p class="cc-description">এসইও, সোশ্যাল মিডিয়া মার্কেটিং, গুগল অ্যাডস এবং কনটেন্ট স্ট্র্যাটেজি শিখে ক্যারিয়ার গড়ুন।</p>
             </div>
             <div class="cc-footer">
-              <div class="cc-price">৳১০,০০০ <small>কিস্তিতে পরিশোধযোগ্য</small></div>
+              <div class="cc-price">৳১০,০০০</div>
               <a href="#admission-form" class="btn-enroll"><i class="ti ti-arrow-right"></i> ভর্তি</a>
             </div>
           </div>
@@ -215,23 +951,17 @@
 
         <!-- Slide 3 (Featured) -->
         <div class="slider-slide">
-          <div class="course-card" style="border-color:rgba(230,29,35,.3);border-top:3px solid var(--red);position:relative;">
+          <div class="course-card" style="border-color:rgba(230,29,35,.3); border-top:3px solid var(--red); position:relative;">
             <div class="cc-featured-ribbon">MOST POPULAR</div>
-            <div class="cc-header" style="margin-top:14px;">
-              <span class="batch-badge r">Friday Batch</span>
-              <span class="seat-chip low"><i class="ti ti-user-exclamation"></i> মাত্র ২টি সিট</span>
+            <div class="cc-image">
+              <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=500&q=80" alt="Graphic Design">
             </div>
             <div class="cc-body">
-              <h4>AI Workflow Engineering &<br><span>Programmatic SEO</span></h4>
-              <ul class="cc-meta">
-                <li><i class="ti ti-calendar-event"></i> শুধু শুক্রবার, সকাল ৯:০০–বিকাল ৫:০০</li>
-                <li><i class="ti ti-device-laptop"></i> এক্সক্লুসিভ এক্সপার্ট ল্যাব</li>
-                <li><i class="ti ti-map-pin"></i> কর্পোরেট কনফারেন্স রুম, রাজশাহী</li>
-                <li><i class="ti ti-clock"></i> কোর্স মেয়াদ: ৫ মাস</li>
-              </ul>
+              <h4>গ্রাফিক ডিজাইন<br><span>(Graphic Design)</span></h4>
+              <p class="cc-description">ফটোশপ ও ইলাস্ট্রেটর দিয়ে প্রফেশনাল লোগো, ব্যানার এবং ব্র্যান্ডিং ডিজাইন শিখুন।</p>
             </div>
             <div class="cc-footer">
-              <div class="cc-price">৳১৫,০০০ <small>কিস্তিতে পরিশোধযোগ্য</small></div>
+              <div class="cc-price">৳১৫,০০০</div>
               <a href="#admission-form" class="btn-enroll"><i class="ti ti-arrow-right"></i> ভর্তি</a>
             </div>
           </div>
@@ -240,21 +970,15 @@
         <!-- Slide 4 -->
         <div class="slider-slide">
           <div class="course-card">
-            <div class="cc-header">
-              <span class="batch-badge b">New Batch</span>
-              <span class="seat-chip high"><i class="ti ti-user-check"></i> ১৮টি সিট বাকি</span>
+            <div class="cc-image">
+              <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=500&q=80" alt="WordPress Development">
             </div>
             <div class="cc-body">
-              <h4>WordPress & WooCommerce<br><span>Theme & Plugin Dev</span></h4>
-              <ul class="cc-meta">
-                <li><i class="ti ti-calendar-event"></i> শনি-সোম-বুধ, বিকাল ৩:০০–৫:০০</li>
-                <li><i class="ti ti-device-laptop"></i> ল্যাব সিট: সর্বোচ্চ ২০ জন</li>
-                <li><i class="ti ti-map-pin"></i> মেইন ল্যাব ক্যাম্পাস, রাজশাহী</li>
-                <li><i class="ti ti-clock"></i> কোর্স মেয়াদ: ৩ মাস</li>
-              </ul>
+              <h4>ওয়েব ডেভেলপমেন্ট - ওয়ার্ডপ্রেস <br><span>Web Development - WordPress</span></h4>
+              <p class="cc-description">কোনো কোডিং ছাড়া এলিমেন্টর ও কাস্টম থিম দিয়ে প্রফেশনাল ওয়েবসাইট তৈরি করুন।</p>
             </div>
             <div class="cc-footer">
-              <div class="cc-price">৳৮,০০০ <small>কিস্তিতে পরিশোধযোগ্য</small></div>
+              <div class="cc-price">৳৮,০০০</div>
               <a href="#admission-form" class="btn-enroll"><i class="ti ti-arrow-right"></i> ভর্তি</a>
             </div>
           </div>
@@ -263,21 +987,15 @@
         <!-- Slide 5 -->
         <div class="slider-slide">
           <div class="course-card">
-            <div class="cc-header">
-              <span class="batch-badge g">Evening Batch</span>
-              <span class="seat-chip high"><i class="ti ti-user-check"></i> ১৫টি সিট বাকি</span>
+            <div class="cc-image">
+              <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=500&q=80" alt="Video Editing">
             </div>
             <div class="cc-body">
-              <h4>Digital Marketing &<br><span>Social Media Strategy</span></h4>
-              <ul class="cc-meta">
-                <li><i class="ti ti-calendar-event"></i> রবি-মঙ্গল-বৃহস্পতি, সন্ধ্যা ৭:০০–৯:০০</li>
-                <li><i class="ti ti-device-laptop"></i> ল্যাব সিট: সর্বোচ্চ ২৫ জন</li>
-                <li><i class="ti ti-map-pin"></i> মেইন ল্যাব ক্যাম্পাস, রাজশাহী</li>
-                <li><i class="ti ti-clock"></i> কোর্স মেয়াদ: ২.৫ মাস</li>
-              </ul>
+              <h4>অডিও-ভিডিও এডিটিং<br><span>(Audio- Video Editing)</span></h4>
+              <p class="cc-description">প্রিমিয়ার প্রো ও আফটার ইফেক্টস দিয়ে কালার গ্রেডিং এবং মোশন গ্রাফিক্সের কাজ শিখুন।</p>
             </div>
             <div class="cc-footer">
-              <div class="cc-price">৳৭,০০০ <small>কিস্তিতে পরিশোধযোগ্য</small></div>
+              <div class="cc-price">৳৭,০০০</div>
               <a href="#admission-form" class="btn-enroll"><i class="ti ti-arrow-right"></i> ভর্তি</a>
             </div>
           </div>
@@ -301,208 +1019,374 @@
 </section>
 
 
-<!-- ==================== STATS ==================== -->
-<section class="stats-section py-5">
-  <div class="container position-relative" style="z-index:1;">
-    <div class="row g-4 align-items-center">
-      <div class="col-md-4 stat-item reveal text-center">
-        <div class="stat-num g" data-target="1200">০</div>
-        <p class="stat-label">সফল গ্র্যাজুয়েট শিক্ষার্থী</p>
-      </div>
-      <div class="col-md-4 stat-item reveal text-center">
-        <div class="stat-num r" data-target="25">০</div>
-        <p class="stat-label">টোটাল প্র্যাক্টিকাল প্রজেক্ট</p>
-      </div>
-      <div class="col-md-4 stat-item reveal text-center">
-        <div class="stat-num g" data-target="98">০</div>
-        <p class="stat-label">কোর্স সন্তুষ্টির হার (%)</p>
-      </div>
+
+
+
+
+
+
+
+{% comment %} <section class="jbd-courses" id="courses">
+  <div class="jbd-wrap">
+    <div class="jbd-section-head is-center">
+      <h2>Our Courses</h2>
     </div>
-  </div>
-</section>
 
+    <!-- ৪ কলাম গ্রিড ক্লাসের নাম দেওয়া হলো jbd-courses__grid--4col -->
+    <div class="jbd-courses__grid jbd-courses__grid--4col">
+      <!-- slice:":8" দিয়ে সর্বোচ্চ ৮টি কোর্স ফিল্টার করা হলো -->
+      {% for course in courses|slice:":8" %}
+        <div class="jbd-course-card">
 
-<!-- ==================== INSTRUCTORS ==================== -->
-<section class="instructor-section py-5" id="instructors">
-  <div class="container">
-    <div class="text-center mb-5 reveal">
-      <span class="section-eyebrow eyebrow-red">Expert Mentors</span>
-      <h2 class="section-title mt-2">আমাদের অভিজ্ঞ মেন্টর টিম</h2>
-      <p class="section-sub">ইন্ডাস্ট্রি প্র্যাক্টিশনার যারা আপনাকে রিয়েল ওয়ার্ল্ডের জন্য তৈরি করবেন</p>
-    </div>
-    <div class="row g-4 justify-content-center">
-      <div class="col-md-6 col-lg-4 reveal">
-        <div class="instructor-card">
-          <div class="instructor-avatar r">MR</div>
-          <h5>মো. রাহিকুল ইসলাম</h5>
-          <p class="role">Lead Instructor — Full-Stack</p>
-          <p>৬+ বছরের Laravel, Vue.js অভিজ্ঞতা সম্পন্ন সিনিয়র ডেভেলপার। ৫০+ লাইভ প্রজেক্ট ডেলিভার করেছেন।</p>
-          <div class="instructor-tags">
-            <span class="instructor-tag">Laravel</span>
-            <span class="instructor-tag">Vue.js</span>
-            <span class="instructor-tag">MySQL</span>
-            <span class="instructor-tag">REST API</span>
+          <!-- কোর্স ইমেজ বা থাম্বনেইল -->
+          <div class="jbd-course-card__thumb" style="{% if course.image %}background-image: url('{{ course.image.url }}'); background-size: cover; background-position: center;{% else %}background: linear-gradient(135deg,#FDECEC,#FFF7E4);{% endif %}">
+            <span class="jbd-course-card__level">{{ course.get_level_display }}</span>
+            {% if not course.image %}
+              <svg viewBox="0 0 24 24" fill="none" stroke="#E31E24" stroke-width="1.6"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"/><path d="M16 3h5v5"/><path d="M14 10 21 3"/></svg>
+            {% endif %}
           </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4 reveal">
-        <div class="instructor-card">
-          <div class="instructor-avatar g">SA</div>
-          <h5>সাদিয়া আক্তার</h5>
-          <p class="role">UI/UX & Python Instructor</p>
-          <p>ফিগমা ও ডিজাইন সিস্টেমে বিশেষজ্ঞ। Django ও FastAPI দিয়ে একাধিক SaaS প্রোডাক্ট তৈরির অভিজ্ঞতা।</p>
-          <div class="instructor-tags">
-            <span class="instructor-tag">Python</span>
-            <span class="instructor-tag">Django</span>
-            <span class="instructor-tag">Figma</span>
-            <span class="instructor-tag">UI/UX</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4 reveal">
-        <div class="instructor-card">
-          <div class="instructor-avatar r">TH</div>
-          <h5>তানভীর হোসেন</h5>
-          <p class="role">AI & SEO Strategy Expert</p>
-          <p>AI Automation ও Programmatic SEO-তে বিশেষজ্ঞ। Upwork-এ Top Rated Plus ফ্রিল্যান্সার।</p>
-          <div class="instructor-tags">
-            <span class="instructor-tag">AI Tools</span>
-            <span class="instructor-tag">Programmatic SEO</span>
-            <span class="instructor-tag">n8n</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
+          <div class="jbd-course-card__body">
+          <h3>
+            <a href="{% if course.slug %}{% url 'course_detail' course.slug %}{% else %}{% url 'course_detail' course.id %}{% endif %}" style="text-decoration: none; color: inherit;">
+              {{ course.name }}
+            </a>
+          </h3>
+            <p>{{ course.description|default:"No description available."|truncatewords:12 }}</p>
 
-<!-- ==================== TESTIMONIALS ==================== -->
-<section class="testimonials-section py-5">
-  <div class="container">
-    <div class="text-center mb-5 reveal">
-      <span class="section-eyebrow eyebrow-green">Student Reviews</span>
-      <h2 class="section-title mt-2">শিক্ষার্থীরা কী বলছেন</h2>
-      <p class="section-sub">আমাদের গ্র্যাজুয়েটদের সত্যিকারের অভিজ্ঞতা</p>
-    </div>
-    <div class="row g-4">
-      <div class="col-md-6 col-lg-4 reveal">
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-text">JBD IT-এর Full-Stack ব্যাচ শেষ করার ৩ সপ্তাহের মধ্যে Fiverr-এ প্রথম অর্ডার পেয়েছি। ল্যাবে প্র্যাক্টিস করার সুযোগটা সত্যিই অনন্য।</p>
-          <div class="testi-author">
-            <div class="testi-av r">RK</div>
-            <div><div class="testi-name">রাফিউল করিম</div><div class="testi-role">Freelance Laravel Developer, Lab Batch A</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4 reveal">
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-text">অন্য কোথাও শুধু ভিডিও দেখতাম, এখানে সরাসরি কোড লিখে শিখেছি। মেন্টর সব সময় পাশে থেকে গাইড করেছেন।</p>
-          <div class="testi-author">
-            <div class="testi-av g">NI</div>
-            <div><div class="testi-name">নাদিয়া ইসলাম</div><div class="testi-role">Junior UI/UX Designer, Lab Batch B</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4 reveal">
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-text">Friday Batch-এ AI Workflow কোর্স নিয়ে মাসে ৩০ হাজার টাকারও বেশি আয় করছি। কোর্স শেষের পরেও সাপোর্ট পাচ্ছি।</p>
-          <div class="testi-author">
-            <div class="testi-av r">SH</div>
-            <div><div class="testi-name">সাইফুল হক</div><div class="testi-role">AI Automation Consultant, Friday Batch</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+            <div class="jbd-course-card__meta">
+              <span>⏱ {{ course.duration_months }} Months</span>
+              <span>📚 {{ course.total_classes }} Classes</span>
+            </div>
 
-
-<!-- ==================== ADMISSION FORM ==================== -->
-<section class="form-section py-5" id="admission-form">
-  <div class="container">
-    <div class="form-outer reveal">
-      <div class="row g-0">
-        <div class="col-lg-4">
-          <div class="form-sidebar">
-            <h3>অনলাইন ভর্তি ফরম পূরণ করুন</h3>
-            <p>ফরম সাবমিটের পর ২৪ ঘণ্টার মধ্যে আমাদের অফিস থেকে সিট নিশ্চিতকরণে যোগাযোগ করা হবে।</p>
-            <div class="sidebar-perk"><div class="sidebar-perk-icon"><i class="ti ti-clock"></i></div><div class="sidebar-perk-text"><h6>দ্রুত কনফার্মেশন</h6><p>২৪ ঘণ্টার মধ্যে ফোনে সিট নিশ্চিত</p></div></div>
-            <div class="sidebar-perk"><div class="sidebar-perk-icon"><i class="ti ti-credit-card"></i></div><div class="sidebar-perk-text"><h6>সহজ কিস্তি সুবিধা</h6><p>দুই ধাপে কোর্স ফি পরিশোধ করা যাবে</p></div></div>
-            <div class="sidebar-perk"><div class="sidebar-perk-icon"><i class="ti ti-lock"></i></div><div class="sidebar-perk-text"><h6>তথ্যের নিরাপত্তা</h6><p>আপনার ব্যক্তিগত তথ্য সম্পূর্ণ সুরক্ষিত</p></div></div>
-            <div style="border-top:1px solid rgba(255,255,255,.1);margin-top:24px;padding-top:20px;">
-              <p style="color:rgba(255,255,255,.35);font-size:.78rem;font-family:'Noto Sans Bengali',sans-serif;margin-bottom:8px;">সরাসরি যোগাযোগ</p>
-              <a href="tel:+8801716905615" style="color:rgba(255,255,255,.65);font-size:.88rem;display:flex;align-items:center;gap:8px;text-decoration:none;">
-                <i class="ti ti-phone" style="color:var(--green);"></i> +88 01716 905615
-              </a>
+            <div class="jbd-course-card__foot">
+              <span class="jbd-mono" style="font-size:13px;color:var(--slate);">৳ {{ course.default_fee|floatformat:0 }}</span>
+             <a href="{% if course.slug %}{% url 'course_detail' course.slug %}{% else %}{% url 'course_detail' course.id %}{% endif %}">
+  View Course →
+</a>
             </div>
           </div>
         </div>
-        <div class="col-lg-8">
-          <div class="form-body">
-            <h4><i class="ti ti-user-plus me-2" style="color:var(--red);"></i>প্রাথমিক সিট বুকিং ফরম</h4>
-            <p>ফরমটি নির্ভুলভাবে পূরণ করুন — সব তথ্য আবশ্যিক</p>
-            <form>
-              <div class="row g-3">
-                <div class="col-md-6 form-grp"><label class="form-label-bn">শিক্ষার্থীর পূর্ণ নাম *</label><input type="text" class="form-ctrl" required placeholder="আপনার পূর্ণ নাম লিখুন"></div>
-                <div class="col-md-6 form-grp"><label class="form-label-bn">মোবাইল নম্বর *</label><input type="tel" class="form-ctrl" required placeholder="017XXXXXXXX"></div>
-                <div class="col-md-6 form-grp"><label class="form-label-bn">ইমেইল (ঐচ্ছিক)</label><input type="email" class="form-ctrl" placeholder="example@gmail.com"></div>
-                <div class="col-md-6 form-grp"><label class="form-label-bn">শিক্ষাগত যোগ্যতা *</label>
-                  <select class="form-ctrl" required>
-                    <option value="" disabled selected>বেছে নিন</option>
-                    <option>SSC / সমমান</option><option>HSC / সমমান</option>
-                    <option>ডিপ্লোমা / ভোকেশনাল</option><option>স্নাতক (চলমান)</option><option>স্নাতক (সম্পন্ন)</option>
-                  </select></div>
-                <div class="col-12 form-grp"><label class="form-label-bn">কাঙ্খিত ব্যাচ ও কোর্স *</label>
-                  <select class="form-ctrl" required>
-                    <option value="" disabled selected>কোর্স বেছে নিন</option>
-                    <option>Lab Batch A — Full-Stack (Laravel & Vue.js) — ৳১২,০০০</option>
-                    <option>Lab Batch B — Python Django & UI/UX — ৳১০,০০০</option>
-                    <option>Friday Batch — AI Workflow & Programmatic SEO — ৳১৫,০০০</option>
-                    <option>New Batch — WordPress & WooCommerce — ৳৮,০০০</option>
-                    <option>Evening Batch — Digital Marketing — ৳৭,০০০</option>
-                  </select></div>
-                <div class="col-12 form-grp"><label class="form-label-bn">বর্তমান ঠিকানা *</label><textarea class="form-ctrl" rows="2" required placeholder="আপনার বর্তমান ঠিকানা লিখুন"></textarea></div>
-                <div class="col-12 form-grp"><label class="form-label-bn">কোর্সে আপনার লক্ষ্য কী?</label><textarea class="form-ctrl" rows="2" placeholder="যেমন: ফ্রিল্যান্সিং শুরু করতে চাই / চাকরি খুঁজছি / নিজের প্রজেক্ট তৈরি করতে চাই..."></textarea></div>
-                <div class="col-12">
-                  <button type="submit" class="btn-submit"><i class="ti ti-checkbox"></i> প্রাথমিক সিট বুকিং কনফার্ম করুন</button>
-                  <p class="form-note"><i class="ti ti-shield-check" style="color:var(--green);"></i> সাবমিটের পর ২৪ ঘণ্টার মধ্যে অফিস থেকে কনফার্মেশন কল আসবে</p>
+      {% empty %}
+        <p class="is-center">No courses found at the moment.</p>
+      {% endfor %}
+    </div>
+
+      <div class="jbd-courses__more">
+      <a href="#" class="jbd-btn jbd-btn--outline">আরও দেখুন</a>
+    </div>
+  </div>
+</section> {% endcomment %}
+  <!-- ============ 4. TESTIMONIALS ============ -->
+<section class="jbd-testimonials" id="testimonials">
+  <div class="jbd-wrap">
+    <div class="jbd-section-head is-center is-light">
+      <h2>টেস্টিমোনিয়াল / রিভিউ</h2>
+    </div>
+
+    <div class="jbd-testi-slider">
+      <div class="jbd-testi-pages">
+        <div class="jbd-testi-track" id="jbdTestiTrack">
+
+          {% for review in testimonials %}
+            <div class="jbd-testi-card">
+              <span class="quote-mark">“</span>
+
+              <!-- রিভিউ কমেন্ট -->
+              <p>{{ review.comment }}</p>
+
+              <!-- রেটিং স্টার (ঐচ্ছিক: ডিজাইন সুন্দর করার জন্য) -->
+              <div class="text-warning small mb-2">
+                {% if review.rating == 5 %}⭐⭐⭐⭐⭐{% elif review.rating == 4 %}⭐⭐⭐⭐{% elif review.rating == 3 %}⭐⭐⭐{% elif review.rating == 2 %}⭐⭐{% else %}⭐{% endif %}
+              </div>
+
+              <div class="jbd-testi-person">
+                <!-- ইউজার প্রোফাইল পিকচার থাকলে দেখাবে, না থাকলে ডিফল্ট প্লেসহোল্ডার জেনারেট হবে -->
+                <img class="jbd-avatar-img" src="https://ui-avatars.com/api/?name={{ review.user.get_full_name|urlencode }}&background=random" alt="{{ review.user.get_full_name }}">
+
+                <div class="who">
+                  <!-- স্টুডেন্টের নাম -->
+                  <b>{{ review.user.get_full_name|default:review.user.username }}</b>
+                  <!-- কোর্সের নাম -->
+                  <span>{{ review.course.name }}</span>
                 </div>
               </div>
-            </form>
+            </div>
+          {% empty %}
+            <!-- যদি ডেটাবেসে কোনো রিভিউ না থাকে -->
+            <div class="w-100 text-center text-white py-4 opacity-75">
+              <p>এখনো কোনো রিভিউ দেওয়া হয়নি।</p>
+            </div>
+          {% endfor %}
+
+        </div>
+      </div>
+
+      <div class="jbd-testi-dots" id="jbdTestiDots"></div>
+    </div>
+  </div>
+</section>
+
+  <!-- ============ 5. BLOG ============ -->
+<section class="jbd-blog" id="blog">
+  <div class="jbd-wrap">
+    <div class="jbd-section-head is-center">
+      <h2>সর্বশেষ পোস্ট </h2>
+    </div>
+
+    <div class="jbd-blog__grid">
+      {% for post in latest_posts %}
+        <!-- এখানে `position: relative;` যুক্ত করা হয়েছে কার্ডে -->
+        <article class="jbd-blog-card" style="position: relative;">
+
+          <!-- থাম্বনেইল ব্যাকগ্রাউন্ড ও ডাইনামিক ইমেজ লজিক -->
+          <div class="jbd-blog-card__thumb" style="background: linear-gradient(135deg,#FDECEC,#FFF6DE);">
+            {% if post.featured_image %}
+              <img src="{{ post.featured_image.url }}" alt="{{ post.image_alt_text|default:post.title }}" onerror="this.style.display='none'">
+            {% endif %}
+            {% if post.category %}
+              <!-- ক্যাটাগরির z-index বাড়ানো হয়েছে যাতে এটার ওপর আলাদা ক্লিক করা যায় -->
+              <span class="jbd-blog-card__cat jbd-mono" style="position: relative; z-index: 2;">{{ post.category.name|upper }}</span>
+            {% endif %}
           </div>
+
+          <div class="jbd-blog-card__body">
+            <!-- তারিখের ফরম্যাট: JUL 12, 2026 -->
+            <span class="jbd-blog-card__date jbd-mono">{{ post.published_at|date:"M d, Y"|upper }}</span>
+
+            <!-- টাইটেল বড় রাখার জন্য h3 ট্যাগ এবং স্লাগ লজিক -->
+            <h3>
+              {% if post.slug %}
+                <!-- এখানে `jbd-stretched-link` ক্লাস যোগ করা হয়েছে -->
+                <a href="{% url 'blog_detail' slug=post.slug %}" class="jbd-stretched-link" style="color: inherit; text-decoration: none;">{{ post.title }}</a>
+              {% else %}
+                {{ post.title }}
+              {% endif %}
+            </h3>
+
+            <p>{{ post.content|truncatewords_html:20|safe }}</p>
+
+            <!-- বাটন আগের মতোই আছে, তবে এর ক্লিক মেইন লিংকের সাথে মার্জ হয়ে যাবে -->
+            {% if post.slug %}
+              <a href="{% url 'blog_detail' slug=post.slug %}" class="jbd-blog-card__link" style="position: relative; z-index: 2;">বিস্তারিত পোস্ট  →</a>
+            {% else %}
+              <a href="#" class="jbd-blog-card__link">বিস্তারিত পোস্ট →</a>
+            {% endif %}
+          </div>
+        </article>
+      {% empty %}
+        <div class="col-12 text-center py-4">
+            <p class="text-muted small">No articles found from the blog.</p>
         </div>
-      </div>
+      {% endfor %}
     </div>
+  </div>
+  <div class="jbd-courses__more">
+    <a href="#" class="jbd-btn jbd-btn--outline">আরও দেখুন</a>
   </div>
 </section>
 
-
-<!-- ==================== FAQ ==================== -->
-<section class="faq-section py-5">
-  <div class="container">
-    <div class="text-center mb-5 reveal">
-      <span class="section-eyebrow eyebrow-red">FAQ</span>
-      <h2 class="section-title mt-2">সচরাচর জিজ্ঞাসিত প্রশ্নসমূহ</h2>
-      <p class="section-sub">ভর্তি সংক্রান্ত সকল প্রশ্নের উত্তর এখানে পাবেন</p>
-    </div>
-    <div class="row justify-content-center">
-      <div class="col-lg-8 reveal">
-        <div class="accordion custom-accordion" id="faqAcc">
-          <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#f1">ল্যাব ক্লাসের জন্য কি নিজের ল্যাপটপ আনতে হবে?</button></h2><div id="f1" class="accordion-collapse collapse show" data-bs-parent="#faqAcc"><div class="accordion-body">না, আমাদের মেইন ল্যাবে হাই-কনফিগারেশন পিসি সম্পূর্ণ বিনামূল্যে বরাদ্দ থাকবে। বাসায় প্র্যাক্টিসের জন্য প্রজেক্ট ফাইল USB বা GitHub-এ নিয়ে যেতে পারবেন।</div></div></div>
-          <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">ভর্তির পর পেমেন্ট কি কিস্তিতে দেওয়া যাবে?</button></h2><div id="f2" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">হ্যাঁ, দুটি সহজ কিস্তিতে পরিশোধ করতে পারবেন। প্রথম কিস্তি ভর্তির সময়, দ্বিতীয় কিস্তি কোর্সের মাঝামাঝিতে।</div></div></div>
-          <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f3">কোনো পূর্ব প্রোগ্রামিং অভিজ্ঞতা না থাকলেও ভর্তি হওয়া যাবে?</button></h2><div id="f3" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">হ্যাঁ, Lab Batch A ও B-তে একদম শুরু থেকে শেখানো হয়। Friday Batch (AI & SEO)-এ কমপক্ষে HTML/CSS-এর বেসিক ধারণা থাকা ভালো।</div></div></div>
-          <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f4">কোর্স শেষে চাকরির ব্যবস্থা আছে?</button></h2><div id="f4" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">আমরা CV রিভিউ, Fiverr/Upwork প্রোফাইল সেটআপ ও ফ্রিল্যান্সিং গাইডেন্স দিই। আমাদের ৯০%+ গ্র্যাজুয়েট কোর্স শেষের ৩ মাসের মধ্যে আয় শুরু করেছেন।</div></div></div>
-        </div>
-      </div>
+  <!-- ============ 6. RECENT STUDENTS (full-width, always sliding) ============ -->
+<section class="jbd-students" id="students">
+  <div class="jbd-wrap">
+    <div class="jbd-section-head is-center">
+      <h2>ছাত্র ছাত্রী</h2>
     </div>
   </div>
+
+  <div class="jbd-students-marquee">
+    <div class="jbd-students-track" id="jbdStudentsTrack">
+
+      {% if marquee_students %}
+        <!-- set A -->
+        {% for student in marquee_students %}
+          <div class="jbd-mini-student">
+            <div class="jbd-mini-avatar">
+              {% if student.photo %}
+                <img src="{{ student.photo.url }}" alt="{{ student.name }}">
+              {% else %}
+               <img src="{% static 'cus/jbditnoprofilepicture.jpg' %}" alt="{{ student.name }}">
+              {% endif %}
+              <span class="dot"></span>
+            </div>
+            <div class="info">
+              <h4>{{ student.name }}</h4>
+              <span>{{ student.course.name|default:"Web Development" }}</span>
+            </div>
+          </div>
+        {% endfor %}
+
+        <!-- set B -->
+        {% for student in marquee_students %}
+          <div class="jbd-mini-student" aria-hidden="true">
+            <div class="jbd-mini-avatar">
+              {% if student.photo %}
+                <img src="{{ student.photo.url }}" alt="{{ student.name }}">
+              {% else %}
+                <img src="{% static 'cus/jbditnoprofilepicture.jpg' %}" alt="{{ student.name }}">
+              {% endif %}
+              <span class="dot"></span>
+            </div>
+            <div class="info">
+              <h4>{{ student.name }}</h4>
+              <span>{{ student.course.name|default:"Web Development" }}</span>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-center text-muted w-100 py-3">No approved students to display.</p>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <!-- আরও দেখুন বাটন -->
+  <div class="jbd-courses__more">
+    <a href="#" class="jbd-btn jbd-btn--outline">আরও দেখুন</a>
+  </div>
 </section>
+</div>
 
 
+<script>
+(function(){
+  document.addEventListener("DOMContentLoaded", function() {
+    // সরাসরি স্লাইডারের মেইন সেকশন বা হোম রুট সিলেক্ট করা হচ্ছে
+    var root = document.querySelector('.jbd-hero') || document.querySelector('.jbd-home');
+    if(!root) return;
+
+    /* ==========================================================================
+       1. HERO SLIDER
+       ========================================================================== */
+    var heroSlides = root.querySelectorAll('.jbd-hero__slide');
+    var heroDotsWrap = root.querySelector('#jbdHeroDots');
+    var heroIndex = 0;
+    var heroTimer;
+
+    if(heroSlides.length > 0) {
+      if(heroDotsWrap) heroDotsWrap.innerHTML = '';
+
+      heroSlides.forEach(function(_, i){
+        var dot = document.createElement('button');
+        if(i === 0) dot.className = 'is-active';
+        dot.setAttribute('aria-label', 'Go to slide ' + (i+1));
+        dot.addEventListener('click', function(){ goHero(i); resetHeroTimer(); });
+        if(heroDotsWrap) heroDotsWrap.appendChild(dot);
+      });
+
+      var heroDots = heroDotsWrap ? heroDotsWrap.querySelectorAll('button') : [];
+
+      function goHero(i){
+        if(heroSlides.length === 0) return;
+        heroSlides[heroIndex].classList.remove('is-active');
+        if(heroDots[heroIndex]) heroDots[heroIndex].classList.remove('is-active');
+
+        heroIndex = (i + heroSlides.length) % heroSlides.length;
+
+        heroSlides[heroIndex].classList.add('is-active');
+        if(heroDots[heroIndex]) heroDots[heroIndex].classList.add('is-active');
+      }
+
+      function nextHero(){ goHero(heroIndex + 1); }
+      function prevHero(){ goHero(heroIndex - 1); }
+
+      var nextBtn = root.querySelector('#jbdHeroNext');
+      var prevBtn = root.querySelector('#jbdHeroPrev');
+
+      if(nextBtn) nextBtn.addEventListener('click', function(){ nextHero(); resetHeroTimer(); });
+      if(prevBtn) prevBtn.addEventListener('click', function(){ prevHero(); resetHeroTimer(); });
+
+      function resetHeroTimer(){
+        clearInterval(heroTimer);
+        heroTimer = setInterval(nextHero, 6000);
+      }
+      resetHeroTimer();
+    }
 
 
+    /* ==========================================================================
+       2. TESTIMONIAL SLIDER
+       ========================================================================== */
+    // টেস্টমোনিয়াল এলিমেন্টগুলো ডকূমেন্ট থেকে সরাসরি বা রুট থেকে খোঁজা হচ্ছে
+    var tTrack = document.querySelector('#jbdTestiTrack');
+    var tCards = document.querySelectorAll('.jbd-testi-card');
+    var tDotsWrap = document.querySelector('#jbdTestiDots');
+    var tIndex = 0;
+    var tTimer;
+
+    if(tTrack && tCards.length > 0 && tDotsWrap) {
+
+      // স্ক্রিনে একসাথে কয়টি কার্ড দেখা যাচ্ছে তা বের করা
+      function getVisibleCardsCount() {
+        var width = window.innerWidth;
+        if (width <= 600) return 1;
+        if (width <= 1024) return 2;
+        return 4; // ডেক্সটপে ৪টি
+      }
+
+      // ডট তৈরি করার লজিক
+      function maxSlideIndex() {
+        return Math.max(0, tCards.length - getVisibleCardsCount());
+      }
+
+      function buildDots() {
+        if(!tDotsWrap) return;
+        tDotsWrap.innerHTML = '';
+        var totalDots = maxSlideIndex() + 1;
+
+        for (var i = 0; i < totalDots; i++) {
+          var dot = document.createElement('button');
+          if (i === 0) dot.className = 'is-active';
+          dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+          (function(index) {
+            dot.addEventListener('click', function() {
+              goTesti(index);
+              resetTestiTimer();
+            });
+          })(i);
+          tDotsWrap.appendChild(dot);
+        }
+      }
+
+      function goTesti(i) {
+        var maxIndex = maxSlideIndex();
+        var tDots = tDotsWrap.querySelectorAll('button');
+
+        if (tDots[tIndex]) tDots[tIndex].classList.remove('is-active');
+
+        tIndex = i;
+        if (tIndex > maxIndex) tIndex = 0;
+        if (tIndex < 0) tIndex = maxIndex;
+
+        // কার্ডের উইডথ এবং গ্যাপ মেপে নিখুঁতভাবে ট্রান্সলেট করা
+        if (tCards.length > 0) {
+          var cardWidth = tCards[0].getBoundingClientRect().width;
+          var gap = 20; // আপনার CSS এর gap ভ্যালু
+          var moveAmount = (cardWidth + gap) * tIndex;
+          tTrack.style.transform = 'translateX(-' + moveAmount + 'px)';
+        }
+
+        if (tDots[tIndex]) tDots[tIndex].classList.add('is-active');
+      }
+
+      function resetTestiTimer() {
+        clearInterval(tTimer);
+        tTimer = setInterval(function() {
+          goTesti(tIndex + 1);
+        }, 5000);
+      }
+
+      // স্ক্রিন রিসাইজ হলে ডট রিক্যালকুলেট করা
+      window.addEventListener('resize', function() {
+        buildDots();
+        goTesti(tIndex);
+      });
+
+      // ইনিশিয়াল রান
+      buildDots();
+      resetTestiTimer();
+    }
+  });
+})();
+</script>
 {% endblock %}

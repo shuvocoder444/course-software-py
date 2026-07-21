@@ -15,7 +15,8 @@
 
             <div class="card shadow border-0">
                 <div class="card-body p-4">
-                    <form method="POST" novalidate>
+                    <!-- ইমেজ আপলোডের জন্য enctype="multipart/form-data" যোগ করা হয়েছে -->
+                    <form method="POST" enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
 
                         {% if form.errors %}
@@ -25,24 +26,63 @@
                         {% endif %}
 
                         <div class="row g-3">
+                            <!-- Course Name -->
                             <div class="col-md-12">
                                 <label class="form-label fw-semibold">Course Name <span class="text-danger">*</span></label>
                                 {{ form.name }}
                                 {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors.0 }}</div>{% endif %}
                             </div>
 
+                            <!-- Course Code -->
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Course Code</label>
                                 {{ form.code }}
                                 {% if form.code.errors %}<div class="text-danger small mt-1">{{ form.code.errors.0 }}</div>{% endif %}
                             </div>
 
+                            <!-- Default Fee -->
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Default Fee (BDT) <span class="text-danger">*</span></label>
                                 {{ form.default_fee }}
                                 {% if form.default_fee.errors %}<div class="text-danger small mt-1">{{ form.default_fee.errors.0 }}</div>{% endif %}
                             </div>
 
+                            <!-- Duration (Months) -->
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Duration (Months)</label>
+                                {{ form.duration_months }}
+                                {% if form.duration_months.errors %}<div class="text-danger small mt-1">{{ form.duration_months.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <!-- Total Classes -->
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Total Classes</label>
+                                {{ form.total_classes }}
+                                {% if form.total_classes.errors %}<div class="text-danger small mt-1">{{ form.total_classes.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <!-- Total Hours -->
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Total Hours</label>
+                                {{ form.total_hours }}
+                                {% if form.total_hours.errors %}<div class="text-danger small mt-1">{{ form.total_hours.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <!-- Course Level (Dropdown) -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Course Level</label>
+                                {{ form.level }}
+                                {% if form.level.errors %}<div class="text-danger small mt-1">{{ form.level.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <!-- Course Image -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Course Image</label>
+                                {{ form.image }}
+                                {% if form.image.errors %}<div class="text-danger small mt-1">{{ form.image.errors.0 }}</div>{% endif %}
+                            </div>
+
+                            <!-- Course Description -->
                             <div class="col-md-12">
                                 <label class="form-label fw-semibold">Course Description</label>
                                 {{ form.description }}

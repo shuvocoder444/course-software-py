@@ -7,4 +7,6 @@ urlpatterns = [
     path('settings/', views.institute_settings_view, name='institute_settings'),
     path('sms-history/delete/', views.SMSLogDeleteView.as_view(), name='delete_sms_logs'),
     path('sms-history/', views.SMSHistoryListView.as_view(), name='sms_history'),
+    path('settings/update/', views.UpdateSiteSettingsView.as_view(), name='update_site_settings'),
+
 ]

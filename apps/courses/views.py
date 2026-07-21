@@ -117,3 +117,58 @@ class BatchDeleteView(LoginRequiredMixin, AdminRoleRequiredMixin, View):
 
     def get(self, request, pk):
         return self.post(request, pk)
+
+
+
+
+
+
+
+
+
+from django.views.generic import TemplateView, View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Enrollment
+# আপনার প্রোজেক্টের মিক্সিন ইমপোর্ট (আপনার কোড অনুযায়ী)
+from apps.courses.views import AdminRoleRequiredMixin, VuxyVerticalLayoutMixin
+
+class AdminEnrollmentDashboardView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, TemplateView):
+    """
+    অ্যাডমিনদের জন্য ক্লাস-বেসড এনরোলমেন্ট ড্যাশবোর্ড
+    """
+    template_name = 'courses/admin_enrollment_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # পেন্ডিং ও একটিভ এনরোলমেন্টগুলো কনটেক্সটে পাস করা
+        context['pending_enrollments'] = Enrollment.objects.filter(is_active=False).order_by('-enrolled_at')
+        context['active_enrollments'] = Enrollment.objects.filter(is_active=True).order_by('-enrolled_at')
+        context['title'] = 'Enrollment Management'
+        return context
+
+
+class AdminApproveEnrollmentView(LoginRequiredMixin, AdminRoleRequiredMixin, View):
+    """
+    এনরোলমেন্ট এপ্রুভ করার জন্য ক্লাস-বেসড অ্যাকশন ভিউ
+    """
+    def get(self, request, enrollment_id, *args, **kwargs):
+        enrollment = get_object_or_404(Enrollment, id=enrollment_id)
+        enrollment.is_active = True
+        enrollment.save()
+
+        messages.success(request, f"সফলভাবে {enrollment.student} এর জন্য {enrollment.course.name} курсটি এপ্রুভ করা হয়েছে।")
+        return redirect('admin_enrollment_dashboard')
+
+
+class AdminRejectEnrollmentView(LoginRequiredMixin, AdminRoleRequiredMixin, View):
+    """
+    এনরোলমেন্ট রিজেক্ট বা বাতিল করার জন্য ক্লাস-বেসড অ্যাকশন ভিউ
+    """
+    def get(self, request, enrollment_id, *args, **kwargs):
+        enrollment = get_object_or_404(Enrollment, id=enrollment_id)
+        student_name = enrollment.student
+        course_name = enrollment.course.name
+        enrollment.delete()
+
+        messages.warning(request, f"{student_name} এর {course_name} কোর্সের অনুরোধটি বাতিল করা হয়েছে।")
+        return redirect('admin_enrollment_dashboard')

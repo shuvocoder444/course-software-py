@@ -1,0 +1,138 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Create New Slider{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center border-bottom mb-4">
+                <h4 class="card-title mb-0">Add New Hero Slider</h4>
+                <a href="{% url 'slider_list' %}" class="btn btn-sm btn-secondary">
+                    <i class="ti ti-arrow-left me-1"></i> Back to List
+                </a>
+            </div>
+
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Non-field Errors -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Section: Titles -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold" for="{{ form.title_white.id_for_label }}">Title (White Text)</label>
+                            {{ form.title_white }}
+                            {% if form.title_white.errors %}
+                                <div class="text-danger small mt-1">{{ form.title_white.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold" for="{{ form.title_colored.id_for_label }}">Title (Colored Text)</label>
+                            {{ form.title_colored }}
+                            {% if form.title_colored.errors %}
+                                <div class="text-danger small mt-1">{{ form.title_colored.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Section: Description -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <label class="form-label fw-bold" for="{{ form.description.id_for_label }}">Slider Description</label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="text-danger small mt-1">{{ form.description.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Section: Button 1 -->
+                    <div class="row g-3 mb-4 p-3 bg-light rounded-2 border">
+                        <h6 class="text-muted mb-1"><i class="ti ti-link me-1"></i> Primary Button (Button 1)</h6>
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ form.btn1_text.id_for_label }}">Button 1 Text</label>
+                            {{ form.btn1_text }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ form.btn1_url.id_for_label }}">Button 1 Link/URL</label>
+                            {{ form.btn1_url }}
+                        </div>
+                    </div>
+
+
+
+                    <!-- Section: Image and Controls -->
+                    <div class="row g-3 mb-4 align-items-end">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold" for="{{ form.right_image.id_for_label }}">Slider Image / Showcase Vector</label>
+                            {{ form.right_image }}
+                            <div class="mt-2">
+                                <img id="imagePreview" src="#" alt="Preview" class="img-thumbnail d-none" style="max-height: 120px;">
+                            </div>
+                            {% if form.right_image.errors %}
+                                <div class="text-danger small mt-1">{{ form.right_image.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold" for="{{ form.order.id_for_label }}">Display Order</label>
+                            {{ form.order }}
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-check form-switch mb-2 ms-2">
+                                {{ form.is_active }}
+                                <label class="form-check-label fw-bold" for="{{ form.is_active.id_for_label }}">Is Active?</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="pt-3 border-top d-flex justify-content-end gap-2">
+                        <button type="reset" class="btn btn-label-secondary">Discard</button>
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="ti ti-device-floppy me-1"></i> Save Slider
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Image Preview Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageInput = document.querySelector('input[type="file"]');
+        const previewImg = document.getElementById('imagePreview');
+
+        if (imageInput && previewImg) {
+            imageInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImg.src = e.target.result;
+                        previewImg.classList.remove('d-none');
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    previewImg.classList.add('d-none');
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
