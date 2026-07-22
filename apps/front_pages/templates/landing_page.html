@@ -45,7 +45,7 @@
   .jbd-mono{ font-family: 'JetBrains Mono', 'Courier New', monospace; }
 
   .jbd-wrap{
-    max-width: 1400px;
+    max-width: 1800px;
     margin: 0 auto;
     padding: 0 32px;
   }
@@ -219,6 +219,7 @@ a.jbd-btn.jbd-btn--primary {
   font-size: clamp(16px, 3.2vw, 28px);
   display: block;
   margin-top: 6px;
+  line-height: 25px;
 }
 
 .jbd-hero__content p {
@@ -311,7 +312,7 @@ a.jbd-btn.jbd-btn--primary {
     grid-template-columns: .85fr 1.15fr;
     gap: 64px;
     align-items:center;
-    max-width:1220px;
+    max-width:1800px;
     margin:0 auto;
     padding-left:32px; padding-right:32px;
   }
@@ -356,6 +357,177 @@ a.jbd-btn.jbd-btn--primary {
     font-size: 26px; color: var(--ink);
   }
   .jbd-stats .stat span{ font-size:13px; color:var(--slate); }
+
+
+
+
+
+
+
+/* ===== COURSE SECTION MAIN ===== */
+.courses-section {
+  background-color: #F6F7FB !important;
+}
+
+/* স্লাইডারের বদলে ১০০% স্থির গ্রিড কন্টেইনার */
+.courses-grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  width: 100%;
+}
+
+/* এক সারিতে ৫টি কোর্স দেখানোর নিখুঁত হিসাব */
+.course-card-wrapper {
+  flex: 0 0 calc(20% - 12px);
+  max-width: calc(20% - 12px);
+  box-sizing: border-box;
+}
+
+/* রেসপনসিভ ব্রেকপয়েন্ট (স্ক্রিন ছোট হলে নিচে নেমে আসবে) */
+@media(max-width: 1400px){
+  .course-card-wrapper {
+    flex: 0 0 calc(25% - 11.25px);
+    max-width: calc(25% - 11.25px);
+  }
+}
+
+@media(max-width: 1100px){
+  .course-card-wrapper {
+    flex: 0 0 calc(33.333% - 10px);
+    max-width: calc(33.333% - 10px);
+  }
+}
+
+@media(max-width: 768px){
+  .course-card-wrapper {
+    flex: 0 0 calc(50% - 7.5px);
+    max-width: calc(50% - 7.5px);
+  }
+}
+
+@media(max-width: 480px){
+  .course-card-wrapper {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* ===== COURSE CARD STYLES (১০০% অপরিবর্তিত) ===== */
+.course-card {
+  background: #ffffff;
+  border: 1.5px solid var(--line, #eaefe9);
+  border-radius: var(--r2, 12px);
+  overflow: hidden;
+  transition: transform .25s, box-shadow .25s, border-color .25s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.08);
+  border-color: var(--green, #10b981);
+}
+
+.cc-image {
+  width: 100%;
+  height: 257px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.cc-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .3s ease;
+}
+
+.course-card:hover .cc-image img {
+  transform: scale(1.05);
+}
+
+.cc-body {
+  padding: 15px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cc-body h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--dark, #1f2937);
+  margin-bottom: 8px;
+  line-height: 1.35;
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.cc-body h4 span {
+  color: var(--red, #e61d23);
+  font-size: 0.82rem;
+}
+
+.cc-description {
+  font-size: 0.8rem;
+  color: var(--muted, #6b7280);
+  line-height: 1.5;
+  font-family: 'Noto Sans Bengali', sans-serif;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.cc-footer {
+  padding: 12px 15px;
+  background: #ffffff;
+  border-top: 1px solid var(--line, #f3f4f6);
+}
+
+.btn-enroll {
+  background: var(--green, #16a34a);
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 8px 12px;
+  border-radius: var(--r, 6px);
+  text-decoration: none;
+  font-family: 'Noto Sans Bengali', sans-serif;
+  transition: background .2s, transform .15s;
+}
+
+.btn-enroll:hover {
+  background: var(--green-d, #15803d);
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+.cc-featured-ribbon {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--red, #e61d23);
+  color: #fff;
+  font-size: .6rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 0 0 6px 6px;
+  letter-spacing: .5px;
+  font-family: 'Public Sans', sans-serif;
+  z-index: 2;
+}
+
+
+
+
+
+
+
+
+
+
 
   /* ---------- 3. COURSES ---------- */
   .jbd-courses{ background: var(--paper); padding: 100px 0; }
@@ -513,32 +685,41 @@ a.jbd-btn.jbd-btn--primary {
 
 
 /* ---------- 5. BLOG ---------- */
+/* ==========================================
+   5. BLOG SECTION (5 POSTS GRID LAYOUT)
+   ========================================== */
+
 .jbd-blog {
-  padding: 60px 0; /* টপ ও বটম গ্যাপ ১০০ থেকে কমিয়ে ৬০ করা হয়েছে */
+  padding: 60px 0;
 }
 
+/* ৫ কলাম গ্রিড লেআউট */
 .jbd-blog__grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* ৩টি থেকে ৪টি কলাম করা হয়েছে */
-  gap: 20px; /* গ্যাপ ২৮ থেকে কমিয়ে ২০ করা হয়েছে */
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
 }
 
+/* ব্লগ কার্ড স্টাইল */
 .jbd-blog-card {
+  position: relative;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
-  transition: transform .22s ease, box-shadow .22s ease;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
   display: flex;
   flex-direction: column;
 }
 
 .jbd-blog-card:hover {
+  cursor: pointer;
   transform: translateY(-6px);
-  box-shadow: var(--shadow);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
 }
 
+/* থাম্বনেইল অংশ */
 .jbd-blog-card__thumb {
-  height: 237px; /* ৪ কলামের সাথে সামঞ্জস্য রাখতে থাম্বনেইল হাইট ৩১০ থেকে ২২০ করা হয়েছে */
+height: 249px;
   position: relative;
 }
 
@@ -559,10 +740,12 @@ a.jbd-btn.jbd-btn--primary {
   font-weight: 700;
   padding: 6px 12px;
   border-radius: 8px;
+  z-index: 2;
 }
 
+/* কন্টেন্ট বডি অংশ */
 .jbd-blog-card__body {
-  padding: 26px 22px 22px;
+  padding: 20px 16px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -578,80 +761,88 @@ a.jbd-btn.jbd-btn--primary {
 }
 
 .jbd-blog-card__body h3 {
-  font-size: 16px; /* ৪ কলামের টেক্সট ফিট করার জন্য ফন্ট সাইজ সামান্য কমানো হয়েছে */
+  font-size: 15px;
   margin-bottom: 10px;
+  line-height: 1.4;
 }
 
 .jbd-blog-card__body p {
-  font-size: 14px;
-
+  font-size: 13px;
+  color: #555;
 }
 
 .jbd-blog-card__body a {
   font-weight: 700;
-  font-size: 15px;
-color: #14a800;
+  font-size: 14px;
+  color: #14a800;
 }
 
 .jbd-blog-card__body a:hover {
   text-decoration: underline;
 }
 
-
-
-
-/* পুরো কার্ডের এরিয়া জুড়ে লিংকটিকে ছড়িয়ে দেওয়ার জন্য */
+/* পুরো কার্ড ক্লিকেবল করার জন্য Stretched Link */
 .jbd-stretched-link::after {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  content: "";
 }
 
-/* মাউস হোভার করলে কার্ডের লুক সুন্দর করার জন্য (ঐচ্ছিক) */
-.jbd-blog-card {
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-.jbd-blog-card:hover {
-    cursor: pointer;
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+/* এনিমেশন */
+@keyframes jbdHorizontalMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-33.333% - 8px));
+  }
 }
 
+/* ==========================================
+   RESPONSIVE BREAKPOINTS
+   ========================================== */
 
-/* ---------- RESPONSIVE MEDIA QUERIES ---------- */
-@media (max-width: 1024px) {
+/* বড় ডেস্কটপ / ল্যাপটপ (১২০০px এর নিচে) - ৩টি কলাম */
+@media (max-width: 1200px) {
   .jbd-blog__grid {
-    grid-template-columns: repeat(2, 1fr); /* ট্যাব বা ছোট স্ক্রিনে ২টি কলাম দেখাবে */
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
+}
+
+/* ট্যাবলেট / ছোট স্ক্রিন (৭৬৮px এর নিচে) - ২টি কলাম */
+@media (max-width: 768px) {
+  .jbd-blog__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
   .jbd-blog-card__thumb {
-    height: 100%px;
+    height: 249px;
   }
 }
 
+/* মোবাইল স্ক্রিন (৫৭৬px এর নিচে) - ১টি কলাম */
 @media (max-width: 576px) {
   .jbd-blog {
-    padding: 40px 0; /* মোবাইলে টপ-বটম স্পেস আরও কমানো হয়েছে */
+    padding: 40px 0;
   }
   .jbd-blog__grid {
-    grid-template-columns: 1fr; /* মোবাইল স্ক্রিনে ১টি করে কলাম দেখাবে */
+    grid-template-columns: 1fr;
     gap: 24px;
   }
   .jbd-blog-card__thumb {
-    height: 100%;
+  height: 245px;
   }
 }
-
-
 
 /* ---------- 6. RECENT STUDENTS (Horizontal Box Marquee - Right to Left) ---------- */
 .jbd-students {
   background: var(--paper);
-  padding: 50px 0 30px; /* ডানে-বামে প্যাডিং ০ করা হয়েছে যাতে স্লাইডার স্ক্রিন জুড়ে থাকে */
+  padding: 50px 0 30px;
   overflow: hidden;
 }
 
@@ -664,6 +855,8 @@ color: #14a800;
   margin-right: -50vw;
   overflow: hidden;
   padding: 20px 0;
+  white-space: nowrap;
+
   /* ডানে এবং বামে ফেড ইফেক্ট */
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
@@ -671,38 +864,44 @@ color: #14a800;
 
 .jbd-students-track {
   display: flex;
-  flex-direction: row; /* বক্সগুলোকে পাশাপাশি (ডানে-বামে) সাজানোর জন্য */
+  flex-direction: row;
   align-items: stretch;
-  gap: 24px; /* বক্সগুলোর পারস্পরিক দূরত্ব */
-  width: max-content;
-  animation: jbdHorizontalMarquee 25s linear infinite; /* অ্যানিমেশন স্পিড */
+  gap: 24px; /* বক্সগুলোর দূরত্ব */
+  width: max-content; /* নিখুঁত দৈর্ঘ্যের জন্য */
+  animation: jbdHorizontalMarquee 25s linear infinite;
 }
 
 .jbd-students-marquee:hover .jbd-students-track {
   animation-play-state: paused;
 }
 
-/* ডান থেকে বামে যাওয়ার অ্যানিমেশন */
+/* নিখুঁত সিমলেস লুপের জন্য অ্যানিমেশন */
 @keyframes jbdHorizontalMarquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* -50% এর সাথে gap (24px)-এর অর্ধেক (12px) এডজাস্টমেন্ট */
+    transform: translateX(calc(-50% - 12px));
+  }
 }
 
 /* চারকোনা বক্স কার্ড */
 .jbd-mini-student {
   display: flex;
-  flex-direction: column; /* ইমেজ উপরে এবং টেক্সট নিচে রাখার জন্য */
+  flex-direction: column;
   align-items: center;
   text-align: center;
   gap: 15px;
   background: var(--white);
   border: 1px solid var(--line);
-  border-radius: 12px; /* চারকোনা বক্স শেপ */
+  border-radius: 12px;
   padding: 24px 20px;
-  width: 200px; /* প্রতিটি বক্সের নির্দিষ্ট প্রস্থ */
+  width: 200px;
   flex: none;
-  white-space: normal; /* নাম বা কোর্স বড় হলে যাতে নিচে নেমে আসে */
-  box-shadow: 0 12px 26px -18px rgba(13,21,36,.25);
+  flex-shrink: 0; /* কার্ড যেন চেপে না যায় */
+  white-space: normal;
+  box-shadow: 0 12px 26px -18px rgba(13, 21, 36, 0.25);
 }
 
 .jbd-mini-avatar {
@@ -711,12 +910,12 @@ color: #14a800;
 }
 
 .jbd-mini-avatar img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%; /* ছবি গোল থাকবে */
-  object-fit: cover;
-  display: block;
-  box-shadow: 0 0 0 3px rgba(63,161,61,.12);
+    width: 100px;
+    height: 100px;
+    border-radius: 5%;
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 0 0 3px rgba(63, 161, 61, 0.12);
 }
 
 .jbd-mini-avatar .dot {
@@ -779,6 +978,32 @@ color: #14a800;
     .jbd-testi-page{ grid-template-columns: 1fr; }
     .jbd-about__badge{ position:static; margin-top:18px; }
   }
+
+
+  .jbd-blog__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* ৪ থেকে ৫ করা হয়েছে */
+  gap: 16px; /* কার্ডের জন্য ৫টি কলামে কিছুটা স্পেস কমাতে গ্যাপ ১৬px দেওয়া ভালো */
+}
+
+/* responsive break points */
+@media (max-width: 1200px) {
+  .jbd-blog__grid {
+    grid-template-columns: repeat(3, 1fr); /* মাঝারি স্ক্রিনে ৩টি */
+  }
+}
+
+@media (max-width: 768px) {
+  .jbd-blog__grid {
+    grid-template-columns: repeat(2, 1fr); /* ট্যাবে ২টি */
+  }
+}
+
+@media (max-width: 576px) {
+  .jbd-blog__grid {
+    grid-template-columns: 1fr; /* মোবাইলে ১টি */
+  }
+}
 </style>
 
 <div class="jbd-home">
@@ -850,42 +1075,56 @@ color: #14a800;
 
   <!-- ============ 2. ABOUT ============ -->
 <section class="jbd-about" id="about">
+  <!-- ================= LEFT SIDE ================= -->
   <div class="jbd-about__media">
     <div class="jbd-about__frame">
-      <!-- যদি মডেলে ইমেজ আপলোড করা থাকে তবে তা দেখাবে, না থাকলে মকআপ (Mockup) এনিমেশনটি দেখাবে -->
-      {% if about_data.right_image %}
-        <img src="{{ about_data.right_image.url }}" alt="{{ about_data.title_white }}" class="jbd-about__img" style="width: 100%; height: auto; border-radius: 8px;">
-      {% else %}
-        <div class="jbd-mock">
-          <div class="jbd-mock__bar"><span></span><span></span><span></span></div>
-          <div class="jbd-mock__body">
-            <div class="jbd-mock__line accent-r"></div>
-            <div class="jbd-mock__line w1"></div>
-            <div class="jbd-mock__line w2"></div>
-            <div class="jbd-mock__line accent-g"></div>
-            <div class="jbd-mock__line w3"></div>
-          </div>
-        </div>
-      {% endif %}
-    </div>
+      <div class="jbd-about__content-box" style="padding: 20px;">
+        <!-- Left Title & Color -->
+        {% if about_data.left_title %}
+          <h3 style="color: {{ about_data.left_title_color|default:'#ffffff' }}; font-weight: bold; margin-bottom: 12px;">
+            {{ about_data.left_title }}
+          </h3>
+        {% endif %}
 
-    <div class="jbd-about__badge">
-      <span class="num jbd-mono">98%</span>
-      <span class="lbl">Course completion rate</span>
+        <!-- Left Description -->
+        {% if about_data.left_description %}
+          <p class="jbd-about__left-desc" style="color: #d1d5db; line-height: 1.6;">
+            {{ about_data.left_description|linebreaksbr }}
+          </p>
+        {% endif %}
+
+        <!-- Left Button -->
+        {% if about_data.left_btn_text and about_data.left_btn_url %}
+          <div class="jbd-about__action" style="margin-top: 15px;">
+            <a href="{{ about_data.left_btn_url }}" class="btn btn-outline-primary">
+              {{ about_data.left_btn_text }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 
+  <!-- ================= RIGHT SIDE ================= -->
   <div class="jbd-about__content">
-    <!-- মডেলের সঠিক টাইটেল ফিল্ড -->
-    <h2>{{ about_data.title_white }}</h2>
+    <!-- Right Title & Color -->
+    {% if about_data.right_title %}
+      <h2 style="color: {{ about_data.right_title_color|default:'#ffffff' }};">
+        {{ about_data.right_title }}
+      </h2>
+    {% endif %}
 
-    <!-- মডেলের সঠিক ডেসক্রিপশন ফিল্ড -->
-    <p>{{ about_data.description|linebreaksbr }}</p>
+    <!-- Right Description -->
+    {% if about_data.right_description %}
+      <p>{{ about_data.right_description|linebreaksbr }}</p>
+    {% endif %}
 
-    <!-- ডাইনামিক বাটন (যদি টেক্সট এবং ইউআরএল দেওয়া থাকে) -->
-    {% if about_data.btn_text and about_data.btn_url %}
+    <!-- Right Button -->
+    {% if about_data.right_btn_text and about_data.right_btn_url %}
       <div class="jbd-about__action" style="margin-top: 20px;">
-        <a href="{{ about_data.btn_url }}" class="btn btn-primary">{{ about_data.btn_text }}</a>
+        <a href="{{ about_data.right_btn_url }}" class="btn btn-primary">
+          {{ about_data.right_btn_text }}
+        </a>
       </div>
     {% endif %}
   </div>
@@ -897,123 +1136,62 @@ color: #14a800;
 
 
 
-
 <section class="courses-section py-5" id="courses">
   <div class="container">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-end mb-4 gap-3 reveal">
-      <div>
-        <span class="section-eyebrow eyebrow-green">Active Batches</span>
-        <h2 class="section-title mt-2">চলতি অফলাইন প্রিমিয়াম ব্যাচসমূহ</h2>
-        <p class="section-sub">ল্যাব ও মাল্টিমিডিয়া প্রজেক্টর সাপোর্টেড ক্লাসরুম শিডিউল</p>
-      </div>
-      <a href="#admission-form" class="btn-primary-brand flex-shrink-0">
-        <i class="ti ti-arrow-right"></i> এখনই ভর্তি হোন
-      </a>
+
+    <!-- Dynamic Section Header -->
+    <div class="text-center mb-4 reveal">
+      <h2 class="section-title mt-2">{{ section_title }}</h2>
+      <p class="section-sub">{{ section_description }}</p>
     </div>
 
-    <!-- Slider -->
-    <div class="slider-wrapper" id="sliderWrapper">
-      <div class="slider-track" id="sliderTrack">
+    <!-- Static Grid Container with Dynamic Course Loop -->
+    <div class="courses-grid-container">
 
-        <!-- Slide 1 -->
-        <div class="slider-slide">
+      {% for course in front_courses %}
+        <div class="course-card-wrapper">
           <div class="course-card">
+
+            <!-- Dynamic Image -->
             <div class="cc-image">
-              <img src="https://images.unsplash.com/photo-1468495244123-6c6c332eeece?auto=format&fit=crop&w=500&q=80" alt="Office Application">
+              {% if course.image %}
+                <img src="{{ course.image.url }}" alt="{{ course.title }}">
+              {% else %}
+                <img src="https://images.unsplash.com/photo-1468495244123-6c6c332eeece?auto=format&fit=crop&w=500&q=80" alt="Default Image">
+              {% endif %}
             </div>
+
+            <!-- Dynamic Title & Color -->
             <div class="cc-body">
-              <h4>অফিস অ্যাপ্লিকেশন <br><span>(Office Application)</span></h4>
-              <p class="cc-description">এমএস ওয়ার্ড, এক্সেল, পাওয়ারপয়েন্ট এবং ইন্টারনেট ব্রাউজিংয়ের বেসিক থেকে অ্যাডভান্সড স্কিল।</p>
+              <h4 style="color: {{ course.title_color|default:'#1f2937' }};">
+                {{ course.title }}
+              </h4>
+              <p class="cc-description">
+                {{ course.description|truncatewords:20 }}
+              </p>
             </div>
-            <div class="cc-footer">
-              <div class="cc-price">৳১২,০০০</div>
-              <a href="#admission-form" class="btn-enroll"><i class="ti ti-arrow-right"></i> ভর্তি</a>
-            </div>
+
+<!-- Dynamic Button Link -->
+<div class="cc-footer text-center">
+  {% if course.button_link %}
+    <a href="{{ course.button_link }}" target="_blank" class="btn-enroll w-100 d-inline-block text-center">
+      <i class="ti ti-arrow-right"></i> বিস্তারিত
+    </a>
+  {% else %}
+<a href="{% url 'card_detail' slug=course.slug|default:course.pk %}" class="btn-enroll w-100 d-inline-block text-center">
+    <i class="ti ti-arrow-right"></i> বিস্তারিত
+</a>
+  {% endif %}
+</div>
           </div>
         </div>
-
-        <!-- Slide 2 -->
-        <div class="slider-slide">
-          <div class="course-card">
-            <div class="cc-image">
-              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=500&q=80" alt="Digital Marketing">
-            </div>
-            <div class="cc-body">
-              <h4>ডিজিটাল মার্কেটিং<br><span>(Digital Marketing)</span></h4>
-              <p class="cc-description">এসইও, সোশ্যাল মিডিয়া মার্কেটিং, গুগল অ্যাডস এবং কনটেন্ট স্ট্র্যাটেজি শিখে ক্যারিয়ার গড়ুন।</p>
-            </div>
-            <div class="cc-footer">
-              <div class="cc-price">৳১০,০০০</div>
-              <a href="#admission-form" class="btn-enroll"><i class="ti ti-arrow-right"></i> ভর্তি</a>
-            </div>
-          </div>
+      {% empty %}
+        <div class="col-12 text-center py-4">
+          <p class="text-muted">কোনো কোর্স পাওয়া যায়নি।</p>
         </div>
+      {% endfor %}
 
-        <!-- Slide 3 (Featured) -->
-        <div class="slider-slide">
-          <div class="course-card" style="border-color:rgba(230,29,35,.3); border-top:3px solid var(--red); position:relative;">
-            <div class="cc-featured-ribbon">MOST POPULAR</div>
-            <div class="cc-image">
-              <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=500&q=80" alt="Graphic Design">
-            </div>
-            <div class="cc-body">
-              <h4>গ্রাফিক ডিজাইন<br><span>(Graphic Design)</span></h4>
-              <p class="cc-description">ফটোশপ ও ইলাস্ট্রেটর দিয়ে প্রফেশনাল লোগো, ব্যানার এবং ব্র্যান্ডিং ডিজাইন শিখুন।</p>
-            </div>
-            <div class="cc-footer">
-              <div class="cc-price">৳১৫,০০০</div>
-              <a href="#admission-form" class="btn-enroll"><i class="ti ti-arrow-right"></i> ভর্তি</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 4 -->
-        <div class="slider-slide">
-          <div class="course-card">
-            <div class="cc-image">
-              <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=500&q=80" alt="WordPress Development">
-            </div>
-            <div class="cc-body">
-              <h4>ওয়েব ডেভেলপমেন্ট - ওয়ার্ডপ্রেস <br><span>Web Development - WordPress</span></h4>
-              <p class="cc-description">কোনো কোডিং ছাড়া এলিমেন্টর ও কাস্টম থিম দিয়ে প্রফেশনাল ওয়েবসাইট তৈরি করুন।</p>
-            </div>
-            <div class="cc-footer">
-              <div class="cc-price">৳৮,০০০</div>
-              <a href="#admission-form" class="btn-enroll"><i class="ti ti-arrow-right"></i> ভর্তি</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 5 -->
-        <div class="slider-slide">
-          <div class="course-card">
-            <div class="cc-image">
-              <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=500&q=80" alt="Video Editing">
-            </div>
-            <div class="cc-body">
-              <h4>অডিও-ভিডিও এডিটিং<br><span>(Audio- Video Editing)</span></h4>
-              <p class="cc-description">প্রিমিয়ার প্রো ও আফটার ইফেক্টস দিয়ে কালার গ্রেডিং এবং মোশন গ্রাফিক্সের কাজ শিখুন।</p>
-            </div>
-            <div class="cc-footer">
-              <div class="cc-price">৳৭,০০০</div>
-              <a href="#admission-form" class="btn-enroll"><i class="ti ti-arrow-right"></i> ভর্তি</a>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /track -->
-    </div><!-- /wrapper -->
-
-    <!-- Slider Controls -->
-    <div class="d-flex align-items-center justify-content-center gap-4 mt-4">
-      <button class="slider-arrow" id="sliderPrev" onclick="sliderPrev()">
-        <i class="ti ti-chevron-left"></i>
-      </button>
-      <div class="slider-dots" id="sliderDots"></div>
-      <button class="slider-arrow" id="sliderNext" onclick="sliderNext()">
-        <i class="ti ti-chevron-right"></i>
-      </button>
-    </div>
+    </div><!-- /courses-grid-container -->
 
   </div>
 </section>
@@ -1182,7 +1360,9 @@ color: #14a800;
     </div>
   </div>
   <div class="jbd-courses__more">
-    <a href="#" class="jbd-btn jbd-btn--outline">আরও দেখুন</a>
+   <div class="jbd-courses__more">
+  <a href="{% url 'blog_feed' %}" class="jbd-btn jbd-btn--outline">আরও দেখুন</a>
+</div>
   </div>
 </section>
 
@@ -1194,51 +1374,68 @@ color: #14a800;
     </div>
   </div>
 
-  <div class="jbd-students-marquee">
-    <div class="jbd-students-track" id="jbdStudentsTrack">
-
-      {% if marquee_students %}
-        <!-- set A -->
-        {% for student in marquee_students %}
-          <div class="jbd-mini-student">
-            <div class="jbd-mini-avatar">
-              {% if student.photo %}
-                <img src="{{ student.photo.url }}" alt="{{ student.name }}">
-              {% else %}
-               <img src="{% static 'cus/jbditnoprofilepicture.jpg' %}" alt="{{ student.name }}">
-              {% endif %}
-              <span class="dot"></span>
-            </div>
-            <div class="info">
-              <h4>{{ student.name }}</h4>
-              <span>{{ student.course.name|default:"Web Development" }}</span>
-            </div>
+<div class="jbd-students-marquee">
+  <div class="jbd-students-track" id="jbdStudentsTrack">
+    {% if marquee_students %}
+      <!-- Set A -->
+      {% for student in marquee_students %}
+        <div class="jbd-mini-student">
+          <div class="jbd-mini-avatar">
+            {% if student.photo %}
+              <img src="{{ student.photo.url }}" alt="{{ student.name }}">
+            {% else %}
+              <img src="{% static 'cus/jbditnoprofilepicture.jpg' %}" alt="{{ student.name }}">
+            {% endif %}
+            <span class="dot"></span>
           </div>
-        {% endfor %}
-
-        <!-- set B -->
-        {% for student in marquee_students %}
-          <div class="jbd-mini-student" aria-hidden="true">
-            <div class="jbd-mini-avatar">
-              {% if student.photo %}
-                <img src="{{ student.photo.url }}" alt="{{ student.name }}">
-              {% else %}
-                <img src="{% static 'cus/jbditnoprofilepicture.jpg' %}" alt="{{ student.name }}">
-              {% endif %}
-              <span class="dot"></span>
-            </div>
-            <div class="info">
-              <h4>{{ student.name }}</h4>
-              <span>{{ student.course.name|default:"Web Development" }}</span>
-            </div>
+          <div class="info">
+            <h4>{{ student.name }}</h4>
+            <span>{{ student.course.name|default:"Web Development" }}</span>
           </div>
-        {% endfor %}
-      {% else %}
-        <p class="text-center text-muted w-100 py-3">No approved students to display.</p>
-      {% endif %}
+        </div>
+      {% endfor %}
 
-    </div>
+      <!-- Set B -->
+      {% for student in marquee_students %}
+        <div class="jbd-mini-student" aria-hidden="true">
+          <div class="jbd-mini-avatar">
+            {% if student.photo %}
+              <img src="{{ student.photo.url }}" alt="{{ student.name }}">
+            {% else %}
+              <img src="{% static 'cus/jbditnoprofilepicture.jpg' %}" alt="{{ student.name }}">
+            {% endif %}
+            <span class="dot"></span>
+          </div>
+          <div class="info">
+            <h4>{{ student.name }}</h4>
+            <span>{{ student.course.name|default:"Web Development" }}</span>
+          </div>
+        </div>
+      {% endfor %}
+
+      <!-- Set C (অতিরিক্ত ১টি সেট যোগ করুন) -->
+      {% for student in marquee_students %}
+        <div class="jbd-mini-student" aria-hidden="true">
+          <div class="jbd-mini-avatar">
+            {% if student.photo %}
+              <img src="{{ student.photo.url }}" alt="{{ student.name }}">
+            {% else %}
+              <img src="{% static 'cus/jbditnoprofilepicture.jpg' %}" alt="{{ student.name }}">
+            {% endif %}
+            <span class="dot"></span>
+          </div>
+          <div class="info">
+            <h4>{{ student.name }}</h4>
+            <span>{{ student.course.name|default:"Web Development" }}</span>
+          </div>
+        </div>
+      {% endfor %}
+
+    {% else %}
+      <p class="text-center text-muted w-100 py-3">No approved students to display.</p>
+    {% endif %}
   </div>
+</div>
 
   <!-- আরও দেখুন বাটন -->
   <div class="jbd-courses__more">
@@ -1251,63 +1448,180 @@ color: #14a800;
 <script>
 (function(){
   document.addEventListener("DOMContentLoaded", function() {
-    // সরাসরি স্লাইডারের মেইন সেকশন বা হোম রুট সিলেক্ট করা হচ্ছে
-    var root = document.querySelector('.jbd-hero') || document.querySelector('.jbd-home');
-    if(!root) return;
 
     /* ==========================================================================
-       1. HERO SLIDER
+       0. STUDENTS MARQUEE AUTO CLONE (গ্যাপ সমস্যার স্থায়ী সমাধান)
        ========================================================================== */
-    var heroSlides = root.querySelectorAll('.jbd-hero__slide');
-    var heroDotsWrap = root.querySelector('#jbdHeroDots');
-    var heroIndex = 0;
-    var heroTimer;
+    var studentTrack = document.querySelector('#jbdStudentsTrack');
+    if (studentTrack && studentTrack.children.length > 0) {
+      var minWidth = window.innerWidth * 3; // স্ক্রিনের ৩ গুণ উইডথ নিশ্চিত করা
+      var currentWidth = studentTrack.scrollWidth;
 
-    if(heroSlides.length > 0) {
-      if(heroDotsWrap) heroDotsWrap.innerHTML = '';
-
-      heroSlides.forEach(function(_, i){
-        var dot = document.createElement('button');
-        if(i === 0) dot.className = 'is-active';
-        dot.setAttribute('aria-label', 'Go to slide ' + (i+1));
-        dot.addEventListener('click', function(){ goHero(i); resetHeroTimer(); });
-        if(heroDotsWrap) heroDotsWrap.appendChild(dot);
-      });
-
-      var heroDots = heroDotsWrap ? heroDotsWrap.querySelectorAll('button') : [];
-
-      function goHero(i){
-        if(heroSlides.length === 0) return;
-        heroSlides[heroIndex].classList.remove('is-active');
-        if(heroDots[heroIndex]) heroDots[heroIndex].classList.remove('is-active');
-
-        heroIndex = (i + heroSlides.length) % heroSlides.length;
-
-        heroSlides[heroIndex].classList.add('is-active');
-        if(heroDots[heroIndex]) heroDots[heroIndex].classList.add('is-active');
+      // যতক্ষণ পর্যন্ত ট্র্যাক যথেষ্ট বড় না হচ্ছে, ডাটা ক্লোন হতে থাকবে
+      while (currentWidth < minWidth) {
+        var existingCards = Array.from(studentTrack.children);
+        existingCards.forEach(function(card) {
+          var clone = card.cloneNode(true);
+          clone.setAttribute('aria-hidden', 'true');
+          studentTrack.appendChild(clone);
+        });
+        currentWidth = studentTrack.scrollWidth;
       }
-
-      function nextHero(){ goHero(heroIndex + 1); }
-      function prevHero(){ goHero(heroIndex - 1); }
-
-      var nextBtn = root.querySelector('#jbdHeroNext');
-      var prevBtn = root.querySelector('#jbdHeroPrev');
-
-      if(nextBtn) nextBtn.addEventListener('click', function(){ nextHero(); resetHeroTimer(); });
-      if(prevBtn) prevBtn.addEventListener('click', function(){ prevHero(); resetHeroTimer(); });
-
-      function resetHeroTimer(){
-        clearInterval(heroTimer);
-        heroTimer = setInterval(nextHero, 6000);
-      }
-      resetHeroTimer();
     }
 
 
     /* ==========================================================================
-       2. TESTIMONIAL SLIDER
+       1. HERO SLIDER
        ========================================================================== */
-    // টেস্টমোনিয়াল এলিমেন্টগুলো ডকূমেন্ট থেকে সরাসরি বা রুট থেকে খোঁজা হচ্ছে
+    var root = document.querySelector('.jbd-hero') || document.querySelector('.jbd-home');
+    if(root) {
+      var heroSlides = root.querySelectorAll('.jbd-hero__slide');
+      var heroDotsWrap = root.querySelector('#jbdHeroDots');
+      var heroIndex = 0;
+      var heroTimer;
+
+      if(heroSlides.length > 0) {
+        if(heroDotsWrap) heroDotsWrap.innerHTML = '';
+
+        heroSlides.forEach(function(_, i){
+          var dot = document.createElement('button');
+          if(i === 0) dot.className = 'is-active';
+          dot.setAttribute('aria-label', 'Go to slide ' + (i+1));
+          dot.addEventListener('click', function(){ goHero(i); resetHeroTimer(); });
+          if(heroDotsWrap) heroDotsWrap.appendChild(dot);
+        });
+
+        var heroDots = heroDotsWrap ? heroDotsWrap.querySelectorAll('button') : [];
+
+        function goHero(i){
+          if(heroSlides.length === 0) return;
+          heroSlides[heroIndex].classList.remove('is-active');
+          if(heroDots[heroIndex]) heroDots[heroIndex].classList.remove('is-active');
+
+          heroIndex = (i + heroSlides.length) % heroSlides.length;
+
+          heroSlides[heroIndex].classList.add('is-active');
+          if(heroDots[heroIndex]) heroDots[heroIndex].classList.add('is-active');
+        }
+
+        function nextHero(){ goHero(heroIndex + 1); }
+        function prevHero(){ goHero(heroIndex - 1); }
+
+        var nextBtn = root.querySelector('#jbdHeroNext');
+        var prevBtn = root.querySelector('#jbdHeroPrev');
+
+        if(nextBtn) nextBtn.addEventListener('click', function(){ nextHero(); resetHeroTimer(); });
+        if(prevBtn) prevBtn.addEventListener('click', function(){ prevHero(); resetHeroTimer(); });
+
+        function resetHeroTimer(){
+          clearInterval(heroTimer);
+          heroTimer = setInterval(nextHero, 6000);
+        }
+        resetHeroTimer();
+      }
+    }
+
+
+    /* ==========================================================================
+       2. COURSE SLIDER (UPDATED & GAP FIXED)
+       ========================================================================== */
+    var cTrack = document.querySelector('#sliderTrack');
+    var cSlides = document.querySelectorAll('.slider-slide');
+    var cDotsWrap = document.querySelector('#sliderDots');
+    var cPrevBtn = document.querySelector('#sliderPrev');
+    var cNextBtn = document.querySelector('#sliderNext');
+    var cIndex = 0;
+
+    if (cTrack && cSlides.length > 0) {
+
+      function getVisibleCoursesCount() {
+        var width = window.innerWidth;
+        if (width <= 480) return 1;
+        if (width <= 768) return 2;
+        if (width <= 1100) return 3;
+        if (width <= 1400) return 4;
+        return 5; // বড় স্ক্রিনে ৫টি দেখাবে
+      }
+
+      function maxCourseIndex() {
+        return Math.max(0, cSlides.length - getVisibleCoursesCount());
+      }
+
+      function buildCourseDots() {
+        if (!cDotsWrap) return;
+        cDotsWrap.innerHTML = '';
+        var totalDots = maxCourseIndex() + 1;
+
+        for (var i = 0; i < totalDots; i++) {
+          var dot = document.createElement('div');
+          dot.className = 's-dot' + (i === 0 ? ' active' : '');
+          (function(index) {
+            dot.addEventListener('click', function() {
+              goCourse(index);
+            });
+          })(i);
+          cDotsWrap.appendChild(dot);
+        }
+      }
+
+      function goCourse(i) {
+        var maxIndex = maxCourseIndex();
+
+        cIndex = i;
+        if (cIndex > maxIndex) cIndex = maxIndex;
+        if (cIndex < 0) cIndex = 0;
+
+        var slideWidth = cSlides[0].getBoundingClientRect().width;
+        var gap = 15; // CSS gap 15px
+        var moveAmount = (slideWidth + gap) * cIndex;
+
+        cTrack.style.transform = 'translateX(-' + moveAmount + 'px)';
+
+        // Active Dot update
+        if (cDotsWrap) {
+          var cDots = cDotsWrap.querySelectorAll('.s-dot');
+          cDots.forEach(function(dot, idx) {
+            if (idx === cIndex) dot.classList.add('active');
+            else dot.classList.remove('active');
+          });
+        }
+
+        // Arrow disable state update
+        if (cPrevBtn) {
+          if (cIndex === 0) cPrevBtn.classList.add('disabled');
+          else cPrevBtn.classList.remove('disabled');
+        }
+        if (cNextBtn) {
+          if (cIndex >= maxIndex) cNextBtn.classList.add('disabled');
+          else cNextBtn.classList.remove('disabled');
+        }
+      }
+
+      // Global functions for onclick attributes (if used in HTML)
+      window.sliderNext = function() {
+        if (cIndex < maxCourseIndex()) goCourse(cIndex + 1);
+      };
+
+      window.sliderPrev = function() {
+        if (cIndex > 0) goCourse(cIndex - 1);
+      };
+
+      if (cNextBtn) cNextBtn.addEventListener('click', window.sliderNext);
+      if (cPrevBtn) cPrevBtn.addEventListener('click', window.sliderPrev);
+
+      window.addEventListener('resize', function() {
+        buildCourseDots();
+        goCourse(cIndex);
+      });
+
+      buildCourseDots();
+      goCourse(0);
+    }
+
+
+    /* ==========================================================================
+       3. TESTIMONIAL SLIDER
+       ========================================================================== */
     var tTrack = document.querySelector('#jbdTestiTrack');
     var tCards = document.querySelectorAll('.jbd-testi-card');
     var tDotsWrap = document.querySelector('#jbdTestiDots');
@@ -1316,15 +1630,13 @@ color: #14a800;
 
     if(tTrack && tCards.length > 0 && tDotsWrap) {
 
-      // স্ক্রিনে একসাথে কয়টি কার্ড দেখা যাচ্ছে তা বের করা
       function getVisibleCardsCount() {
         var width = window.innerWidth;
         if (width <= 600) return 1;
         if (width <= 1024) return 2;
-        return 4; // ডেক্সটপে ৪টি
+        return 4; // ডেস্কটপে ৪টি
       }
 
-      // ডট তৈরি করার লজিক
       function maxSlideIndex() {
         return Math.max(0, tCards.length - getVisibleCardsCount());
       }
@@ -1358,10 +1670,9 @@ color: #14a800;
         if (tIndex > maxIndex) tIndex = 0;
         if (tIndex < 0) tIndex = maxIndex;
 
-        // কার্ডের উইডথ এবং গ্যাপ মেপে নিখুঁতভাবে ট্রান্সলেট করা
         if (tCards.length > 0) {
           var cardWidth = tCards[0].getBoundingClientRect().width;
-          var gap = 20; // আপনার CSS এর gap ভ্যালু
+          var gap = 20;
           var moveAmount = (cardWidth + gap) * tIndex;
           tTrack.style.transform = 'translateX(-' + moveAmount + 'px)';
         }
@@ -1376,13 +1687,11 @@ color: #14a800;
         }, 5000);
       }
 
-      // স্ক্রিন রিসাইজ হলে ডট রিক্যালকুলেট করা
       window.addEventListener('resize', function() {
         buildDots();
         goTesti(tIndex);
       });
 
-      // ইনিশিয়াল রান
       buildDots();
       resetTestiTimer();
     }

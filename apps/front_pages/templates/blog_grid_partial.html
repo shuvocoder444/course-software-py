@@ -1,0 +1,61 @@
+{% load i18n %}
+<div class="jbd-blog__grid">
+  {% for post in blog_posts %}
+    <article class="jbd-blog-card">
+      <div class="jbd-blog-card__thumb" style="background: linear-gradient(135deg,#FDECEC,#FFF6DE);">
+        {% if post.featured_image %}
+          <img src="{{ post.featured_image.url }}" alt="{{ post.image_alt_text|default:post.title }}" onerror="this.style.display='none'">
+        {% endif %}
+        {% if post.category %}
+          <span class="jbd-blog-card__cat jbd-mono" style="position: relative; z-index: 2;">{{ post.category.name|upper }}</span>
+        {% endif %}
+      </div>
+
+      <div class="jbd-blog-card__body">
+        <span class="jbd-blog-card__date jbd-mono">{{ post.published_at|date:"M d, Y"|upper }}</span>
+
+        <h3>
+          {% if post.slug %}
+            <a href="{% url 'blog_detail' slug=post.slug %}" class="jbd-blog-card__stretched" style="color: inherit; text-decoration: none;">{{ post.title }}</a>
+          {% else %}
+            {{ post.title }}
+          {% endif %}
+        </h3>
+
+        <p>{{ post.content|truncatewords_html:20|safe }}</p>
+
+        {% if post.slug %}
+          <a href="{% url 'blog_detail' slug=post.slug %}" class="jbd-blog-card__link" style="position: relative; z-index: 2;">বিস্তারিত পোস্ট →</a>
+        {% else %}
+          <a href="#" class="jbd-blog-card__link">বিস্তারিত পোস্ট →</a>
+        {% endif %}
+      </div>
+    </article>
+  {% empty %}
+    <div class="col-12 text-center py-5">
+      <p class="text-muted">বর্তমানে কোনো ব্লগ পোস্ট পাওয়া যায়নি।</p>
+    </div>
+  {% endfor %}
+</div>
+
+{% if is_paginated %}
+  <div class="jbd-pagination text-center mt-5">
+    <ul class="pagination justify-content-center d-flex gap-2 list-unstyled">
+      {% if page_obj.has_previous %}
+        <li><a data-jbd-page href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" class="btn btn-outline-secondary btn-sm">« পূর্ববর্তী</a></li>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <li><span class="btn btn-success btn-sm">{{ num }}</span></li>
+        {% else %}
+          <li><a data-jbd-page href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" class="btn btn-outline-secondary btn-sm">{{ num }}</a></li>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <li><a data-jbd-page href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" class="btn btn-outline-secondary btn-sm">পরবর্তী »</a></li>
+      {% endif %}
+    </ul>
+  </div>
+{% endif %}

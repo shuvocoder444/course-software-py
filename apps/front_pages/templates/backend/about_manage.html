@@ -27,64 +27,109 @@
             </div>
 
             <div class="card-body">
-                <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <form method="post" class="needs-validation" novalidate>
                     {% csrf_token %}
 
-                    <!-- Titles Section -->
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold" for="{{ form.title_white.id_for_label }}">Title (White Text)</label>
-                            {{ form.title_white }}
-                            {% if form.title_white.errors %}
-                                <div class="text-danger small mt-1">{{ form.title_white.errors.0 }}</div>
-                            {% endif %}
-                        </div>
+                    <!-- LEFT SIDE CONFIGURATION -->
+                    <div class="border p-3 rounded mb-4 bg-light-subtle">
+                        <h6 class="text-primary mb-3"><i class="ti ti-align-left me-1"></i> Left Side Section</h6>
 
-                    </div>
-
-                    <!-- Description Section -->
-                    <div class="row mb-4">
-                        <div class="col-12">
-                            <label class="form-label fw-bold" for="{{ form.description.id_for_label }}">Main Description</label>
-                            {{ form.description }}
-                            {% if form.description.errors %}
-                                <div class="text-danger small mt-1">{{ form.description.errors.0 }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <!-- Button Configuration Link -->
-                    <div class="row g-3 mb-4 p-3 bg-light rounded-2 border mx-0">
-                        <h6 class="text-muted mb-1 px-0"><i class="ti ti-link me-1"></i> Action Button Configuration</h6>
-                        <div class="col-md-6 ps-0">
-                            <label class="form-label" for="{{ form.btn_text.id_for_label }}">Button Text</label>
-                            {{ form.btn_text }}
-                        </div>
-                        <div class="col-md-6 pe-0">
-                            <label class="form-label" for="{{ form.btn_url.id_for_label }}">Button URL / Link</label>
-                            {{ form.btn_url }}
-                        </div>
-                    </div>
-
-                    <!-- Image Section -->
-                    <div class="row mb-4">
-                        <div class="col-md-8">
-                            <label class="form-label fw-bold" for="{{ form.right_image.id_for_label }}">About Section Image</label>
-                            {{ form.right_image }}
-                            {% if form.right_image.errors %}
-                                <div class="text-danger small mt-1">{{ form.right_image.errors.0 }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-4 d-flex align-items-end">
-                            <div class="mt-2">
-                                {% if form.instance.right_image %}
-                                    <img id="imagePreview" src="{{ form.instance.right_image.url }}" alt="Current Image" class="img-thumbnail" style="max-height: 100px;">
-                                {% else %}
-                                    <img id="imagePreview" src="#" alt="Preview" class="img-thumbnail d-none" style="max-height: 100px;">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-8">
+                                <label class="form-label fw-bold" for="{{ form.left_title.id_for_label }}">Left Title</label>
+                                {{ form.left_title }}
+                                {% if form.left_title.errors %}
+                                    <div class="text-danger small mt-1">{{ form.left_title.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold" for="{{ form.left_title_color.id_for_label }}">Title Color</label>
+                                {{ form.left_title_color }}
+                                {% if form.left_title_color.errors %}
+                                    <div class="text-danger small mt-1">{{ form.left_title_color.errors.0 }}</div>
                                 {% endif %}
                             </div>
                         </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold" for="{{ form.left_description.id_for_label }}">Left Description</label>
+                            {{ form.left_description }}
+                            {% if form.left_description.errors %}
+                                <div class="text-danger small mt-1">{{ form.left_description.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.left_btn_text.id_for_label }}">Button Text</label>
+                                {{ form.left_btn_text }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="{{ form.left_btn_url.id_for_label }}">Button URL / Link</label>
+                                {{ form.left_btn_url }}
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- RIGHT SIDE CONFIGURATION -->
+<section class="jbd-about" id="about">
+  <!-- ================= LEFT SIDE (Looping Features / Grid Cards) ================= -->
+  <div class="jbd-about__media">
+    <div class="jbd-about__frame">
+      <div class="row g-3">
+
+        <!-- features/grid items লুপ শুরু -->
+        {% for feature in about_data.features.all %}
+          <div class="col-md-6 col-12">
+            <div class="jbd-about__card p-3 rounded" style="background: #111c24; border: 1px solid #2a3744; height: 100%;">
+
+              <!-- Title with Color -->
+              <h5 class="fw-bold mb-2" style="color: {{ feature.title_color|default:'#ffffff' }}; font-size: 1rem;">
+                {{ feature.title }}
+              </h5>
+
+              <!-- Description -->
+              <p class="mb-0" style="color: #a0aec0; font-size: 0.875rem; line-height: 1.5;">
+                {{ feature.description|linebreaksbr }}
+              </p>
+
+            </div>
+          </div>
+        {% empty %}
+          <!-- যদি কোনো ডাটা না থাকে -->
+          <div class="col-12">
+            <p class="text-muted">No features added yet.</p>
+          </div>
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= RIGHT SIDE (Single Content) ================= -->
+  <div class="jbd-about__content">
+    <!-- Right Title & Color -->
+    {% if about_data.right_title %}
+      <h2 style="color: {{ about_data.right_title_color|default:'#ffffff' }};">
+        {{ about_data.right_title }}
+      </h2>
+    {% endif %}
+
+    <!-- Right Description -->
+    {% if about_data.right_description %}
+      <p>{{ about_data.right_description|linebreaksbr }}</p>
+    {% endif %}
+
+    <!-- Right Button -->
+    {% if about_data.right_btn_text and about_data.right_btn_url %}
+      <div class="jbd-about__action" style="margin-top: 20px;">
+        <a href="{{ about_data.right_btn_url }}" class="btn btn-primary">
+          {{ about_data.right_btn_text }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
 
                     <!-- Form Submission Actions -->
                     <div class="pt-3 border-top d-flex justify-content-end">
@@ -97,26 +142,4 @@
         </div>
     </div>
 </div>
-
-<!-- Script for Real-time Image Preview Selection -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const imageInput = document.querySelector('input[type="file"]');
-        const previewImg = document.getElementById('imagePreview');
-
-        if (imageInput && previewImg) {
-            imageInput.addEventListener('change', function() {
-                const file = this.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        previewImg.src = e.target.result;
-                        previewImg.classList.remove('d-none');
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-    });
-</script>
 {% endblock %}

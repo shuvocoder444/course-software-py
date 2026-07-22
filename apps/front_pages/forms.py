@@ -11,7 +11,6 @@ class SliderForm(forms.ModelForm):
             'btn1_text', 'btn1_url', 'btn2_text', 'btn2_url',
             'right_image', 'order', 'is_active'
         ]
-        # বুটস্ট্র্যাপ ডিজাইনের সাথে মেলানোর জন্য উইজেট ক্লাস যুক্ত করতে পারেন
         widgets = {
             'title_white': forms.TextInput(attrs={'class': 'form-control'}),
             'title_colored': forms.TextInput(attrs={'class': 'form-control'}),
@@ -25,25 +24,83 @@ class SliderForm(forms.ModelForm):
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
-
 # =================================ABOUT US Start ============================
-
-# apps/front_pages/forms.py
 from django import forms
 from .models import AboutContent
 
 class AboutContentForm(forms.ModelForm):
     class Meta:
         model = AboutContent
-        fields = ['title_white', 'description', 'btn_text', 'btn_url', 'right_image']
+        fields = '__all__'
+
+        # Color input widget for color fields
         widgets = {
-            'title_white': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Example: Building Careers,'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Main description paragraph text'}),
-            'btn_text': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Example: Learn More'}),
-            'btn_url': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Example: /about-us/'}),
-            'right_image': forms.FileInput(attrs={'class': 'form-control-file'}),
+            'left_title_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control-color'}),
+            'right_title_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control-color'}),
+            'left_description': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+            'right_description': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+            'left_title': forms.TextInput(attrs={'class': 'form-control'}),
+            'left_btn_text': forms.TextInput(attrs={'class': 'form-control'}),
+            'left_btn_url': forms.TextInput(attrs={'class': 'form-control'}),
+            'right_title': forms.TextInput(attrs={'class': 'form-control'}),
+            'right_btn_text': forms.TextInput(attrs={'class': 'form-control'}),
+            'right_btn_url': forms.TextInput(attrs={'class': 'form-control'}),
+            'right_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
+        labels = {
+            'left_title': 'Left Title',
+            'left_title_color': 'Left Title Color',
+            'left_description': 'Left Description',
+            'left_btn_text': 'Left Button Text',
+            'left_btn_url': 'Left Button URL',
+            'right_title': 'Right Title',
+            'right_title_color': 'Right Title Color',
+            'right_description': 'Right Description',
+            'right_btn_text': 'Right Button Text',
+            'right_btn_url': 'Right Button URL',
+            'right_image': 'Right Image',
+        }
+
+# =================================CardItemForm   US Start ============================
+from django import forms
+from .models import CardItem
+
+# সেকশন হেডার আপডেট করার জন্য ফর্ম
+class SectionHeaderForm(forms.ModelForm):
+    class Meta:
+        model = CardItem
+        fields = ['section_title', 'section_description']
+        labels = {
+            'section_title': 'Section Title',
+            'section_description': 'Section Description',
+        }
+        widgets = {
+            'section_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter section title'}),
+            'section_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter section description'}),
+        }
+
+# শুধু কার্ড/বক্স ম্যানেজ করার জন্য ফর্ম (আপডেট করা হয়েছে)
+class CardItemForm(forms.ModelForm):
+    class Meta:
+        model = CardItem
+        fields = ['image', 'title', 'slug', 'title_color', 'description', 'button_link']
+        labels = {
+            'image': 'Card Image',
+            'title': 'Card Title',
+            'slug': 'Custom Slug',
+            'title_color': 'Title Color',
+            'description': 'Card Description',
+            'button_link': 'Custom Button Link',
+        }
+        widgets = {
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter course title'}),
+            'slug': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Leave blank for auto-generated slug'}),
+            'title_color': forms.TextInput(attrs={'class': 'form-control form-control-color', 'type': 'color'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Enter course description'}),
+            'button_link': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://example.com'}),
+        }
 
 # =================================Blog Start ============================
 

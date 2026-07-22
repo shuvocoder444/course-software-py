@@ -182,6 +182,12 @@
           "slug": "about_manage"
         },
         {
+          "url": "frontcourse_list",
+          "icon": "menu-icon tf-icons ti ti-info-circle",
+          "name": "Front Course",
+          "slug": "frontcourse_list"
+        },
+        {
           "url": "photo",
           "icon": "menu-icon tf-icons ti ti-photo",
           "name": "Photo Gallery",

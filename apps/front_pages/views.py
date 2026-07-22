@@ -1,13 +1,13 @@
 from django.views.generic import TemplateView
 from web_project import TemplateLayout
 from web_project.template_helpers.theme import TemplateHelper
-from .models import Slider, AboutContent  # AboutContent মডেল ইম্পোর্ট নিশ্চিত করুন
+from .models import Slider, AboutContent, CardItem  # CardItem মডেল ইম্পোর্ট করা হলো
 from apps.courses.models import Course, CourseReview
 from .models import BlogPost
 from apps.students.models import Student
 
 class FrontPagesView(TemplateView):
-    template_name = "index.html"  # আপনার ফ্রন্টএন্ডের মূল টেমপ্লেটের নাম এখানে দিন
+    template_name = "index.html"  # আপনার ফ্রন্টএন্ডের মূল টেমপ্লেটের নাম
 
     def get_context_data(self, **kwargs):
         context = TemplateLayout.init(self, super().get_context_data(**kwargs))
@@ -19,15 +19,23 @@ class FrontPagesView(TemplateView):
             active_sliders = Slider.objects.all()
 
         courses = Course.objects.all().order_by('-created_at')
-        latest_posts = BlogPost.objects.filter(is_published=True).order_by('-published_at')[:4]
+        latest_posts = BlogPost.objects.filter(is_published=True).order_by('-published_at')[:5]
         marquee_students = Student.objects.filter(status='approved').order_by('-id')[:10]
         testimonials = CourseReview.objects.all().select_related('user', 'course').order_by('-created_at')[:8]
 
-        # ডাইনামিক About সেকশন কুয়েরি (যা id=1 এর সমস্যা এড়াবে)
+        # ডাইনামিক About সেকশন কুয়েরি
         try:
             about_data = AboutContent.objects.first()
         except Exception:
             about_data = None
+
+        # ================= Front Course (CardItem) Query =================
+        front_courses = CardItem.objects.all()
+        first_card = front_courses.first()
+
+        section_title = first_card.section_title if (first_card and first_card.section_title) else "চলতি অফলাইন প্রিমিয়াম ব্যাচসমূহ"
+        section_description = first_card.section_description if (first_card and first_card.section_description) else "ল্যাব ও মাল্টিমিডিয়া প্রজেক্টর সাপোর্টেড ক্লাসরুম শিডিউল"
+        # =================================================================
 
         context.update(
             {
@@ -39,13 +47,17 @@ class FrontPagesView(TemplateView):
                 "latest_posts": latest_posts,
                 "marquee_students": marquee_students,
                 "testimonials": testimonials,
-                "about_data": about_data,  # কনটেক্সটে ডাটা পাস করা হলো
+                "about_data": about_data,
+
+                # Front Course Data
+                "front_courses": front_courses,
+                "section_title": section_title,
+                "section_description": section_description,
             }
         )
 
         TemplateHelper.map_context(context)
         return context
-
 
 
 
@@ -76,6 +88,58 @@ class CourseDetailView(TemplateView):
         return context
 
 
+
+from django.views.generic import ListView
+from django.db.models import Q
+
+from apps.front_pages.models import Category
+from django.template.loader import render_to_string
+from django.http import HttpResponse
+
+
+class BlogFeedView(ListView):
+    model = BlogPost
+    template_name = "blog.html"
+    context_object_name = "blog_posts"
+    paginate_by = 20
+
+    def get_queryset(self):
+        qs = BlogPost.objects.filter(is_published=True).order_by('-published_at')
+
+        search = self.request.GET.get('q')
+        if search:
+            qs = qs.filter(Q(title__icontains=search) | Q(content__icontains=search))
+
+        category = self.request.GET.get('category')
+        if category:
+            qs = qs.filter(category__slug=category)
+
+        return qs
+
+    def render_to_response(self, context, **response_kwargs):
+        # AJAX রিকোয়েস্ট হলে শুধু গ্রিড + পেজিনেশন পার্ট পাঠাবে
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            html = render_to_string('blog_grid_partial.html', context, request=self.request)
+            return HttpResponse(html)
+        return super().render_to_response(context, **response_kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context = TemplateLayout.init(self, context)
+
+        context["categories"] = Category.objects.all()
+
+        context.update(
+            {
+                "layout": "front",
+                "layout_path": TemplateHelper.set_layout("layout_front.html", context),
+                "active_url": self.request.path,
+            }
+        )
+
+        TemplateHelper.map_context(context)
+
+        return context
 
 
 
@@ -176,30 +240,163 @@ class SliderDeleteView(LoginRequiredMixin, AdminRoleRequiredMixin, DeleteView):
 
 # =================================ABOUT US Start ============================
 
+
+
+
+
+
+
 from django.views.generic import UpdateView
 from django.urls import reverse_lazy
-from apps.courses.views import LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin
+
+# আপনার অ্যাপের সঠিক পাথ থেকে Model ইমপোর্ট করুন
 from .forms import AboutContentForm
+from apps.courses.views import LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin
+
 
 class AboutContentManageView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, UpdateView):
     model = AboutContent
     form_class = AboutContentForm
     template_name = 'backend/about_manage.html'
-    success_url = reverse_lazy('about_manage')  # URL name-এর সাথে মিল রাখা হয়েছে
+    success_url = reverse_lazy('about_manage')  # আপনার URL pattern এর name অনুযায়ী নিশ্চিত করুন
 
     def get_object(self, queryset=None):
+        # আইডি ১ নাম্বার অবজেক্টটি নিয়ে আসবে, না থাকলে তৈরি করবে
         obj, created = AboutContent.objects.get_or_create(id=1)
         return obj
 
     def form_valid(self, form):
-        form.save()
         messages.success(self.request, "About section updated successfully!")
         return super().form_valid(form)
 
+
+
+
+
+# ==================================FRONT Course ================================
+from django.urls import reverse_lazy
+from django.shortcuts import redirect
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from apps.courses.views import LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin
+from .forms import CardItemForm, SectionHeaderForm
+
+
+# ================================= FRONT COURSE LIST ============================
+class FrontCourseListView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, ListView):
+    model = CardItem
+    template_name = 'backend/frontcourse_list.html'
+    context_object_name = 'courses'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # প্রথম অবজেক্ট থেকে সেকশন টাইটেল ও ডেসক্রিপশন কন্টেক্সটে পাঠানো হচ্ছে
+        first_item = CardItem.objects.first()
+        context['section_info'] = first_item
+        context['header_form'] = SectionHeaderForm(instance=first_item) if first_item else SectionHeaderForm()
+        return context
+
+
+# ================================= UPDATE SECTION HEADER ============================
+def update_section_header(request):
+    if request.method == 'POST':
+        first_item = CardItem.objects.first()
+        if first_item:
+            # বিদ্যমান সব কার্ডের সেকশন টাইটেল ও ডেসক্রিপশন একসাথে আপডেট হবে
+            form = SectionHeaderForm(request.POST, instance=first_item)
+            if form.is_valid():
+                title = form.cleaned_data['section_title']
+                desc = form.cleaned_data['section_description']
+                CardItem.objects.all().update(section_title=title, section_description=desc)
+                messages.success(request, "Section header updated for all courses!")
+        else:
+            messages.error(request, "Please create at least one course first.")
+    return redirect('frontcourse_list')
+
+
+
+# ================================= FRONT COURSE CREATE ============================
+class FrontCourseCreateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, CreateView):
+    model = CardItem
+    form_class = CardItemForm
+    template_name = 'backend/frontcourse_manage.html'
+    success_url = reverse_lazy('frontcourse_list')
+
+    def form_valid(self, form):
+        # ডাটাবেজে ইতোমধ্যে কোনো কার্ড থাকলে সেখান থেকে সেকশন হেডার কপি করে বসাবে
+        first_item = CardItem.objects.first()
+        if first_item and first_item.section_title:
+            form.instance.section_title = first_item.section_title
+            form.instance.section_description = first_item.section_description
+
+        messages.success(self.request, "Course created successfully!")
+        return super().form_valid(form)
+
+# ================================= FRONT COURSE UPDATE ============================
+class FrontCourseUpdateView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, UpdateView):
+    model = CardItem
+    form_class = CardItemForm  # <--- CardItem-এর বদলে CardItemForm ব্যবহার করা হয়েছে
+    template_name = 'backend/frontcourse_manage.html'
+    success_url = reverse_lazy('frontcourse_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, "Course updated successfully!")
+        return super().form_valid(form)
+
+
+# ================================= FRONT COURSE DELETE ============================
+class FrontCourseDeleteView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, DeleteView):
+    model = CardItem
+    success_url = reverse_lazy('frontcourse_list')
+
+    def post(self, request, *args, **kwargs):
+        messages.success(self.request, "Course deleted successfully!")
+        return super().post(request, *args, **kwargs)
+
+
+# ================================= FRONT COURSE Details ============================
+
+
+
+
+
+
+from django.views.generic import DetailView
+from .models import CardItem
+
+
+class FrontCardDetailView(DetailView):
+    model = CardItem
+    template_name = 'frontcourse_detail.html'
+    context_object_name = 'card'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
+    def get_object(self, queryset=None):
+        slug_or_pk = self.kwargs.get('slug')
+
+        if str(slug_or_pk).isdigit():
+            return get_object_or_404(CardItem, pk=int(slug_or_pk))
+
+        return get_object_or_404(CardItem, slug=slug_or_pk)
+
+    def get_context_data(self, **kwargs):
+        context = TemplateLayout.init(self, super().get_context_data(**kwargs))
+
+        # 💥 সাইডবারের জন্য বর্তমান কোর্সটি ছাড়া অন্য সব কোর্স কুয়েরি করা হচ্ছে
+        context['other_courses'] = CardItem.objects.exclude(id=self.object.id)
+
+        context.update(
+            {
+                "layout": "front",
+                "layout_path": TemplateHelper.set_layout("layout_front.html", context),
+                "active_url": self.request.path,
+            }
+        )
+
+        TemplateHelper.map_context(context)
+        return context
+
 # =================================BLOG Start============================
-
-
-
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy

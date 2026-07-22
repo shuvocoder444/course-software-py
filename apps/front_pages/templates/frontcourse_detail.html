@@ -1,0 +1,115 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}{{ card.title|default:"Course Details" }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row g-4">
+
+    <!-- ================= Main Content (Course Details) ================= -->
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0 rounded-4 overflow-hidden mb-4">
+
+        <!-- Course Image -->
+        {% if card.image %}
+          <img src="{{ card.image.url }}" class="card-img-top style-course-img" alt="{{ card.title }}">
+        {% else %}
+          <img src="{% static 'assets/img/front-pages/landing-page/course-placeholder.jpg' %}" class="card-img-top style-course-img" alt="Default Image">
+        {% endif %}
+
+        <div class="card-body p-4">
+          <!-- Course Title -->
+          <h2 class="fw-bold mb-3" style="color: {{ card.title_color|default:'#000000' }};">
+            {{ card.title }}
+          </h2>
+
+          <hr class="my-4 text-muted opacity-25">
+
+          <!-- Course Description -->
+          <div class="course-description mb-4 lh-lg text-secondary">
+            {% if card.description %}
+              {{ card.description|linebreaks }}
+            {% else %}
+              <p class="text-muted">এই কোর্সটির জন্য কোনো বিস্তারিত বিবরণ পাওয়া যায়নি।</p>
+            {% endif %}
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-4 pt-3 border-top">
+            <a href="{% url 'landing-page' %}" class="btn btn-outline-secondary px-4 py-2 rounded-pill">
+              <i class="ti ti-arrow-left me-1"></i> হোমপেজে যান
+            </a>
+
+            {% if card.button_link %}
+              <a href="{{ card.button_link }}" target="_blank" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
+                এনরোল করুন <i class="ti ti-external-link ms-1"></i>
+              </a>
+            {% endif %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Sidebar (Other Courses) ================= -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm border-0 rounded-4 p-3 sticky-top" style="top: 90px; z-index: 10;">
+        <h5 class="fw-bold mb-3 pb-2 border-bottom">
+          <i class="ti ti-books me-1 text-primary"></i> অন্যান্য কোর্সসমূহ
+        </h5>
+
+        <div class="d-flex flex-column gap-3">
+          {% for item in other_courses %}
+            <div class="d-flex align-items-center gap-3 p-2 rounded-3 hover-bg">
+              <!-- Thumbnail Image -->
+              <a href="{% url 'card_detail' slug=item.slug|default:item.pk %}" class="flex-shrink-0">
+                {% if item.image %}
+                  <img src="{{ item.image.url }}" class="rounded-3 sidebar-thumb" alt="{{ item.title }}">
+                {% else %}
+                  <img src="{% static 'assets/img/front-pages/landing-page/course-placeholder.jpg' %}" class="rounded-3 sidebar-thumb" alt="Default">
+                {% endif %}
+              </a>
+
+              <!-- Info -->
+              <div class="flex-grow-1 overflow-hidden">
+                <h6 class="mb-1 text-truncate fw-semibold">
+                  <a href="{% url 'card_detail' slug=item.slug|default:item.pk %}" class="text-decoration-none text-dark">
+                    {{ item.title }}
+                  </a>
+                </h6>
+                <a href="{% url 'card_detail' slug=item.slug|default:item.pk %}" class="btn btn-link btn-sm p-0 text-primary fw-medium text-decoration-none">
+                  দেখুন <i class="ti ti-chevron-right fs-tiny"></i>
+                </a>
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-muted small my-2">অন্য কোনো কোর্স পাওয়া যায়নি।</p>
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .style-course-img {
+    max-height: 1000px;
+    object-fit: cover;
+    width: 100%;
+  }
+  .sidebar-thumb {
+    width: 75px;
+    height: 60px;
+    object-fit: cover;
+  }
+  .hover-bg {
+    transition: background-color 0.2s ease-in-out;
+  }
+  .hover-bg:hover {
+    background-color: #f8f9fa;
+  }
+</style>
+{% endblock %}

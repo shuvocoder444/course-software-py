@@ -40,14 +40,21 @@ class Slider(models.Model):
 # =================================ABOUT US Start ============================
 
 class AboutContent(models.Model):
-    title_white = models.CharField(max_length=255, blank=True, null=True, help_text="Example: Building Careers,")
-    description = models.TextField(blank=True, null=True, help_text="Main description paragraph text")
+# ==================== LEFT SIDE ====================
+    left_title = models.CharField(max_length=255, blank=True, null=True, help_text="Left Section Title")
+    left_title_color = models.CharField(max_length=50, blank=True, null=True, help_text="Example: #FFFFFF or white")
+    left_description = models.TextField(blank=True, null=True, help_text="Left Section Description")
+    left_btn_text = models.CharField(max_length=50, blank=True, null=True, help_text="Example: Learn More")
+    left_btn_url = models.CharField(max_length=500, blank=True, null=True)
 
-    # Button
-    btn_text = models.CharField(max_length=50, blank=True, null=True, help_text="Example: Learn More")
-    btn_url = models.CharField(max_length=500, blank=True, null=True)
+    # ==================== RIGHT SIDE ====================
+    right_title = models.CharField(max_length=255, blank=True, null=True, help_text="Right Section Title")
+    right_title_color = models.CharField(max_length=50, blank=True, null=True, help_text="Example: #FF0000 or red")
+    right_description = models.TextField(blank=True, null=True, help_text="Right Section Description")
+    right_btn_text = models.CharField(max_length=50, blank=True, null=True, help_text="Example: Contact Us")
+    right_btn_url = models.CharField(max_length=500, blank=True, null=True)
 
-    # Image
+    # ==================== IMAGE ====================
     right_image = models.ImageField(upload_to='about/', blank=True, null=True, help_text="Background or Section Image")
 
     class Meta:
@@ -55,7 +62,7 @@ class AboutContent(models.Model):
         verbose_name_plural = "About Content"
 
     def __str__(self):
-        return f"{self.title_white} {self.title_colored}" if self.title_white or self.title_colored else "About Content"
+        return self.left_title or self.right_title or "About Content"
 
 # =================================ABOUT US  End============================
 
@@ -63,8 +70,47 @@ class AboutContent(models.Model):
 
 
 # =================================OUR COURSES Start============================
+from django.db import models
+from django.utils.text import slugify
 
+class CardItem(models.Model):
+    section_title = models.CharField(blank=True, null=True, max_length=200, help_text="সেকশনের মেইন টাইটেল")
+    section_description = models.TextField(blank=True, null=True, help_text="সেকশনের বিবরণ")
 
+    image = models.ImageField(blank=True, null=True, upload_to='card_images/', help_text="কোর্স ছবি")
+    title = models.CharField(blank=True, null=True, max_length=200, help_text="কোর্স টাইটেল")
+
+    # URL-এর জন্য ইউনিক স্ল্যাগ ফিল্ড
+    slug = models.SlugField(unique=True, blank=True, null=True, max_length=250, help_text="URL Slug (খালি রাখলে অটো জেনারেট হবে)")
+
+    title_color = models.CharField(max_length=20, default="#000000", help_text="HEX বা Color Name")
+    description = models.TextField(blank=True, null=True, help_text="কোর্স বিবরণ")
+    button_link = models.URLField(blank=True, null=True, help_text="খালি রাখলে সিঙ্গেল পেজে নিয়ে যাবে")
+
+    def save(self, *args, **kwargs):
+        # স্ল্যাগ না থাকলে অটো জেনারেট করবে
+        if not self.slug:
+            base_title = self.title if self.title else "course"
+            base_slug = slugify(base_title, allow_unicode=True)
+
+            # টাইটেল যদি সম্পূর্ণরূপে স্পেশাল ক্যারেক্টার হয় এবং slugify খালি আউটপুট দেয়
+            if not base_slug:
+                base_slug = "course"
+
+            slug = base_slug
+            counter = 1
+
+            # ডাটাবেজে একই স্ল্যাগ অন্য কোনো অবজেক্টে আছে কিনা চেক করে ইউনিক স্ল্যাগ তৈরি করবে
+            while CardItem.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.slug = slug
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title or "Card Item"
 # =================================OUR COURSES  End============================
 
 
@@ -78,7 +124,6 @@ class AboutContent(models.Model):
 
 # =================================BLOG Start============================
 from django.db import models
-from django.utils.text import slugify
 from django.conf import settings
 from django.urls import reverse  # ১. এটি অবশ্যই ইম্পোর্ট করবেন
 

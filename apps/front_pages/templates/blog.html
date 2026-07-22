@@ -1,0 +1,298 @@
+{% extends layout_path %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}আমাদের ব্লগ{% endblock %}
+
+{% block content %}
+<style>
+  /* ---------- Banner ---------- */
+  .jbd-blog-banner {
+    background: linear-gradient(135deg, #FDECEC 0%, #FFF6DE 100%);
+    padding: clamp(35px, 8vw, 60px) 15px;
+    text-align: center;
+    margin-bottom: clamp(20px, 5vw, 40px);
+  }
+  .jbd-blog-banner h1 {
+    font-size: clamp(1.6rem, 4vw, 2.3rem);
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.25;
+  }
+  .jbd-blog-banner p {
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+  }
+/* ---------- Filter Bar ---------- */
+.jbd-blog-filter {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 35px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+
+  /* সেন্টারে আনা এবং প্রস্থ ছোট করার নিয়ম */
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.jbd-blog-filter form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: center; /* ভেতরের Element গুলোকে সেন্টারে রাখার জন্য */
+}
+
+.jbd-blog-filter input[type="text"],
+.jbd-blog-filter select {
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  flex: 1 1 180px; /* ফিল্ডগুলোর ফ্লেক্স-সাইজ কিছুটা ছোট করা হয়েছে */
+  min-height: 44px;
+  box-sizing: border-box;
+}
+  .jbd-blog-filter button {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 8px;
+    background: #28a745;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 0 0 auto;
+    min-height: 44px;
+    transition: background 0.2s ease;
+  }
+  .jbd-blog-filter button:hover {
+    background: #218838;
+  }
+  .jbd-blog-filter .jbd-filter-reset {
+    color: #dc3545;
+    text-decoration: none;
+    font-size: 0.9rem;
+    flex: 0 0 auto;
+    padding: 10px 5px;
+  }
+
+  /* ---------- Grid & Cards ---------- */
+  .jbd-blog__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .jbd-blog-card {
+    position: relative;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    transition: transform .25s ease, box-shadow .25s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .jbd-blog-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+  }
+.jbd-blog-card__thumb {
+  position: relative;
+  aspect-ratio: auto;
+  overflow: hidden;
+  height: 270px;
+  background: #f0f0f0; /* ইমেজ লোড না হওয়া পর্যন্ত হালকা ব্যাকগ্রাউন্ড */
+}
+
+.jbd-blog-card__thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: transform .3s ease;
+}
+  .jbd-blog-card:hover .jbd-blog-card__thumb img {
+    transform: scale(1.06);
+  }
+  .jbd-blog-card__cat {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(0,0,0,0.65);
+    color: #fff;
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    z-index: 2;
+  }
+  .jbd-blog-card__body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .jbd-blog-card__date {
+    font-size: 0.75rem;
+    color: #999;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .jbd-blog-card__body h3 {
+    font-size: 1.15rem;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .jbd-blog-card__body p {
+    color: #666;
+    font-size: 0.92rem;
+    margin-bottom: 14px;
+    flex-grow: 1;
+    line-height: 1.5;
+  }
+  .jbd-blog-card__link {
+    font-weight: 600;
+    color: #28a745;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .jbd-blog-card__stretched::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  #jbd-blog-loading {
+    display: none;
+    text-align: center;
+    padding: 40px 0;
+    color: #999;
+  }
+
+  /* ---------- Media Queries ---------- */
+  /* Tablet Styles */
+  @media (max-width: 768px) {
+    .jbd-blog-filter {
+      padding: 15px;
+    }
+    .jbd-blog-filter form {
+      gap: 10px;
+    }
+    .jbd-blog-filter input[type="text"],
+    .jbd-blog-filter select {
+      flex: 1 1 100%; /* Tablet & Mobile full width */
+    }
+    .jbd-blog-filter button {
+      flex: 1 1 auto;
+      text-align: center;
+    }
+  }
+
+  /* Small Mobile Styles */
+  @media (max-width: 576px) {
+    .jbd-blog-filter form {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .jbd-blog-filter .jbd-filter-reset {
+      text-align: center;
+    }
+    .jbd-blog__grid {
+      grid-template-columns: 1fr; /* Force single column on tiny screens */
+      gap: 18px;
+    }
+  }
+</style>
+
+<section class="jbd-blog-banner">
+  <div class="jbd-wrap container">
+    <h1>সকল পোস্ট </h1>
+    <p>কোর্স এবং সাম্প্রতিক আপডেট পড়ুন</p>
+  </div>
+</section>
+
+<section class="jbd-blog py-4 py-md-5" id="blog">
+  <div class="jbd-wrap container">
+
+    <!-- ফিল্টার বার -->
+    <div class="jbd-blog-filter">
+      <form method="get" action="{% url 'blog_feed' %}" id="jbd-blog-filter-form">
+        <input type="text" name="q" placeholder="পোস্ট সার্চ করুন..." value="{{ request.GET.q|default:'' }}">
+        {% if categories %}
+          <select name="category">
+            <option value="">সব ক্যাটাগরি</option>
+            {% for cat in categories %}
+              <option value="{{ cat.slug }}" {% if request.GET.category == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        {% endif %}
+        <button type="submit">ফিল্টার করুন</button>
+        <a href="{% url 'blog_feed' %}" class="jbd-filter-reset" id="jbd-filter-reset" {% if not request.GET.q and not request.GET.category %}style="display:none;"{% endif %}>রিসেট</a>
+      </form>
+    </div>
+
+    <div id="jbd-blog-results">
+      {% include "blog_grid_partial.html" %}
+    </div>
+
+    <div id="jbd-blog-loading">লোড হচ্ছে...</div>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  const form = document.getElementById('jbd-blog-filter-form');
+  const results = document.getElementById('jbd-blog-results');
+  const loading = document.getElementById('jbd-blog-loading');
+
+  function loadBlog(url, pushState) {
+    loading.style.display = 'block';
+    results.style.opacity = '0.4';
+
+    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(res => res.text())
+      .then(html => {
+        results.innerHTML = html;
+        results.style.opacity = '1';
+        loading.style.display = 'none';
+        if (pushState) {
+          window.history.pushState({}, '', url);
+        }
+        bindPaginationLinks();
+      })
+      .catch(() => {
+        loading.style.display = 'none';
+        results.style.opacity = '1';
+      });
+  }
+
+  function bindPaginationLinks() {
+    results.querySelectorAll('a[data-jbd-page]').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        loadBlog(link.getAttribute('href'), true);
+        window.scrollTo({ top: document.getElementById('blog').offsetTop - 30, behavior: 'smooth' });
+      });
+    });
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const params = new URLSearchParams(new FormData(form)).toString();
+    const url = form.getAttribute('action') + (params ? '?' + params : '');
+    loadBlog(url, true);
+  });
+
+  bindPaginationLinks();
+})();
+</script>
+{% endblock %}
