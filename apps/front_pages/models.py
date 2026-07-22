@@ -39,30 +39,39 @@ class Slider(models.Model):
 
 # =================================ABOUT US Start ============================
 
+
+from django.db import models
+
 class AboutContent(models.Model):
-# ==================== LEFT SIDE ====================
-    left_title = models.CharField(max_length=255, blank=True, null=True, help_text="Left Section Title")
-    left_title_color = models.CharField(max_length=50, blank=True, null=True, help_text="Example: #FFFFFF or white")
-    left_description = models.TextField(blank=True, null=True, help_text="Left Section Description")
-    left_btn_text = models.CharField(max_length=50, blank=True, null=True, help_text="Example: Learn More")
-    left_btn_url = models.CharField(max_length=500, blank=True, null=True)
-
-    # ==================== RIGHT SIDE ====================
-    right_title = models.CharField(max_length=255, blank=True, null=True, help_text="Right Section Title")
-    right_title_color = models.CharField(max_length=50, blank=True, null=True, help_text="Example: #FF0000 or red")
-    right_description = models.TextField(blank=True, null=True, help_text="Right Section Description")
-    right_btn_text = models.CharField(max_length=50, blank=True, null=True, help_text="Example: Contact Us")
+    # RIGHT SIDE (Fixed Fields)
+    right_title = models.CharField(max_length=255, blank=True, null=True, help_text="Right Side Main Title")
+    right_title_color = models.CharField(max_length=50, blank=True, null=True, default="#FFFFFF")
+    right_description = models.TextField(blank=True, null=True)
+    right_btn_text = models.CharField(max_length=50, blank=True, null=True)
     right_btn_url = models.CharField(max_length=500, blank=True, null=True)
-
-    # ==================== IMAGE ====================
-    right_image = models.ImageField(upload_to='about/', blank=True, null=True, help_text="Background or Section Image")
 
     class Meta:
         verbose_name = "About Content"
         verbose_name_plural = "About Content"
 
     def __str__(self):
-        return self.left_title or self.right_title or "About Content"
+        return self.right_title or "About Content Section"
+
+
+class AboutFeature(models.Model):
+    # LEFT SIDE (Multiple Cards with CRUD)
+    about_content = models.ForeignKey(AboutContent, related_name='features', on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, blank=True, null=True, help_text="Card Title")
+    title_color = models.CharField(max_length=50, blank=True, null=True, default="#FFFFFF")
+    description = models.TextField(blank=True, null=True, help_text="Card Description")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return self.title or f"Feature #{self.id}"
+
 
 # =================================ABOUT US  End============================
 

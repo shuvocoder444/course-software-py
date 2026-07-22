@@ -25,42 +25,50 @@ class SliderForm(forms.ModelForm):
         }
 
 # =================================ABOUT US Start ============================
+
+
+
+
+
 from django import forms
-from .models import AboutContent
+from django.forms import inlineformset_factory
+from .models import AboutContent, AboutFeature
 
 class AboutContentForm(forms.ModelForm):
     class Meta:
         model = AboutContent
-        fields = '__all__'
-
-        # Color input widget for color fields
+        fields = ['right_title', 'right_title_color', 'right_description', 'right_btn_text', 'right_btn_url']
         widgets = {
-            'left_title_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control-color'}),
-            'right_title_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control-color'}),
-            'left_description': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
-            'right_description': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
-            'left_title': forms.TextInput(attrs={'class': 'form-control'}),
-            'left_btn_text': forms.TextInput(attrs={'class': 'form-control'}),
-            'left_btn_url': forms.TextInput(attrs={'class': 'form-control'}),
-            'right_title': forms.TextInput(attrs={'class': 'form-control'}),
-            'right_btn_text': forms.TextInput(attrs={'class': 'form-control'}),
-            'right_btn_url': forms.TextInput(attrs={'class': 'form-control'}),
-            'right_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'right_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter section title'}),
+            'right_title_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color', 'title': 'Choose title color'}),
+            'right_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Enter description'}),
+            'right_btn_text': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Button text'}),
+            'right_btn_url': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Button link/URL'}),
         }
 
-        labels = {
-            'left_title': 'Left Title',
-            'left_title_color': 'Left Title Color',
-            'left_description': 'Left Description',
-            'left_btn_text': 'Left Button Text',
-            'left_btn_url': 'Left Button URL',
-            'right_title': 'Right Title',
-            'right_title_color': 'Right Title Color',
-            'right_description': 'Right Description',
-            'right_btn_text': 'Right Button Text',
-            'right_btn_url': 'Right Button URL',
-            'right_image': 'Right Image',
+
+class AboutFeatureForm(forms.ModelForm):
+    class Meta:
+        model = AboutFeature
+        fields = ['title', 'title_color', 'description', 'order']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Card title'}),
+            'title_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color', 'title': 'Choose card title color'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Card description'}),
+            'order': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+
+
+# 'features' prefix নিশ্চিত করার জন্য related_name অনুযায়ী inlineformset তৈরি
+AboutFeatureFormSet = inlineformset_factory(
+    AboutContent,
+    AboutFeature,
+    form=AboutFeatureForm,
+    extra=0,
+    can_delete=True
+)
+
+
 
 # =================================CardItemForm   US Start ============================
 from django import forms

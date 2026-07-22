@@ -1,5 +1,4 @@
 {% extends layout_path %}
-
 {% load static %}
 
 {% block title %}Manage About Us{% endblock %}
@@ -7,7 +6,6 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <!-- Success/Error Messages -->
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
@@ -20,116 +18,172 @@
             {% endfor %}
         {% endif %}
 
-        <!-- Form Card -->
         <div class="card">
-            <div class="card-header border-bottom mb-4">
-                <h5 class="card-title mb-0">Edit About Us Content</h5>
+            <div class="card-header border-bottom mb-4 d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Edit About Us Section</h5>
             </div>
 
             <div class="card-body">
                 <form method="post" class="needs-validation" novalidate>
                     {% csrf_token %}
 
-                    <!-- LEFT SIDE CONFIGURATION -->
+                    <!-- LEFT SIDE CONFIGURATION (DYNAMIC CARDS) -->
                     <div class="border p-3 rounded mb-4 bg-light-subtle">
-                        <h6 class="text-primary mb-3"><i class="ti ti-align-left me-1"></i> Left Side Section</h6>
-
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-8">
-                                <label class="form-label fw-bold" for="{{ form.left_title.id_for_label }}">Left Title</label>
-                                {{ form.left_title }}
-                                {% if form.left_title.errors %}
-                                    <div class="text-danger small mt-1">{{ form.left_title.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold" for="{{ form.left_title_color.id_for_label }}">Title Color</label>
-                                {{ form.left_title_color }}
-                                {% if form.left_title_color.errors %}
-                                    <div class="text-danger small mt-1">{{ form.left_title_color.errors.0 }}</div>
-                                {% endif %}
-                            </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="text-primary mb-0"><i class="ti ti-layout-grid me-1"></i> কেন আমাদের ল্যাব বেছে নিবেন?</h6>
+                            <button type="button" id="add-card-btn" class="btn btn-sm btn-outline-primary">
+                                <i class="ti ti-plus me-1"></i> Add New Card
+                            </button>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold" for="{{ form.left_description.id_for_label }}">Left Description</label>
-                            {{ form.left_description }}
-                            {% if form.left_description.errors %}
-                                <div class="text-danger small mt-1">{{ form.left_description.errors.0 }}</div>
-                            {% endif %}
+                        {{ feature_formset.management_form }}
+
+                        <div id="formset-container">
+                            {% for feature_form in feature_formset %}
+                                <div class="card mb-3 border p-3 feature-form-row">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="mb-0 text-secondary card-number">Card #{{ forloop.counter }}</h6>
+                                        {% if feature_formset.can_delete %}
+                                            <div class="form-check form-switch text-danger">
+                                                {{ feature_form.DELETE }}
+                                                <label class="form-check-label text-danger" for="{{ feature_form.DELETE.id_for_label }}">Delete Card</label>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {{ feature_form.id }}
+                                    <div class="row g-3">
+                                        <div class="col-md-7">
+                                            <label class="form-label">Card Title</label>
+                                            {{ feature_form.title }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Title Color</label>
+                                            {{ feature_form.title_color }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Order</label>
+                                            {{ feature_form.order }}
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Card Description</label>
+                                            {{ feature_form.description }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
 
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label" for="{{ form.left_btn_text.id_for_label }}">Button Text</label>
-                                {{ form.left_btn_text }}
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label" for="{{ form.left_btn_url.id_for_label }}">Button URL / Link</label>
-                                {{ form.left_btn_url }}
+                        <!-- Empty Form Template for JavaScript Dynamic Creation -->
+                        <div id="empty-form-template" class="d-none">
+                            <div class="card mb-3 border p-3 feature-form-row">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="mb-0 text-secondary card-number">New Card</h6>
+                                    <button type="button" class="btn btn-sm btn-link text-danger remove-new-card p-0">Remove</button>
+                                </div>
+                                {{ feature_formset.empty_form.id }}
+                                <div class="row g-3">
+                                    <div class="col-md-7">
+                                        <label class="form-label">Card Title</label>
+                                        {{ feature_formset.empty_form.title }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Title Color</label>
+                                        {{ feature_formset.empty_form.title_color }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Order</label>
+                                        {{ feature_formset.empty_form.order }}
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Card Description</label>
+                                        {{ feature_formset.empty_form.description }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- RIGHT SIDE CONFIGURATION -->
-<section class="jbd-about" id="about">
-  <!-- ================= LEFT SIDE (Looping Features / Grid Cards) ================= -->
-  <div class="jbd-about__media">
-    <div class="jbd-about__frame">
-      <div class="row g-3">
+                    <!-- RIGHT SIDE CONFIGURATION (FIXED) -->
+                    <div class="border p-3 rounded mb-4 bg-light-subtle">
+                        <h6 class="text-primary mb-3"><i class="ti ti-align-right me-1"></i>আমাদের সম্পর্কে</h6>
 
-        <!-- features/grid items লুপ শুরু -->
-        {% for feature in about_data.features.all %}
-          <div class="col-md-6 col-12">
-            <div class="jbd-about__card p-3 rounded" style="background: #111c24; border: 1px solid #2a3744; height: 100%;">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-8">
+                                <label class="form-label fw-bold">Right Title</label>
+                                {{ form.right_title }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Title Color</label>
+                                {{ form.right_title_color }}
+                            </div>
+                        </div>
 
-              <!-- Title with Color -->
-              <h5 class="fw-bold mb-2" style="color: {{ feature.title_color|default:'#ffffff' }}; font-size: 1rem;">
-                {{ feature.title }}
-              </h5>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Right Description</label>
+                            {{ form.right_description }}
+                        </div>
 
-              <!-- Description -->
-              <p class="mb-0" style="color: #a0aec0; font-size: 0.875rem; line-height: 1.5;">
-                {{ feature.description|linebreaksbr }}
-              </p>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Button Text</label>
+                                {{ form.right_btn_text }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Button URL</label>
+                                {{ form.right_btn_url }}
+                            </div>
+                        </div>
+                    </div>
 
-            </div>
-          </div>
-        {% empty %}
-          <!-- যদি কোনো ডাটা না থাকে -->
-          <div class="col-12">
-            <p class="text-muted">No features added yet.</p>
-          </div>
-        {% endfor %}
-
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= RIGHT SIDE (Single Content) ================= -->
-  <div class="jbd-about__content">
-    <!-- Right Title & Color -->
-    {% if about_data.right_title %}
-      <h2 style="color: {{ about_data.right_title_color|default:'#ffffff' }};">
-        {{ about_data.right_title }}
-      </h2>
-    {% endif %}
-
-    <!-- Right Description -->
-    {% if about_data.right_description %}
-      <p>{{ about_data.right_description|linebreaksbr }}</p>
-    {% endif %}
-
-    <!-- Right Button -->
-    {% if about_data.right_btn_text and about_data.right_btn_url %}
-      <div class="jbd-about__action" style="margin-top: 20px;">
-        <a href="{{ about_data.right_btn_url }}" class="btn btn-primary">
-          {{ about_data.right_btn_text }}
-        </a>
-      </div>
-    {% endif %}
-  </div>
-</section>
+                    <!-- LEFT SIDE FEATURES LIST TABLE -->
+                    <div class="card mb-4 border">
+                        <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                            <h6 class="card-title mb-0 text-primary">
+                                <i class="ti ti-list me-1"></i> Left Side Cards List ({{ left_features_list.count }})
+                            </h6>
+                        </div>
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px;">Order</th>
+                                        <th>Title</th>
+                                        <th style="width: 120px;">Title Color</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    {% for item in left_features_list %}
+                                        <tr>
+                                            <td>
+                                                <span class="badge bg-label-secondary fw-bold">#{{ item.order }}</span>
+                                            </td>
+                                            <td>
+                                                <strong class="text-heading">{{ item.title|default:"N/A" }}</strong>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="d-inline-block rounded-circle border" style="width: 18px; height: 18px; background-color: {{ item.title_color|default:'#ffffff' }};"></span>
+                                                    <small class="text-muted">{{ item.title_color|default:"#FFFFFF" }}</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="text-wrap text-muted" style="max-width: 300px; display: inline-block;">
+                                                    {{ item.description|truncatewords:12|default:"No description" }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="4" class="text-center py-4 text-muted">
+                                                <i class="ti ti-alert-circle me-1"></i> No left-side cards created yet.
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
                     <!-- Form Submission Actions -->
                     <div class="pt-3 border-top d-flex justify-content-end">
@@ -142,4 +196,37 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const addCardBtn = document.getElementById('add-card-btn');
+    const container = document.getElementById('formset-container');
+    const totalForms = document.getElementById('id_features-TOTAL_FORMS');
+    const emptyTemplate = document.getElementById('empty-form-template').innerHTML;
+
+    if (addCardBtn && totalForms) {
+        addCardBtn.addEventListener('click', function () {
+            let formCount = parseInt(totalForms.value);
+            let newFormHtml = emptyTemplate.replace(/__prefix__/g, formCount);
+
+            let tempDiv = document.createElement('div');
+            tempDiv.innerHTML = newFormHtml;
+            let newCard = tempDiv.firstElementChild;
+
+            newCard.querySelector('.card-number').innerText = `Card #${formCount + 1}`;
+
+            container.appendChild(newCard);
+            totalForms.value = formCount + 1;
+        });
+    }
+
+    container.addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('remove-new-card')) {
+            e.target.closest('.feature-form-row').remove();
+            let formCount = parseInt(totalForms.value);
+            totalForms.value = formCount - 1;
+        }
+    });
+});
+</script>
 {% endblock %}

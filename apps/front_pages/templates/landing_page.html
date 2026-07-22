@@ -305,69 +305,183 @@ a.jbd-btn.jbd-btn--primary {
   }
 }
 
-  /* ---------- 2. ABOUT ---------- */
-  .jbd-about{
-    padding: 100px 0;
-    display:grid;
-    grid-template-columns: .85fr 1.15fr;
-    gap: 64px;
-    align-items:center;
-    max-width:1800px;
-    margin:0 auto;
-    padding-left:32px; padding-right:32px;
-  }
-  .jbd-about__media{ position:relative; }
-  .jbd-about__frame{
-    background: linear-gradient(160deg, #FFF7E4, #EFF9EA);
-    border-radius: 22px;
-    padding: 30px;
-    position:relative;
-    border: 1px solid var(--line);
-  }
-  .jbd-about__frame .jbd-mock{ background:#101a30; }
-  .jbd-about__badge{
-    position:absolute; left:-18px; bottom:-24px;
-    background: var(--white);
-    border-radius: 14px;
-    box-shadow: var(--shadow);
-    padding: 16px 20px;
-    display:flex; align-items:center; gap:12px;
-    border: 1px solid var(--line);
-  }
-  .jbd-about__badge .num{
-    font-family:'Sora',sans-serif; font-weight:800; font-size:22px; color:var(--red);
-  }
-  .jbd-about__badge .lbl{ font-size:12px; color:var(--slate); max-width:110px; line-height:1.3; }
-  .jbd-about__content p{ font-size:16px; margin-bottom:18px; }
-  .jbd-about__points{ margin: 22px 0 34px; display:flex; flex-direction:column; gap:12px; }
-  .jbd-about__points li{
-    display:flex; align-items:flex-start; gap:12px; font-size:15px; color: var(--ink);
-  }
-  .jbd-about__points .tick{
-    flex:none; width:22px; height:22px; border-radius:50%;
-    background: linear-gradient(135deg, var(--green), var(--green-light));
-    color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; margin-top:2px;
-  }
-  .jbd-stats{
-    display:grid; grid-template-columns: repeat(4,1fr); gap:22px;
-    padding-top:28px; border-top:1px solid var(--line);
-  }
-  .jbd-stats .stat b{
-    display:block; font-family:'Sora',sans-serif; font-weight:800;
-    font-size: 26px; color: var(--ink);
-  }
-  .jbd-stats .stat span{ font-size:13px; color:var(--slate); }
 
 
 
+/* ---------- ABOUT SECTION (PERFECT VISIBILITY & LAYOUT) ---------- */
+#about.jbd-about {
+  width: 100%;
+  padding: 60px 20px;
+  background-color: #f8fafc;
+}
 
+#about .jbd-about__wrapper {
+  max-width: 1800px;
+  margin: 0 auto;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 50px !important;
+  align-items: start !important;
+}
+
+#about .jbd-about__media {
+  width: 100%;
+}
+
+/* Left Title Styling */
+#about .jbd-about__title-wrapper {
+  margin-bottom: 20px;
+}
+
+#about .jbd-about__left-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 2.0rem !important;
+    font-weight: 700 !important;
+    color: #000000 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin: 0 !important;
+}
+
+#about .jbd-about__left-title .title-accent {
+  width: 5px;
+  height: 24px;
+  background-color: #d9232d;
+  border-radius: 4px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Grid Cards Layout */
+#about .jbd-about__grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 16px !important;
+}
+
+#about .jbd-about__card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+  display: flex !important;
+  align-items: center !important; /* Vertically Centers Icon with Text */
+  gap: 14px !important;
+}
+
+#about .jbd-about__card:hover {
+  transform: translateY(-3px);
+  border-color: #cbd5e1;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+}
+
+/* High Contrast & Bold Icon Box */
+#about .jbd-about__card-icon {
+  width: 46px !important;
+  height: 46px !important;
+  min-width: 46px !important;
+  background-color: #fee2e2 !important; /* Soft Red Tint Background */
+  border: 1px solid #fca5a5 !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+#about .jbd-about__card-icon svg {
+  width: 22px !important;
+  height: 22px !important;
+  display: block !important;
+}
+
+/* Text Body */
+#about .jbd-about__card-body {
+  flex: 1;
+}
+
+#about .jbd-about__card-title {
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  /* color: #0f172a !important;  <- এই কালার রুলটি মুছে ফেলুন */
+  margin-bottom: 4px !important;
+}
+
+#about .jbd-about__card-desc {
+  font-size: 0.85rem !important;
+  color: #475569 !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+}
+
+/* Right Content Area */
+#about .jbd-about__content h2 {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin-bottom: 18px !important;
+  line-height: 1.3 !important;
+}
+
+#about .jbd-about__content p {
+  font-size: 0.95rem !important;
+  color: #475569 !important;
+  line-height: 1.8 !important;
+  margin-bottom: 24px !important;
+}
+
+/* Modern Primary Button */
+#about .jbd-about__btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 12px 28px !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  border-radius: 8px !important;
+  background-color: #28a745 !important;
+  color: #ffffff !important;
+  border: none !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.25) !important;
+}
+
+#about .jbd-about__btn:hover {
+  background-color: #218838 !important;
+  box-shadow: 0 6px 18px rgba(40, 167, 69, 0.35) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Mobile Responsive Optimization */
+@media (max-width: 991px) {
+  #about .jbd-about__wrapper {
+    grid-template-columns: 1fr !important;
+    gap: 35px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  #about.jbd-about {
+    padding: 40px 15px !important;
+  }
+
+  #about .jbd-about__grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  #about .jbd-about__card {
+    padding: 14px !important;
+  }
+}
 
 
 
 /* ===== COURSE SECTION MAIN ===== */
-.courses-section {
-  background-color: #F6F7FB !important;
-}
+
 
 /* স্লাইডারের বদলে ১০০% স্থির গ্রিড কন্টেইনার */
 .courses-grid-container {
@@ -433,7 +547,7 @@ a.jbd-btn.jbd-btn--primary {
 
 .cc-image {
   width: 100%;
-  height: 257px;
+  height: 327px;
   overflow: hidden;
   background: #f3f4f6;
 }
@@ -1073,62 +1187,6 @@ height: 249px;
   </div>
 </section>
 
-  <!-- ============ 2. ABOUT ============ -->
-<section class="jbd-about" id="about">
-  <!-- ================= LEFT SIDE ================= -->
-  <div class="jbd-about__media">
-    <div class="jbd-about__frame">
-      <div class="jbd-about__content-box" style="padding: 20px;">
-        <!-- Left Title & Color -->
-        {% if about_data.left_title %}
-          <h3 style="color: {{ about_data.left_title_color|default:'#ffffff' }}; font-weight: bold; margin-bottom: 12px;">
-            {{ about_data.left_title }}
-          </h3>
-        {% endif %}
-
-        <!-- Left Description -->
-        {% if about_data.left_description %}
-          <p class="jbd-about__left-desc" style="color: #d1d5db; line-height: 1.6;">
-            {{ about_data.left_description|linebreaksbr }}
-          </p>
-        {% endif %}
-
-        <!-- Left Button -->
-        {% if about_data.left_btn_text and about_data.left_btn_url %}
-          <div class="jbd-about__action" style="margin-top: 15px;">
-            <a href="{{ about_data.left_btn_url }}" class="btn btn-outline-primary">
-              {{ about_data.left_btn_text }}
-            </a>
-          </div>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= RIGHT SIDE ================= -->
-  <div class="jbd-about__content">
-    <!-- Right Title & Color -->
-    {% if about_data.right_title %}
-      <h2 style="color: {{ about_data.right_title_color|default:'#ffffff' }};">
-        {{ about_data.right_title }}
-      </h2>
-    {% endif %}
-
-    <!-- Right Description -->
-    {% if about_data.right_description %}
-      <p>{{ about_data.right_description|linebreaksbr }}</p>
-    {% endif %}
-
-    <!-- Right Button -->
-    {% if about_data.right_btn_text and about_data.right_btn_url %}
-      <div class="jbd-about__action" style="margin-top: 20px;">
-        <a href="{{ about_data.right_btn_url }}" class="btn btn-primary">
-          {{ about_data.right_btn_text }}
-        </a>
-      </div>
-    {% endif %}
-  </div>
-</section>
 
   <!-- ============ COURSES SLIDER============ -->
 
@@ -1255,55 +1313,130 @@ height: 249px;
     </div>
   </div>
 </section> {% endcomment %}
-  <!-- ============ 4. TESTIMONIALS ============ -->
-<section class="jbd-testimonials" id="testimonials">
-  <div class="jbd-wrap">
-    <div class="jbd-section-head is-center is-light">
-      <h2>টেস্টিমোনিয়াল / রিভিউ</h2>
-    </div>
 
-    <div class="jbd-testi-slider">
-      <div class="jbd-testi-pages">
-        <div class="jbd-testi-track" id="jbdTestiTrack">
 
-          {% for review in testimonials %}
-            <div class="jbd-testi-card">
-              <span class="quote-mark">“</span>
 
-              <!-- রিভিউ কমেন্ট -->
-              <p>{{ review.comment }}</p>
 
-              <!-- রেটিং স্টার (ঐচ্ছিক: ডিজাইন সুন্দর করার জন্য) -->
-              <div class="text-warning small mb-2">
-                {% if review.rating == 5 %}⭐⭐⭐⭐⭐{% elif review.rating == 4 %}⭐⭐⭐⭐{% elif review.rating == 3 %}⭐⭐⭐{% elif review.rating == 2 %}⭐⭐{% else %}⭐{% endif %}
-              </div>
 
-              <div class="jbd-testi-person">
-                <!-- ইউজার প্রোফাইল পিকচার থাকলে দেখাবে, না থাকলে ডিফল্ট প্লেসহোল্ডার জেনারেট হবে -->
-                <img class="jbd-avatar-img" src="https://ui-avatars.com/api/?name={{ review.user.get_full_name|urlencode }}&background=random" alt="{{ review.user.get_full_name }}">
 
-                <div class="who">
-                  <!-- স্টুডেন্টের নাম -->
-                  <b>{{ review.user.get_full_name|default:review.user.username }}</b>
-                  <!-- কোর্সের নাম -->
-                  <span>{{ review.course.name }}</span>
-                </div>
-              </div>
-            </div>
-          {% empty %}
-            <!-- যদি ডেটাবেসে কোনো রিভিউ না থাকে -->
-            <div class="w-100 text-center text-white py-4 opacity-75">
-              <p>এখনো কোনো রিভিউ দেওয়া হয়নি।</p>
-            </div>
-          {% endfor %}
+  <!-- ============ 2. ABOUT ============ -->
+<section class="jbd-about" id="about">
+  <div class="jbd-about__wrapper">
 
-        </div>
+    <!-- ================= LEFT SIDE (GRID CARDS) ================= -->
+    <div class="jbd-about__media">
+
+      <!-- Section Left Title -->
+      <div class="jbd-about__title-wrapper">
+        <h3 class="jbd-about__left-title" style="color: {{ about_data.left_title_color|default:'#d9232d' }};">
+          <span class="title-accent"></span>
+          {% if about_data.left_title %}
+            {{ about_data.left_title }}
+          {% else %}
+            কেন আমাদের ল্যাব বেছে নিবেন?
+          {% endif %}
+        </h3>
       </div>
 
-      <div class="jbd-testi-dots" id="jbdTestiDots"></div>
+      <!-- Feature Grid -->
+      <div class="jbd-about__grid">
+        {% for feature in about_data.features.all %}
+          <div class="jbd-about__card">
+
+            <!-- Dynamic SVG Icon with Title Color -->
+            <div class="jbd-about__card-icon">
+              {% if forloop.counter == 1 %}
+                <!-- Monitor Icon -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{ feature.title_color|default:'#d9232d' }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              {% elif forloop.counter == 2 %}
+                <!-- Ethernet/Network Icon -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{ feature.title_color|default:'#d9232d' }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                  <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                  <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                </svg>
+              {% elif forloop.counter == 3 %}
+                <!-- Desk Workspace Icon -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{ feature.title_color|default:'#d9232d' }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 20h20"></path>
+                  <path d="M5 20v-4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4"></path>
+                  <path d="M12 14V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v10"></path>
+                </svg>
+              {% else %}
+                <!-- Lightning Speed Icon -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{ feature.title_color|default:'#d9232d' }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+              {% endif %}
+            </div>
+
+            <!-- Card Content Body -->
+            <div class="jbd-about__card-body">
+              {% if feature.title %}
+            <h5 class="jbd-about__card-title" style="color: {{ feature.title_color|default:'#d9232d' }} !important;">
+              {{ feature.title }}
+            </h5>
+              {% endif %}
+
+              <p class="jbd-about__card-desc" style="text-align: justify; text-justify: inter-word;">
+                {{ feature.description }}
+              </p>
+            </div>
+
+          </div>
+        {% empty %}
+          <div class="jbd-about__card" style="grid-column: span 2;">
+            <p class="text-muted mb-0">No feature items available.</p>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if about_data.left_btn_text and about_data.left_btn_url %}
+        <div class="mt-4">
+          <a href="{{ about_data.left_btn_url }}" class="jbd-about__btn">
+            <span>{{ about_data.left_btn_text }}</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      {% endif %}
     </div>
+
+    <!-- ================= RIGHT SIDE (FIXED CONTENT) ================= -->
+    <div class="jbd-about__content">
+      {% if about_data.right_title %}
+        <h2 style="color: {{ about_data.right_title_color|default:'#0f172a' }};">
+          {{ about_data.right_title }}
+        </h2>
+      {% endif %}
+
+      {% if about_data.right_description %}
+        <p style="text-align: justify; text-justify: inter-word;">{{ about_data.right_description|linebreaksbr }}</p>
+      {% endif %}
+
+      {% if about_data.right_btn_text and about_data.right_btn_url %}
+        <div>
+          <a href="{{ about_data.right_btn_url }}" class="jbd-about__btn">
+            <span>{{ about_data.right_btn_text }}</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+
   </div>
 </section>
+
 
   <!-- ============ 5. BLOG ============ -->
 <section class="jbd-blog" id="blog">
@@ -1365,6 +1498,61 @@ height: 249px;
 </div>
   </div>
 </section>
+
+
+
+  <!-- ============ 4. TESTIMONIALS ============ -->
+<section class="jbd-testimonials" id="testimonials">
+  <div class="jbd-wrap">
+    <div class="jbd-section-head is-center is-light">
+      <h2>টেস্টিমোনিয়াল / রিভিউ</h2>
+    </div>
+
+    <div class="jbd-testi-slider">
+      <div class="jbd-testi-pages">
+        <div class="jbd-testi-track" id="jbdTestiTrack">
+
+          {% for review in testimonials %}
+            <div class="jbd-testi-card">
+              <span class="quote-mark">“</span>
+
+              <!-- রিভিউ কমেন্ট -->
+              <p>{{ review.comment }}</p>
+
+              <!-- রেটিং স্টার (ঐচ্ছিক: ডিজাইন সুন্দর করার জন্য) -->
+              <div class="text-warning small mb-2">
+                {% if review.rating == 5 %}⭐⭐⭐⭐⭐{% elif review.rating == 4 %}⭐⭐⭐⭐{% elif review.rating == 3 %}⭐⭐⭐{% elif review.rating == 2 %}⭐⭐{% else %}⭐{% endif %}
+              </div>
+
+              <div class="jbd-testi-person">
+                <!-- ইউজার প্রোফাইল পিকচার থাকলে দেখাবে, না থাকলে ডিফল্ট প্লেসহোল্ডার জেনারেট হবে -->
+                <img class="jbd-avatar-img" src="https://ui-avatars.com/api/?name={{ review.user.get_full_name|urlencode }}&background=random" alt="{{ review.user.get_full_name }}">
+
+                <div class="who">
+                  <!-- স্টুডেন্টের নাম -->
+                  <b>{{ review.user.get_full_name|default:review.user.username }}</b>
+                  <!-- কোর্সের নাম -->
+                  <span>{{ review.course.name }}</span>
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <!-- যদি ডেটাবেসে কোনো রিভিউ না থাকে -->
+            <div class="w-100 text-center text-white py-4 opacity-75">
+              <p>এখনো কোনো রিভিউ দেওয়া হয়নি।</p>
+            </div>
+          {% endfor %}
+
+        </div>
+      </div>
+
+      <div class="jbd-testi-dots" id="jbdTestiDots"></div>
+    </div>
+  </div>
+</section>
+
+
+
 
   <!-- ============ 6. RECENT STUDENTS (full-width, always sliding) ============ -->
 <section class="jbd-students" id="students">

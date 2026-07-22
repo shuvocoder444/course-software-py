@@ -240,17 +240,10 @@ class SliderDeleteView(LoginRequiredMixin, AdminRoleRequiredMixin, DeleteView):
 
 # =================================ABOUT US Start ============================
 
-
-
-
-
-
-
 from django.views.generic import UpdateView
 from django.urls import reverse_lazy
-
-# আপনার অ্যাপের সঠিক পাথ থেকে Model ইমপোর্ট করুন
-from .forms import AboutContentForm
+from .models import AboutFeature
+from .forms import AboutContentForm, AboutFeatureFormSet
 from apps.courses.views import LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin
 
 
@@ -258,20 +251,40 @@ class AboutContentManageView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVer
     model = AboutContent
     form_class = AboutContentForm
     template_name = 'backend/about_manage.html'
-    success_url = reverse_lazy('about_manage')  # আপনার URL pattern এর name অনুযায়ী নিশ্চিত করুন
+    success_url = reverse_lazy('about_manage')
 
     def get_object(self, queryset=None):
-        # আইডি ১ নাম্বার অবজেক্টটি নিয়ে আসবে, না থাকলে তৈরি করবে
         obj, created = AboutContent.objects.get_or_create(id=1)
         return obj
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['left_features_list'] = AboutFeature.objects.filter(about_content=self.object).order_by('order', 'id')
+
+        if self.request.method == 'POST':
+            context['feature_formset'] = AboutFeatureFormSet(self.request.POST, instance=self.object, prefix='features')
+        else:
+            context['feature_formset'] = AboutFeatureFormSet(instance=self.object, prefix='features')
+
+        return context
+
     def form_valid(self, form):
-        messages.success(self.request, "About section updated successfully!")
-        return super().form_valid(form)
+        context = self.get_context_data()
+        feature_formset = context['feature_formset']
 
+        if form.is_valid() and feature_formset.is_valid():
+            self.object = form.save()
+            feature_formset.instance = self.object
+            feature_formset.save()
 
+            messages.success(self.request, "About section updated successfully!")
+            return super().form_valid(form)
+        else:
+            return self.form_invalid(form)
 
-
+    def form_invalid(self, form):
+        messages.error(self.request, "Something went wrong! Please check the form errors.")
+        return super().form_invalid(form)
 
 # ==================================FRONT Course ================================
 from django.urls import reverse_lazy
@@ -396,6 +409,8 @@ class FrontCardDetailView(DetailView):
         TemplateHelper.map_context(context)
         return context
 
+
+
 # =================================BLOG Start============================
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -411,7 +426,7 @@ from .forms import BlogPostForm
 # ================= ১. BLOG LIST VIEW  =================
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import BlogPost, Category  # আপনার সঠিক মডেল পাথটি ব্যবহার করুন
+from apps.front_pages.models import BlogPost  # আপনার সঠিক মডেল পাথটি ব্যবহার করুন
 
 class BlogPostListView(LoginRequiredMixin, AdminRoleRequiredMixin, VuxyVerticalLayoutMixin, ListView):
     model = BlogPost

@@ -58,6 +58,47 @@ body {
 
 
 
+/* ===== TOP BAR STYLES ===== */
+.header-topbar {
+  background-color: var(--dark-2);
+  color: var(--muted);
+  font-size: 0.82rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.topbar-link {
+  color: #d1d5db;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.topbar-link:hover {
+  color: var(--red);
+}
+
+.topbar-social {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.topbar-social:hover {
+  background: var(--red);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+
+
+
 /* ===== NAVBAR ===== */
 .site-nav {
   position: sticky; top: 0; z-index: 1000;
@@ -218,6 +259,46 @@ ul {
 </style>
 </head>
 <body>
+
+
+
+
+
+
+
+
+  <!-- ==================== TOP BAR ==================== -->
+<div class="header-topbar py-2 d-none d-md-block">
+  <div class="container d-flex justify-content-between align-items-center">
+
+    <!-- Left Side: Email & Phone -->
+    <div class="d-flex align-items-center gap-4">
+      <a href="mailto:support@jbdit.com.bd" class="topbar-link d-flex align-items-center gap-2">
+        <i class="ti ti-mail text-danger fs-6"></i>
+        <span>support@jbdit.com.bd</span>
+      </a>
+      <a href="tel:+8801716905615" class="topbar-link d-flex align-items-center gap-2">
+        <i class="ti ti-phone text-danger fs-6"></i>
+        <span class="bn">+৮৮ ০১৭১৬ ৯০৫৬১৫</span>
+      </a>
+    </div>
+
+    <!-- Right Side: Social Icons -->
+    <div class="d-flex align-items-center gap-2">
+      <a href="https://facebook.com" target="_blank" class="topbar-social" aria-label="Facebook">
+        <i class="ti ti-brand-facebook"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="topbar-social" aria-label="Instagram">
+        <i class="ti ti-brand-instagram"></i>
+      </a>
+      <a href="https://youtube.com" target="_blank" class="topbar-social" aria-label="YouTube">
+        <i class="ti ti-brand-youtube"></i>
+      </a>
+    </div>
+
+  </div>
+</div>
+
 
 
 
