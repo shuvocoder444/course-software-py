@@ -4,71 +4,11 @@
 
 {% block content %}
 <style>
-    /* ==========================================
-       ১. হিরো ব্যানার সেকশন
-       ========================================== */
-    .about-hero-banner {
-        background: radial-gradient(circle at 80% 20%, rgba(220, 53, 69, 0.15) 0%, transparent 50%),
-                    linear-gradient(135deg, #0b1116 0%, #1a2630 100%);
-        padding: 80px 20px;
-        position: relative;
-        overflow: hidden;
-        border-bottom: 4px solid #dc3545;
-    }
 
-    .about-gradient-title {
-        background: linear-gradient(135deg, #ffffff 40%, #ff4d5a 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-fill-color: transparent;
-        display: inline-block;
-        letter-spacing: 1px;
-    }
 
-    /* ==========================================
-       ২. কন্টেন্ট ও কার্ড স্টাইল (Scoped)
-       ========================================== */
-    .jbd-about-section .about-card {
-        border: none;
-        border-radius: 16px;
-        background: #ffffff;
-        box-shadow: 0 10px 30px rgba(17, 28, 36, 0.05);
-        transition: all 0.3s ease;
-    }
-
-    .jbd-about-section .about-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(17, 28, 36, 0.1);
-    }
-
-    /* আইকন বক্স */
-    .jbd-about-section .icon-box {
-        width: 60px;
-        height: 60px;
-        background-color: rgba(220, 53, 69, 0.1);
-        color: #dc3545;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        margin-bottom: 20px;
-    }
-
-    /* স্ট্যাটস কাউন্টার সেকশন */
-    .stats-section {
-        background-color: #111c24;
-        color: #ffffff;
-        border-radius: 16px;
-        padding: 40px 20px;
-    }
-
-    .stats-number {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: #dc3545;
-    }
+  .mb-5 {
+    margin-bottom: 0rem !important;
+}
 </style>
 
 <!-- ==========================================
@@ -83,107 +23,120 @@
     </div>
 </div>
 
-<!-- ==========================================
-     ২. মূল বিবরণ ও মিশন-ভিশন
-     ========================================== -->
-<div class="container my-5 jbd-about-section">
-    <div class="row align-items-center g-5 mb-5">
-        <div class="col-lg-6">
-            <h2 class="fw-bold text-dark mb-4">JBD IT-এর পথচলা</h2>
-            <p class="text-muted leading-relaxed">
-                JBD IT একটি আধুনিক
-            </p>
-            <p class="text-muted leading-relaxed">
+<section class="jbd-about" id="about">
+  <div class="jbd-about__wrapper">
 
-            </p>
-        </div>
-        <div class="col-lg-6">
-            <div class="row g-4">
-                <!-- মিশন কার্ড -->
-                <div class="col-12">
-                    <div class="card about-card p-4">
-                        <div class="d-flex align-items-start">
-                            <div class="icon-box me-3 flex-shrink-0">🎯</div>
-                            <div>
-                                <h5 class="fw-bold text-dark">আমাদের মিশন</h5>
-                                <p class="text-muted mb-0">সহজ এবং মানসম্মত শিক্ষার মাধ্যমে প্রত্যেক শিক্ষার্থীকে মার্কেটপ্লেসের জন্য শতভাগ প্রস্তুত করে তোলা।</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- ভিশন কার্ড -->
-                <div class="col-12">
-                    <div class="card about-card p-4">
-                        <div class="d-flex align-items-start">
-                            <div class="icon-box me-3 flex-shrink-0">🚀</div>
-                            <div>
-                                <h5 class="fw-bold text-dark">আমাদের ভিশন</h5>
-                                <p class="text-muted mb-0">দেশের অন্যতম শীর্ষস্থানীয় আইটি প্রতিষ্ঠান হিসেবে প্রযুক্তিগত উন্নয়ন এবং বেকারত্ব দূরীকরণে অগ্রণী ভূমিকা পালন করা।</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- ================= LEFT SIDE (GRID CARDS) ================= -->
+    <div class="jbd-about__media">
+
+      <!-- Section Left Title -->
+      <div class="jbd-about__title-wrapper">
+        <h3 class="jbd-about__left-title" style="color: {{ about_data.left_title_color|default:'#d9232d' }};">
+          <span class="title-accent"></span>
+          {% if about_data.left_title %}
+            {{ about_data.left_title }}
+          {% else %}
+            কেন আমাদের ল্যাব বেছে নিবেন?
+          {% endif %}
+        </h3>
+      </div>
+
+      <!-- Feature Grid -->
+      <div class="jbd-about__grid">
+        {% for feature in about_data.features.all %}
+          <div class="jbd-about__card">
+
+            <!-- Dynamic SVG Icon with Title Color -->
+            <div class="jbd-about__card-icon">
+              {% if forloop.counter == 1 %}
+                <!-- Monitor Icon -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{ feature.title_color|default:'#d9232d' }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              {% elif forloop.counter == 2 %}
+                <!-- Ethernet/Network Icon -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{ feature.title_color|default:'#d9232d' }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                  <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                  <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                </svg>
+              {% elif forloop.counter == 3 %}
+                <!-- Desk Workspace Icon -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{ feature.title_color|default:'#d9232d' }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 20h20"></path>
+                  <path d="M5 20v-4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4"></path>
+                  <path d="M12 14V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v10"></path>
+                </svg>
+              {% else %}
+                <!-- Lightning Speed Icon -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{ feature.title_color|default:'#d9232d' }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+              {% endif %}
             </div>
+
+            <!-- Card Content Body -->
+            <div class="jbd-about__card-body">
+              {% if feature.title %}
+            <h5 class="jbd-about__card-title" style="color: {{ feature.title_color|default:'#d9232d' }} !important;">
+              {{ feature.title }}
+            </h5>
+              {% endif %}
+
+              <p class="jbd-about__card-desc" style="text-align: justify; text-justify: inter-word;">
+                {{ feature.description }}
+              </p>
+            </div>
+
+          </div>
+        {% empty %}
+          <div class="jbd-about__card" style="grid-column: span 2;">
+            <p class="text-muted mb-0">No feature items available.</p>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if about_data.left_btn_text and about_data.left_btn_url %}
+        <div class="mt-4">
+          <a href="{{ about_data.left_btn_url }}" class="jbd-about__btn">
+            <span>{{ about_data.left_btn_text }}</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
         </div>
+      {% endif %}
     </div>
 
-    <!-- ==========================================
-         ৩. কেন আমাদের বেছে নেবেন? (Features)
-         ========================================== -->
-    <div class="text-center my-5 pt-4">
-        <h2 class="fw-bold text-dark">কেন আমরা সেরা?</h2>
-        <p class="text-muted">আমাদের বিশেষত্ব যা আমাদের অন্য সবার চেয়ে আলাদা করে।</p>
+    <!-- ================= RIGHT SIDE (FIXED CONTENT) ================= -->
+    <div class="jbd-about__content">
+      {% if about_data.right_title %}
+        <h2 style="color: {{ about_data.right_title_color|default:'#0f172a' }};">
+          {{ about_data.right_title }}
+        </h2>
+      {% endif %}
+
+      {% if about_data.right_description %}
+        <p style="text-align: justify; text-justify: inter-word;">{{ about_data.right_description|linebreaksbr }}</p>
+      {% endif %}
+
+      {% if about_data.right_btn_text and about_data.right_btn_url %}
+        <div>
+          <a href="{{ about_data.right_btn_url }}" class="jbd-about__btn">
+            <span>{{ about_data.right_btn_text }}</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      {% endif %}
     </div>
 
-    <div class="row g-4 mb-5">
-        <!-- বৈশিষ্ট্য ১ -->
-        <div class="col-md-4">
-            <div class="card about-card p-4 text-center h-100">
-                <div class="icon-box mx-auto">👨‍🏫</div>
-                <h5 class="fw-bold text-dark">অভিজ্ঞ মেন্টর</h5>
-                <p class="text-muted small mb-0">ইন্ডাস্ট্রির রিয়েল-প্রজেক্টে অভিজ্ঞ এবং দক্ষ মেন্টরদের সরাসরি তত্ত্বাবধান।</p>
-            </div>
-        </div>
-        <!-- বৈশিষ্ট্য ২ -->
-        <div class="col-md-4">
-            <div class="card about-card p-4 text-center h-100">
-                <div class="icon-box mx-auto">💻</div>
-                <h5 class="fw-bold text-dark">হ্যান্ডস-অন প্রজেক্ট</h5>
-                <p class="text-muted small mb-0">তত্ত্বীয় আলোচনার পাশাপাশি প্রতিটি ক্লাসে রিয়েল-লাইফ প্রজেক্ট প্র্যাকটিস।</p>
-            </div>
-        </div>
-        <!-- বৈশিষ্ট্য ৩ -->
-        <div class="col-md-4">
-            <div class="card about-card p-4 text-center h-100">
-                <div class="icon-box mx-auto">🤝</div>
-                <h5 class="fw-bold text-dark">লাইফটাইম সাপোর্ট</h5>
-                <p class="text-muted small mb-0">কোর্স শেষ হওয়ার পরেও যেকোনো সমস্যায় আমাদের ডেডিকেটেড ফোরাম থেকে লাইফটাইম সাপোর্ট।</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         ৪. স্ট্যাটস কাউন্টার (Stats Section)
-         ========================================== -->
-    <div class="stats-section text-center my-5">
-        <div class="row g-4">
-            <div class="col-md-3 col-6">
-                <div class="stats-number">১,২০০+</div>
-                <div class="text-white-50 small mt-1">সফল শিক্ষার্থী</div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="stats-number">১৫+</div>
-                <div class="text-white-50 small mt-1">প্রফেশনাল কোর্স</div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="stats-number">৫০+</div>
-                <div class="text-white-50 small mt-1">কর্পোরেট প্রজেক্ট</div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="stats-number">২৪/৭</div>
-                <div class="text-white-50 small mt-1">লার্নিং সাপোর্ট</div>
-            </div>
-        </div>
-    </div>
-</div>
+  </div>
+</section>
 {% endblock %}

@@ -155,4 +155,87 @@
 
     </div>
 </div> {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+
+ <!-- ============ 6. RECENT STUDENTS (full-width, always sliding) ============ -->
+<section class="jbd-students" id="students">
+  <div class="jbd-wrap">
+    <div class="jbd-section-head is-center">
+      <h2>ছাত্র ছাত্রী</h2>
+    </div>
+  </div>
+
+<div class="jbd-students-marquee">
+  <div class="jbd-students-track" id="jbdStudentsTrack">
+    {% if marquee_students %}
+      <!-- Set A -->
+      {% for student in marquee_students %}
+        <div class="jbd-mini-student">
+          <div class="jbd-mini-avatar">
+            {% if student.photo %}
+              <img src="{{ student.photo.url }}" alt="{{ student.name }}">
+            {% else %}
+              <img src="{% static 'cus/jbditnoprofilepicture.jpg' %}" alt="{{ student.name }}">
+            {% endif %}
+            <span class="dot"></span>
+          </div>
+          <div class="info">
+            <h4>{{ student.name }}</h4>
+            <span>{{ student.course.name|default:"Web Development" }}</span>
+          </div>
+        </div>
+      {% endfor %}
+
+      <!-- Set B -->
+      {% for student in marquee_students %}
+        <div class="jbd-mini-student" aria-hidden="true">
+          <div class="jbd-mini-avatar">
+            {% if student.photo %}
+              <img src="{{ student.photo.url }}" alt="{{ student.name }}">
+            {% else %}
+              <img src="{% static 'cus/jbditnoprofilepicture.jpg' %}" alt="{{ student.name }}">
+            {% endif %}
+            <span class="dot"></span>
+          </div>
+          <div class="info">
+            <h4>{{ student.name }}</h4>
+            <span>{{ student.course.name|default:"Web Development" }}</span>
+          </div>
+        </div>
+      {% endfor %}
+
+      <!-- Set C (অতিরিক্ত ১টি সেট যোগ করুন) -->
+      {% for student in marquee_students %}
+        <div class="jbd-mini-student" aria-hidden="true">
+          <div class="jbd-mini-avatar">
+            {% if student.photo %}
+              <img src="{{ student.photo.url }}" alt="{{ student.name }}">
+            {% else %}
+              <img src="{% static 'cus/jbditnoprofilepicture.jpg' %}" alt="{{ student.name }}">
+            {% endif %}
+            <span class="dot"></span>
+          </div>
+          <div class="info">
+            <h4>{{ student.name }}</h4>
+            <span>{{ student.course.name|default:"Web Development" }}</span>
+          </div>
+        </div>
+      {% endfor %}
+
+    {% else %}
+      <p class="text-center text-muted w-100 py-3">No approved students to display.</p>
+    {% endif %}
+  </div>
+</div>
+
 {% endblock %}

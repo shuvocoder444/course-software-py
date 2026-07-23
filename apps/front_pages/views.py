@@ -29,6 +29,9 @@ class FrontPagesView(TemplateView):
         except Exception:
             about_data = None
 
+
+
+
         # ================= Front Course (CardItem) Query =================
         front_courses = CardItem.objects.all()
         first_card = front_courses.first()

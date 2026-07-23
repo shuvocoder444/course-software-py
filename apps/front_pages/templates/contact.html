@@ -3,60 +3,7 @@
 {% block title %}Contact Us - যোগাযোগ করুন{% endblock %}
 
 {% block content %}
-<style>
-    /* ==========================================
-       ১. হিরো ব্যানার সেকশন
-       ========================================== */
-    .contact-hero-banner {
-        background: radial-gradient(circle at 80% 20%, rgba(220, 53, 69, 0.15) 0%, transparent 50%),
-                    linear-gradient(135deg, #0b1116 0%, #1a2630 100%);
-        padding: 80px 20px;
-        position: relative;
-        overflow: hidden;
-        border-bottom: 4px solid #dc3545;
-    }
 
-    .contact-gradient-title {
-        background: linear-gradient(135deg, #ffffff 40%, #ff4d5a 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-fill-color: transparent;
-        display: inline-block;
-        letter-spacing: 1px;
-    }
-
-    /* ==========================================
-       ২. পেজ ব্যাকগ্রাউন্ড ও ফর্ম কার্ড স্টাইল
-       ========================================== */
-    .contact-page-body {
-        background-color: #f4f6f9; /* হালকা ব্যাকগ্রাউন্ড কালার */
-        border-radius: 16px;
-        padding: 50px 20px;
-    }
-
-    .custom-form-card {
-        background-color: #ffffff !important;
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(17, 28, 36, 0.05) !important;
-    }
-
-    /* ব্র্যান্ড থিম বাটন */
-    .btn-black {
-        background-color: #111c24 !important; /* ফুটারের ডার্ক কালার */
-        color: #ffffff !important;
-        border: none;
-        font-weight: 700;
-        border-radius: 8px;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn-black:hover {
-        background-color: #dc3545 !important; /* লোগোর লাল কালার */
-        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
-    }
-</style>
 
 <!-- ==========================================
      ১. হিরো ব্যানার (Hero Section)
@@ -70,14 +17,152 @@
     </div>
 </div>
 
-<!-- ==========================================
-     ২. ফর্ম সেকশন
-     ========================================== -->
+<!-- Bootstrap 5 CSS & FontAwesome / Bootstrap Icons (হেড ট্যাগে এগুলো দিন) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<style>
+    /* ==========================================
+       পেজ ব্যাকগ্রাউন্ড ও কাস্টম স্টাইল
+       ========================================== */
+    .contact-page-body {
+        border-radius: 16px;
+        padding: 50px 20px;
+    }
+
+    .custom-form-card, .contact-info-card {
+        background-color: #ffffff !important;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(17, 28, 36, 0.05) !important;
+        height: 100%;
+    }
+
+    /* বামপাশের কন্টাক্ট আইকন ও টেক্সট */
+    .info-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .info-icon {
+        width: 45px;
+        height: 45px;
+        background-color: #f8f9fa;
+        color: #dc3545;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    /* সোশাল আইকন */
+    .social-links a {
+        width: 40px;
+        height: 40px;
+        background-color: #111c24;
+        color: #ffffff;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+        background-color: #dc3545;
+        transform: translateY(-3px);
+    }
+
+    /* ব্র্যান্ড থিম বাটন */
+    .btn-black {
+        background-color: #111c24 !important;
+        color: #ffffff !important;
+        border: none;
+        font-weight: 700;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-black:hover {
+        background-color: #dc3545 !important;
+        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+    }
+
+    /* ম্যাপ সেকশন */
+    .map-container {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(17, 28, 36, 0.05);
+    }
+</style>
+
 <div class="container my-5">
     <div class="contact-page-body">
-        <div class="row justify-content-center">
-            <div class="col-md-7 col-lg-6">
-                <!-- পিওর হোয়াইট প্রিমিয়াম কার্ড -->
+
+        <!-- ১. যোগাযোগের তথ্য ও ফর্ম সেকশন -->
+        <div class="row g-4 justify-content-center align-items-stretch">
+
+            <!-- বামপাশ: কন্টাক্ট ইনফরমেশন ও সোশ্যাল লিংক -->
+            <div class="col-lg-5">
+                <div class="card contact-info-card p-4 p-md-5 d-flex flex-column justify-content-between">
+                    <div>
+                        <h3 class="fw-bold mb-4" style="color: #111c24;">যোগাযোগ করুন</h3>
+                        <p class="text-muted mb-4">যেকোনো প্রশ্ন বা তথ্যের জন্য আমাদের সাথে সরাসরি যোগাযোগ করুন অথবা মেসেজ পাঠান।</p>
+
+                        <!-- ঠিকানার আইটেম -->
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1" style="color: #111c24;">ঠিকানা</h6>
+                                <p class="text-secondary mb-0">লেভেল ৩, ট্রেনিং বিল্ডিং, হাই-টেক পার্ক, রাজশাহী</p>
+                            </div>
+                        </div>
+
+                        <!-- ইমেইল আইটেম -->
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="bi bi-envelope-fill"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1" style="color: #111c24;">ইমেইল</h6>
+                                <p class="text-secondary mb-0">support@jbdit.com.bd</p>
+                            </div>
+                        </div>
+
+                        <!-- ফোন নাম্বার -->
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="bi bi-telephone-fill"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1" style="color: #111c24;">ফোন</h6>
+                                <p class="text-secondary mb-0">+88 01716-905615</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <h6 class="fw-bold mb-3" style="color: #111c24;">সোশ্যাল মিডিয়া</h6>
+                        <div class="social-links">
+                            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                            <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ডানপাশ: ফর্ম সেকশন -->
+            <div class="col-lg-7">
                 <div class="card custom-form-card p-4 p-md-5">
                     <form method="POST">
                         {% csrf_token %}
@@ -102,7 +187,26 @@
                     </form>
                 </div>
             </div>
+
         </div>
+
+        <!-- ২. নিচে গুগল ম্যাপ সেকশন -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="map-container">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3634.3639396265977!2d88.5833!3d24.3683!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39fbef03063f9ebf%3A0xba361dba7eb6258e!2sJBD%20IT!5e0!3m2!1sen!2sbd!4v1700000000000!5m2!1sen!2sbd"
+                        width="100%"
+                        height="400"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 {% endblock %}

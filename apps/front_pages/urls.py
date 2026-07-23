@@ -9,6 +9,14 @@ urlpatterns = [
     path("about/", views.FrontPagesView.as_view(template_name="about.html"), name="about"),
     path("contact/", views.FrontPagesView.as_view(template_name="contact.html"), name="contact"),
     path("courses/", views.FrontPagesView.as_view(template_name="courses.html"), name="courses"),
+
+    # ফন্ট কোর্সসমূহ
+    path("office-application/", views.FrontPagesView.as_view(template_name="officeapplication.html"), name="officeapplication"),
+    path("graphics-design/", views.FrontPagesView.as_view(template_name="graphicsdesign.html"), name="graphicsdesign"),
+    path("digital-marketing/", views.FrontPagesView.as_view(template_name="digitalmarketing.html"), name="digitalmarketing"),
+    path("video-editing/", views.FrontPagesView.as_view(template_name="videoediting.html"), name="videoediting"),
+    path("wordpress-development/", views.FrontPagesView.as_view(template_name="wordpressdevelopment.html"), name="wordpressdevelopment"),
+    path("instructors/", views.FrontPagesView.as_view(template_name="instructors.html"), name="instructors"),
     path("photo-gallery/", views.FrontPagesView.as_view(template_name="photo_gallery.html"), name="photo-gallery"),
     path("students/", views.FrontPagesView.as_view(template_name="students.html"), name="students"),
     path("tutorials/", views.FrontPagesView.as_view(template_name="tutorials.html"), name="tutorials"),

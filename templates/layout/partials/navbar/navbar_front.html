@@ -56,24 +56,23 @@ body {
 
 
 
-
-
 /* ===== TOP BAR STYLES ===== */
 .header-topbar {
-  background-color: var(--dark-2);
+  background-color: hsl(41.65deg 100% 53.61%);
   color: var(--muted);
   font-size: 0.82rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .topbar-link {
-  color: #d1d5db;
+  color: #000307;
   text-decoration: none;
   transition: color 0.2s ease;
+  font-weight: 500;
 }
 
 .topbar-link:hover {
-  color: var(--red);
+  color: #14a800;
 }
 
 .topbar-social {
@@ -83,7 +82,7 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgb(0 0 0);
   color: #ffffff;
   text-decoration: none;
   transition: all 0.2s ease;
@@ -91,21 +90,26 @@ body {
 }
 
 .topbar-social:hover {
-  background: var(--red);
+  background: #14a800;
   color: #ffffff;
   transform: translateY(-2px);
 }
 
 
+/* ====================================== NAVBAR ==================================== */
 
 
-/* ===== NAVBAR ===== */
 .site-nav {
   position: sticky; top: 0; z-index: 1000;
   background: rgba(255,255,255,.95);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
   transition: box-shadow .3s;
+}
+
+/* Bootstrap-এর ডিফল্ট ড্রপডাউন অ্যারো রিমুভ করার কোড */
+.site-nav .dropdown-toggle::after {
+  display: none !important;
 }
 .site-nav.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,.08); }
 
@@ -171,7 +175,7 @@ body {
 }
 
 
-/* ===== LOGIN BUTTON ===== */
+/* ============================== LOGIN BUTTON ============================== */
 .btn-login {
     display: inline-flex;
     align-items: center;
@@ -267,19 +271,24 @@ ul {
 
 
 
-  <!-- ==================== TOP BAR ==================== -->
+
+<!-- ==================== TOP BAR ==================== -->
 <div class="header-topbar py-2 d-none d-md-block">
   <div class="container d-flex justify-content-between align-items-center">
 
     <!-- Left Side: Email & Phone -->
     <div class="d-flex align-items-center gap-4">
+            <a href="https://www.google.com/maps/place/JBD+IT/data=!4m2!3m1!1s0x0:0xba361dba7eb6258e?sa=X&ved=1t:2428&ictx=111" class="topbar-link d-flex align-items-center gap-2">
+        <i class="ti ti-mail text-danger fs-6"></i>
+        <span>লেভেল ৩, ট্রেনিং বিল্ডিং, হাই-টেক পার্ক, রাজশাহী</span>
+      </a>
       <a href="mailto:support@jbdit.com.bd" class="topbar-link d-flex align-items-center gap-2">
         <i class="ti ti-mail text-danger fs-6"></i>
         <span>support@jbdit.com.bd</span>
       </a>
       <a href="tel:+8801716905615" class="topbar-link d-flex align-items-center gap-2">
         <i class="ti ti-phone text-danger fs-6"></i>
-        <span class="bn">+৮৮ ০১৭১৬ ৯০৫৬১৫</span>
+        <span class="bn">+৮৮ ০১৭১৬-৯০৫৬১৫</span>
       </a>
     </div>
 
@@ -288,18 +297,28 @@ ul {
       <a href="https://facebook.com" target="_blank" class="topbar-social" aria-label="Facebook">
         <i class="ti ti-brand-facebook"></i>
       </a>
+      <a href="https://youtube.com" target="_blank" class="topbar-social" aria-label="YouTube">
+        <i class="ti ti-brand-youtube"></i>
+      </a>
+      <a href="https://x.com" target="_blank" class="topbar-social" aria-label="X">
+        <i class="ti ti-brand-x"></i>
+      </a>
       <a href="https://instagram.com" target="_blank" class="topbar-social" aria-label="Instagram">
         <i class="ti ti-brand-instagram"></i>
       </a>
-      <a href="https://youtube.com" target="_blank" class="topbar-social" aria-label="YouTube">
-        <i class="ti ti-brand-youtube"></i>
+      <a href="https://linkedin.com" target="_blank" class="topbar-social" aria-label="LinkedIn">
+        <i class="ti ti-brand-linkedin"></i>
+      </a>
+      <a href="https://tiktok.com" target="_blank" class="topbar-social" aria-label="TikTok">
+        <i class="ti ti-brand-tiktok"></i>
+      </a>
+      <a href="https://pinterest.com" target="_blank" class="topbar-social" aria-label="Pinterest">
+        <i class="ti ti-brand-pinterest"></i>
       </a>
     </div>
 
   </div>
 </div>
-
-
 
 
 <!-- ==================== NAVBAR ==================== -->
@@ -315,7 +334,7 @@ ul {
       {% endif %}
     </a>
 
-    <!-- Navbar Toggler Button (data-bs-toggle সরিয়ে ফেলা হয়েছে যাতে কনফ্লিক্ট না হয়) -->
+    <!-- Navbar Toggler Button -->
     <button class="navbar-toggler border-0 bg-transparent d-lg-none" type="button" id="menuTogglerBtn" aria-label="Toggle navigation">
       <i class="ti ti-menu-2 fs-3" style="color: var(--mid);"></i>
     </button>
@@ -328,14 +347,24 @@ ul {
           <a class="nav-link {% if request.resolver_match.url_name == 'landing-page' %}active{% endif %}" href="{% url 'landing-page' %}">প্রথম পাতা</a>
         </li>
 
-        <!-- কোর্স সমূহ -->
-        <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'courses' %}active{% endif %}" href="{% url 'courses' %}">কোর্স সমূহ</a>
+        <!-- কোর্স সমূহ (নতুন ড্রপডাউন সাবমেনু) -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center gap-1 {% if request.resolver_match.url_name == 'courses' %}active{% endif %}"
+             href="javascript:void(0);" id="coursesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            কোর্স সমূহ <i class="ti ti-chevron-down ms-1" style="color: #14a800;"></i>
+          </a>
+        <ul class="dropdown-menu" aria-labelledby="coursesDropdown">
+            <li><a class="dropdown-item" href="{% url 'officeapplication' %}">অফিস অ্যাপ্লিকেশন</a></li>
+            <li><a class="dropdown-item" href="{% url 'graphicsdesign' %}">গ্রাফিক্স ডিজাইন</a></li>
+            <li><a class="dropdown-item" href="{% url 'digitalmarketing' %}">ডিজিটাল মার্কেটিং</a></li>
+            <li><a class="dropdown-item" href="{% url 'videoediting' %}">ভিডিও এডিটিং</a></li>
+            <li><a class="dropdown-item" href="{% url 'wordpressdevelopment' %}">ওয়ার্ডপ্রেস ওয়েব ডেভেলপমেন্ট</a></li>
+        </ul>
         </li>
 
         <!-- প্রশিক্ষক -->
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'instructors' %}active{% endif %}" href="#">প্রশিক্ষক</a>
+          <a class="nav-link {% if request.resolver_match.url_name == 'instructors' %}active{% endif %}" href="{% url 'instructors' %}">প্রশিক্ষক</a>
         </li>
 
         <!-- আমাদের সম্পর্কে -->
@@ -345,9 +374,9 @@ ul {
 
         <!-- গ্যালারি ড্রপডাউন -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'photo-gallery' or request.resolver_match.url_name == 'video-gallery' %}active{% endif %}"
+          <a class="nav-link dropdown-toggle d-flex align-items-center gap-1 {% if request.resolver_match.url_name == 'photo-gallery' or request.resolver_match.url_name == 'video-gallery' %}active{% endif %}"
              href="javascript:void(0);" id="galleryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            গ্যালারি
+            গ্যালারি <i class="ti ti-chevron-down ms-1" style="color: #14a800;"></i>
           </a>
           <ul class="dropdown-menu" aria-labelledby="galleryDropdown">
             <li>
@@ -366,7 +395,7 @@ ul {
 
         <!-- ছাত্রছাত্রী -->
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'students' %}active{% endif %}" href="{% url 'students' %}">ছাত্রছাত্রী</a>
+          <a class="nav-link {% if request.resolver_match.url_name == 'students' %}active{% endif %}" href="{% url 'students' %}">ছাত্র ছাত্রী</a>
         </li>
 
         <!-- যোগাযোগ -->
@@ -376,18 +405,14 @@ ul {
 
         <!-- অন্যান্য ড্রপডাউন -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'notice' or request.resolver_match.url_name == 'blog' %}active{% endif %}"
+          <a class="nav-link dropdown-toggle d-flex align-items-center gap-1 {% if request.resolver_match.url_name == 'notice' or request.resolver_match.url_name == 'blog' %}active{% endif %}"
              href="javascript:void(0);" id="othersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            অন্যান্য
+            অন্যান্য <i class="ti ti-chevron-down ms-1" style="color: #14a800;"></i>
           </a>
           <ul class="dropdown-menu" aria-labelledby="othersDropdown">
             <li>
-              <a class="dropdown-item {% if request.resolver_match.url_name == 'notice' %}active{% endif %}" href="javascript:void(0);">নোটিশ বোর্ড</a>
+              <a class="dropdown-item {% if request.resolver_match.url_name == 'blog_feed' %}active{% endif %}" href="{% url 'blog_feed' %}">সকল পোস্ট</a>
             </li>
-<li>
-  <a class="dropdown-item {% if request.resolver_match.url_name == 'blog_feed' %}active{% endif %}" href="{% url 'blog_feed' %}">সকল পোস্ট </a>
-</li>
-</li>
           </ul>
         </li>
 
@@ -398,7 +423,7 @@ ul {
           <i class="ti ti-user-plus"></i> স্টুডেন্ট রেজিস্টার
         </a>
         <a href="{% url 'login' %}" class="btn-login">
-          <i class="ti ti-lock"></i> Login
+          <i class="ti ti-lock"></i> লগইন
         </a>
       </div>
     </div>
@@ -424,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    // কোনো লিংকে ক্লিক করলেও মেনু বন্ধ হয়ে যাবে
+    // কোনো লিংকে ক্লিক করলেও মেনু বন্ধ হয়ে যাবে
     const navLinks = navCollapse.querySelectorAll('.nav-link:not(.dropdown-toggle), .dropdown-item');
     navLinks.forEach(function (link) {
       link.addEventListener('click', function () {

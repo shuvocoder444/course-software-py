@@ -1,0 +1,1415 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap');
+
+.jbd-home {
+  --red: #e31e24;
+  --red-dark: #a8121a;
+  --navy: #0d1524;
+  --navy-soft: #131c31;
+  --green: #3fa13d;
+  --green-light: #8cc63f;
+  --amber: #fdb714;
+  --amber-light: #ffd966;
+  --ink: #131722;
+  --slate: #5b6472;
+  --slate-light: #8a93a3;
+  --paper: #f6f7fb;
+  --line: #e7e9f1;
+  --white: #ffffff;
+  --radius: 14px;
+  --shadow: 0 20px 45px -20px rgba(13, 21, 36, 0.22);
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  color: var(--ink);
+  background: var(--white);
+  overflow-x: hidden;
+}
+
+#template-customizer {
+  display: none !important;
+}
+
+.jbd-home * {
+  box-sizing: border-box;
+}
+.jbd-home h1,
+.jbd-home h2,
+.jbd-home h3 {
+  font-family: 'Sora', 'Inter', sans-serif;
+  margin: 0;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.jbd-home p {
+  margin: 0;
+  color: var(--slate);
+  line-height: 1.7;
+}
+.jbd-home ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.jbd-home a {
+  text-decoration: none;
+  color: inherit;
+}
+.jbd-home img {
+  display: block;
+  max-width: 100%;
+}
+.jbd-mono {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+.jbd-wrap {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.jbd-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--red);
+  background: rgba(227, 30, 36, 0.08);
+  border: 1px solid rgba(227, 30, 36, 0.18);
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+.jbd-eyebrow.is-light {
+  color: var(--amber-light);
+  background: rgba(253, 183, 20, 0.12);
+  border-color: rgba(253, 183, 20, 0.3);
+}
+.jbd-section-head {
+  max-width: 640px;
+  margin-top: 75px;
+}
+.jbd-section-head.is-center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.jbd-section-head h2 {
+  font-size: clamp(28px, 3.4vw, 40px);
+  margin: 26px 0 14px;
+}
+.jbd-section-head p {
+  font-size: 16px;
+}
+.jbd-section-head.is-light p {
+  color: #b7becb;
+}
+.jbd-section-head.is-light h2 {
+  color: var(--white);
+}
+
+.jbd-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 15px 28px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+  white-space: nowrap;
+}
+.jbd-btn--primary {
+  background: var(--red);
+  color: var(--white);
+  box-shadow: 0 14px 30px -12px rgba(227, 30, 36, 0.55);
+}
+a.jbd-btn.jbd-btn--primary {
+  color: #ffffff;
+  padding: 6px 30px 6px 31px;
+}
+.jbd-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px -12px rgba(227, 30, 36, 0.65);
+}
+.jbd-btn--ghost {
+  background: transparent;
+  color: var(--white) !important;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.jbd-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.jbd-btn--outline {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+  padding: 10px 20px;
+  font-size: 14px;
+}
+.jbd-btn--outline:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* =====================================News Ticker / Notice Bar ==============================================  */
+
+/* মেইন কন্টেইনার (১২০০ পিক্সেল ফিক্সড উইডথ) */
+
+.notice-ticker-container {
+  display: flex;
+  align-items: center;
+  background-color: #000000;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 45px;
+  position: relative;
+  border-top: solid 1px #14a800;
+}
+
+/* নোটিশ টাইটেল লেবেল */
+.notice-label {
+  background-color: #000000;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 0 20px;
+  white-space: nowrap;
+  font-size: 16px;
+  z-index: 10; /* লেবেলটি উপরে থাকবে */
+  display: flex;
+  align-items: center;
+  height: 100%;
+  border-right: 2px solid #333;
+  box-shadow: 5px 0 10px rgba(0, 0, 0, 0.5); /* টেক্সট নিচ দিয়ে যাওয়ার সময় শ্যাডো দেবে */
+}
+
+/* স্ক্রলিং এরিয়া */
+.notice-content {
+  flex-grow: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  position: relative;
+  white-space: nowrap;
+}
+
+/* ট্র্যাক যা অনবরত ঘুরতে থাকবে */
+.ticker-track {
+  display: flex;
+  white-space: nowrap;
+  width: max-content;
+  animation: seamless-scroll 25s linear infinite;
+}
+
+/* মাউস হভার করলে স্ক্রলিং থমকে যাবে */
+.notice-ticker-container:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+.ticker-group {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* সিঙ্গেল লিঙ্ক আইটেম */
+.notice-item-link {
+  color: #ffffff !important; /* টেক্সট কালার শতভাগ সাদা */
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 0 20px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.notice-item-link:hover {
+  color: #28a745 !important; /* হোভার করলে সবুজ কালার */
+  text-decoration: underline;
+}
+
+.notice-separator {
+  color: #dc3545; /* লাল রঙের সেপারেটর */
+  font-size: 12px;
+}
+
+/* বিরামহীন অসীম স্ক্রলিং অ্যানিমেশন */
+@keyframes seamless-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* অর্ধেক পথ অতিক্রম করার পর লুপ পুনরায় শুরু হবে */
+  }
+}
+
+/* ---------- 1. HERO MAIN SECTION ---------- */
+.jbd-hero {
+  position: relative;
+  background: #0a0f1c;
+  overflow: hidden;
+  min-height: 80vh; /* height এর বদলে min-height ব্যবহার করাই শ্রেয় */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0; /* উপর ও নিচে কিছু জায়গা রাখতে */
+}
+
+/* গ্লো ইফেক্ট রিমুভড */
+.jbd-hero__bg {
+  display: none;
+}
+
+/* ---------- 2. SLIDER TRACK & SLIDES ---------- */
+.jbd-hero__track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.jbd-hero__slide {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.jbd-hero__slide.is-active {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: jbdFade 0.6s ease forwards;
+}
+
+/* ব্যাকগ্রাউন্ড ইমেজ রেসপন্সিভ ও কভার করার জন্য */
+.jbd-hero__slide-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover; /* 100% 100% তুলে কভার দেওয়া হয়েছে যাতে ইমেজ নষ্ট না হয় */
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+/* শ্যাডো ওভারলে */
+.jbd-hero__slide.has-text .jbd-hero__slide-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 15, 28, 0.75); /* লেখা পরিষ্কার দেখার জন্য একটু গাঢ় করা হলো */
+  z-index: 2;
+}
+
+/* ---------- 3. TEXT CONTENT & BUTTONS ---------- */
+.jbd-hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px; /* মোবাইলের জন্য সাইড প্যাডিং কমানো হলো */
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* ফ্লুইড রেসপন্সিভ ফন্ট সাইজ (মোবাইল থেকে ডেক্সটপ নিজে থেকেই অ্যাডজাস্ট হবে) */
+.jbd-hero__content h1 {
+  color: #ffffff;
+  font-size: clamp(20px, 4vw, 42px); /* ডাইনামিক ফন্ট সাইজ */
+  margin: 0 0 16px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.jbd-hero__content h1 span {
+  color: #14a800;
+  font-size: clamp(16px, 3.2vw, 28px);
+  display: block;
+  margin-top: 6px;
+  line-height: 25px;
+}
+
+.jbd-hero__content p {
+  color: #ffffff;
+  font-size: clamp(13px, 2vw, 16px); /* টাইপ সাইজ অপটিমাইজড */
+  max-width: 800px;
+  margin: 0 auto 24px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.jbd-hero__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ---------- 4. CONTROLS (ARROWS & DOTS) ---------- */
+.jbd-hero__controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.jbd-hero__arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.jbd-hero__arrow:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.jbd-hero__dots {
+  display: flex;
+  gap: 8px;
+}
+.jbd-hero__dots button {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.jbd-hero__dots button.is-active {
+  width: 22px;
+  border-radius: 6px;
+  background: #14a800;
+}
+
+/* ---------- 5. MEDIA QUERIES FOR SMALL MOBILE (370px & BELOW) ---------- */
+@media screen and (max-width: 480px) {
+  .jbd-hero {
+    min-height: 550px;
+    padding: 30px 0 60px; /* নিচের কন্ট্রোলসের জায়গা রাখার জন্য */
+  }
+
+  .jbd-hero__content {
+    padding: 0 12px;
+  }
+
+  .jbd-hero__content p {
+    line-height: 1.5;
+  }
+}
+
+/* ---------- ABOUT SECTION (PERFECT VISIBILITY & LAYOUT) ---------- */
+#about.jbd-about {
+  width: 100%;
+  padding: 60px 20px;
+  background-color: #f8fafc;
+}
+
+#about .jbd-about__wrapper {
+  max-width: 1800px;
+  margin: 0 auto;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 50px !important;
+  align-items: start !important;
+}
+
+#about .jbd-about__media {
+  width: 100%;
+}
+
+/* Left Title Styling */
+#about .jbd-about__title-wrapper {
+  margin-bottom: 20px;
+}
+
+#about .jbd-about__left-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin: 0 !important;
+}
+
+#about .jbd-about__left-title .title-accent {
+  width: 5px;
+  height: 24px;
+  background-color: #d9232d;
+  border-radius: 4px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Grid Cards Layout */
+#about .jbd-about__grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 16px !important;
+}
+
+#about .jbd-about__card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+  display: flex !important;
+  align-items: center !important; /* Vertically Centers Icon with Text */
+  gap: 14px !important;
+}
+
+#about .jbd-about__card:hover {
+  transform: translateY(-3px);
+  border-color: #cbd5e1;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+}
+
+/* High Contrast & Bold Icon Box */
+#about .jbd-about__card-icon {
+  width: 46px !important;
+  height: 46px !important;
+  min-width: 46px !important;
+  background-color: #fee2e2 !important; /* Soft Red Tint Background */
+  border: 1px solid #fca5a5 !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+#about .jbd-about__card-icon svg {
+  width: 22px !important;
+  height: 22px !important;
+  display: block !important;
+}
+
+/* Text Body */
+#about .jbd-about__card-body {
+  flex: 1;
+}
+
+#about .jbd-about__card-title {
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  /* color: #0f172a !important;  <- এই কালার রুলটি মুছে ফেলুন */
+  margin-bottom: 4px !important;
+}
+
+#about .jbd-about__card-desc {
+  font-size: 0.85rem !important;
+  color: #475569 !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+}
+
+/* Right Content Area */
+#about .jbd-about__content h2 {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin-bottom: 18px !important;
+  line-height: 1.3 !important;
+}
+
+#about .jbd-about__content p {
+  font-size: 0.95rem !important;
+  color: #475569 !important;
+  line-height: 1.8 !important;
+  margin-bottom: 24px !important;
+}
+
+/* Modern Primary Button */
+#about .jbd-about__btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 12px 28px !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  border-radius: 8px !important;
+  background-color: #28a745 !important;
+  color: #ffffff !important;
+  border: none !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.25) !important;
+}
+
+#about .jbd-about__btn:hover {
+  background-color: #218838 !important;
+  box-shadow: 0 6px 18px rgba(40, 167, 69, 0.35) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Mobile Responsive Optimization */
+@media (max-width: 991px) {
+  #about .jbd-about__wrapper {
+    grid-template-columns: 1fr !important;
+    gap: 35px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  #about.jbd-about {
+    padding: 40px 15px !important;
+  }
+
+  #about .jbd-about__grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  #about .jbd-about__card {
+    padding: 14px !important;
+  }
+}
+
+/* ===== ======================================COURSE SECTION MAIN =================================== */
+
+/* স্লাইডারের বদলে ১০০% স্থির গ্রিড কন্টেইনার */
+.courses-grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  width: 100%;
+}
+
+/* এক সারিতে ৫টি কোর্স দেখানোর নিখুঁত হিসাব */
+.course-card-wrapper {
+  flex: 0 0 calc(20% - 12px);
+  max-width: calc(20% - 12px);
+  box-sizing: border-box;
+}
+
+/* রেসপনসিভ ব্রেকপয়েন্ট (স্ক্রিন ছোট হলে নিচে নেমে আসবে) */
+@media (max-width: 1400px) {
+  .course-card-wrapper {
+    flex: 0 0 calc(25% - 11.25px);
+    max-width: calc(25% - 11.25px);
+  }
+}
+
+@media (max-width: 1100px) {
+  .course-card-wrapper {
+    flex: 0 0 calc(33.333% - 10px);
+    max-width: calc(33.333% - 10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .course-card-wrapper {
+    flex: 0 0 calc(50% - 7.5px);
+    max-width: calc(50% - 7.5px);
+  }
+}
+
+@media (max-width: 480px) {
+  .course-card-wrapper {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* ===== COURSE CARD STYLES (১০০% অপরিবর্তিত) ===== */
+.course-card {
+  background: #ffffff;
+  border: 1.5px solid var(--line, #eaefe9);
+  border-radius: var(--r2, 12px);
+  overflow: hidden;
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s,
+    border-color 0.25s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+  border-color: var(--green, #10b981);
+}
+
+.cc-image {
+  width: 100%;
+  height: 327px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.cc-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.course-card:hover .cc-image img {
+  transform: scale(1.05);
+}
+
+.cc-body {
+  padding: 15px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cc-body h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--dark, #1f2937);
+  margin-bottom: 8px;
+  line-height: 1.35;
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.cc-body h4 span {
+  color: var(--red, #e61d23);
+  font-size: 0.82rem;
+}
+
+.cc-description {
+  font-size: 0.8rem;
+  color: var(--muted, #6b7280);
+  line-height: 1.5;
+  font-family: 'Noto Sans Bengali', sans-serif;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.cc-footer {
+  padding: 12px 15px;
+  background: #ffffff;
+  border-top: 1px solid var(--line, #f3f4f6);
+}
+
+.btn-enroll {
+  background: var(--green, #16a34a);
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 8px 12px;
+  border-radius: var(--r, 6px);
+  text-decoration: none;
+  font-family: 'Noto Sans Bengali', sans-serif;
+  transition:
+    background 0.2s,
+    transform 0.15s;
+}
+
+.btn-enroll:hover {
+  background: var(--green-d, #15803d);
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+.cc-featured-ribbon {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--red, #e61d23);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 0 0 6px 6px;
+  letter-spacing: 0.5px;
+  font-family: 'Public Sans', sans-serif;
+  z-index: 2;
+}
+
+/* =================================== 3. COURSES =========================================== */
+
+.jbd-courses {
+  background: var(--paper);
+  padding: 100px 0;
+}
+.jbd-courses__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.jbd-course-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+  display: flex;
+  flex-direction: column;
+}
+.jbd-course-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow);
+  border-color: transparent;
+}
+.jbd-course-card__thumb {
+  height: 150px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.jbd-course-card__thumb svg {
+  width: 46px;
+  height: 46px;
+}
+.jbd-course-card__level {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+.jbd-course-card__body {
+  padding: 22px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.jbd-course-card__body h3 {
+  font-size: 19px;
+}
+.jbd-course-card__body p {
+  font-size: 14.5px;
+}
+.jbd-course-card__meta {
+  display: flex;
+  gap: 14px;
+  margin: 6px 0 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--slate);
+}
+.jbd-course-card__meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.jbd-course-card__foot {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.jbd-course-card__foot a {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--red);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.jbd-course-card__foot a:hover {
+  text-decoration: underline;
+}
+
+.jbd-courses__more {
+  text-align: center;
+  margin: 44px;
+}
+
+/* ৪ কলাম গ্রিড লেআউট */
+.jbd-courses__grid--4col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* এক লাইনে ৪টি কলাম */
+  gap: 24px; /* কার্ডগুলোর মাঝের দূরত্ব */
+  margin-bottom: 40px;
+}
+
+/* ট্যাবলেট বা মাঝারি স্ক্রিনের জন্য (প্রতি লাইনে ২টি) */
+@media (max-width: 1024px) {
+  .jbd-courses__grid--4col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* মোবাইল স্ক্রিনের জন্য (প্রতি লাইনে ১টি) */
+@media (max-width: 600px) {
+  .jbd-courses__grid--4col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*============================== 4. TESTIMONIALS ======================================*/
+
+.jbd-testimonials {
+  position: relative;
+  overflow: hidden;
+  background: #0a0f1c !important ;
+}
+.jbd-testi-slider {
+  position: relative;
+}
+.jbd-testi-pages {
+  overflow: hidden;
+}
+.jbd-testi-track {
+  display: flex;
+  transition: transform 0.55s ease;
+}
+.jbd-testi-page {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  flex: 0 0 100%;
+  min-width: 100%;
+}
+.jbd-testi-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius);
+  padding: 26px 22px;
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    background 0.22s ease;
+}
+.jbd-testi-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.06);
+}
+.jbd-testi-card .quote-mark {
+  font-family: 'Sora', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--amber), var(--green-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 1;
+  margin-bottom: 10px;
+  display: block;
+}
+.jbd-testi-card p {
+  color: #d6dbe5;
+  font-size: 13.5px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+  flex: 1;
+}
+.jbd-testi-person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.jbd-avatar-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
+}
+.jbd-testi-person .who {
+  text-align: left;
+  min-width: 0;
+}
+.jbd-testi-person .who b {
+  display: block;
+  color: #fff;
+  font-size: 14px;
+}
+.jbd-testi-person .who span {
+  font-size: 11px;
+  color: var(--amber-light);
+  font-family: 'JetBrains Mono', monospace;
+}
+.jbd-testi-dots {
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+.jbd-testi-dots button {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+.jbd-testi-dots button.is-active {
+  width: 26px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--amber), var(--green));
+}
+
+#testimonials .jbd-testi-pages {
+  overflow: hidden;
+  width: 100%;
+}
+
+#testimonials .jbd-testi-track {
+  display: flex;
+  gap: 20px; /* কার্ডগুলোর মাঝের দূরত্ব */
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+}
+
+#testimonials .jbd-testi-card {
+  /* ডেক্সটপে একসাথে ৪টি দেখানোর জন্য (৪টি কার্ড + ৩টি গ্যাপের হিসাব) */
+  flex: 0 0 calc((100% - (20px * 3)) / 4);
+  box-sizing: border-box;
+}
+
+/* রেসপন্সিভ ব্রেকপয়েন্ট (অপশনাল কিন্তু জরুরি) */
+@media (max-width: 1024px) {
+  #testimonials .jbd-testi-card {
+    flex: 0 0 calc((100% - (20px * 1)) / 2); /* ট্যাবে একসাথে ২টি দেখাবে */
+  }
+}
+
+@media (max-width: 600px) {
+  #testimonials .jbd-testi-card {
+    flex: 0 0 100%; /* মোবাইলে ১টি করে দেখাবে */
+  }
+}
+
+/* ======================== 5. BLOG ========================================= */
+
+/* ৫ কলাম গ্রিড লেআউট */
+.jbd-blog__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+/* ব্লগ কার্ড স্টাইল */
+.jbd-blog-card {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.jbd-blog-card:hover {
+  cursor: pointer;
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* থাম্বনেইল অংশ */
+.jbd-blog-card__thumb {
+  height: 249px;
+  position: relative;
+}
+
+.jbd-blog-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.jbd-blog-card__cat {
+  position: absolute;
+  left: 14px;
+  bottom: 8px;
+  background: var(--red);
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  z-index: 2;
+}
+
+/* কন্টেন্ট বডি অংশ */
+.jbd-blog-card__body {
+  padding: 20px 16px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.jbd-blog-card__date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--slate-light);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.jbd-blog-card__body h3 {
+  font-size: 15px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.jbd-blog-card__body p {
+  font-size: 13px;
+  color: #555;
+}
+
+.jbd-blog-card__body a {
+  font-weight: 700;
+  font-size: 14px;
+  color: #14a800;
+}
+
+.jbd-blog-card__body a:hover {
+  text-decoration: underline;
+}
+
+/* পুরো কার্ড ক্লিকেবল করার জন্য Stretched Link */
+.jbd-stretched-link::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  content: '';
+}
+
+/* এনিমেশন */
+@keyframes jbdHorizontalMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-33.333% - 8px));
+  }
+}
+
+/* ==========================================
+   RESPONSIVE BREAKPOINTS
+   ========================================== */
+
+/* বড় ডেস্কটপ / ল্যাপটপ (১২০০px এর নিচে) - ৩টি কলাম */
+@media (max-width: 1200px) {
+  .jbd-blog__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+/* ট্যাবলেট / ছোট স্ক্রিন (৭৬৮px এর নিচে) - ২টি কলাম */
+@media (max-width: 768px) {
+  .jbd-blog__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  .jbd-blog-card__thumb {
+    height: 249px;
+  }
+}
+
+/* মোবাইল স্ক্রিন (৫৭৬px এর নিচে) - ১টি কলাম */
+@media (max-width: 576px) {
+  .jbd-blog {
+    padding: 40px 0;
+  }
+  .jbd-blog__grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .jbd-blog-card__thumb {
+    height: 245px;
+  }
+}
+
+/* ---------- 6. RECENT STUDENTS (Horizontal Box Marquee - Right to Left) ---------- */
+.jbd-students {
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.jbd-students-marquee {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
+  padding: 20px 0;
+  white-space: nowrap;
+
+  /* ডানে এবং বামে ফেড ইফেক্ট */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.jbd-students-track {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 24px; /* বক্সগুলোর দূরত্ব */
+  width: max-content; /* নিখুঁত দৈর্ঘ্যের জন্য */
+  animation: jbdHorizontalMarquee 25s linear infinite;
+}
+
+.jbd-students-marquee:hover .jbd-students-track {
+  animation-play-state: paused;
+}
+
+/* নিখুঁত সিমলেস লুপের জন্য অ্যানিমেশন */
+@keyframes jbdHorizontalMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* -50% এর সাথে gap (24px)-এর অর্ধেক (12px) এডজাস্টমেন্ট */
+    transform: translateX(calc(-50% - 12px));
+  }
+}
+
+/* চারকোনা বক্স কার্ড */
+.jbd-mini-student {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 15px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px 20px;
+  width: 200px;
+  flex: none;
+  flex-shrink: 0; /* কার্ড যেন চেপে না যায় */
+  white-space: normal;
+  box-shadow: 0 12px 26px -18px rgba(13, 21, 36, 0.25);
+}
+
+.jbd-mini-avatar {
+  position: relative;
+  flex: none;
+}
+
+.jbd-mini-avatar img {
+  width: 100px;
+  height: 100px;
+  border-radius: 5%;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 0 0 3px rgba(63, 161, 61, 0.12);
+}
+
+.jbd-mini-avatar .dot {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--green);
+  border: 2px solid var(--white);
+}
+
+.jbd-mini-student .info {
+  text-align: center;
+  width: 100%;
+}
+
+.jbd-mini-student .info h4 {
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  margin: 0 0 6px;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.jbd-mini-student .info span {
+  font-size: 12px;
+  color: var(--slate);
+  font-family: 'JetBrains Mono', monospace;
+  display: block;
+  word-break: break-word;
+}
+
+/* আরও দেখুন বাটন */
+.jbd-courses__more {
+  text-align: center;
+  margin-top: 30px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 992px) {
+  .jbd-about {
+    grid-template-columns: 1fr;
+  }
+  .jbd-about__media {
+    order: 2;
+    margin-top: 20px;
+  }
+  .jbd-courses__grid,
+  .jbd-blog__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .jbd-testi-page {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .jbd-hero__slide {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .jbd-hero__content p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .jbd-hero__actions {
+    justify-content: center;
+  }
+  .jbd-hero__art {
+    order: -1;
+  }
+}
+@media (max-width: 640px) {
+  .jbd-wrap,
+  .jbd-about,
+  .jbd-hero__slide {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .jbd-stats {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 22px;
+  }
+  .jbd-courses__grid,
+  .jbd-blog__grid {
+    grid-template-columns: 1fr;
+  }
+  .jbd-testi-page {
+    grid-template-columns: 1fr;
+  }
+  .jbd-about__badge {
+    position: static;
+    margin-top: 18px;
+  }
+}
+
+.jbd-blog__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* ৪ থেকে ৫ করা হয়েছে */
+  gap: 16px; /* কার্ডের জন্য ৫টি কলামে কিছুটা স্পেস কমাতে গ্যাপ ১৬px দেওয়া ভালো */
+}
+
+/* responsive break points */
+@media (max-width: 1200px) {
+  .jbd-blog__grid {
+    grid-template-columns: repeat(3, 1fr); /* মাঝারি স্ক্রিনে ৩টি */
+  }
+}
+
+@media (max-width: 768px) {
+  .jbd-blog__grid {
+    grid-template-columns: repeat(2, 1fr); /* ট্যাবে ২টি */
+  }
+}
+
+@media (max-width: 576px) {
+  .jbd-blog__grid {
+    grid-template-columns: 1fr; /* মোবাইলে ১টি */
+  }
+}
+
+/* ==========================================
+       ১. হিরো ব্যানার সেকশন
+       ========================================== */
+.about-hero-banner {
+  background:
+    radial-gradient(circle at 80% 20%, rgba(220, 53, 69, 0.15) 0%, transparent 50%),
+    linear-gradient(135deg, #0b1116 0%, #1a2630 100%);
+  padding: 80px 20px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 4px solid #dc3545;
+}
+
+.about-gradient-title {
+  background: linear-gradient(135deg, #ffffff 40%, #ff4d5a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  display: inline-block;
+  letter-spacing: 1px;
+}
+.display-3 {
+  line-height: 1.5 !important;
+}
+
+.mb-5 {
+  margin-bottom: 0rem !important;
+}
